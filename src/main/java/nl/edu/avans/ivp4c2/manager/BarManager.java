@@ -70,8 +70,11 @@ public class BarManager {
 	 * These methods update the three ArrayLists every three seconds by
 	 * reteiving data from the database Each list is cleared before new data is
 	 * added. By doing so, a table can never be in two or more lists
+	 *
 	 */
 
+
+	// Vult alleen de Arraylists
 	public ArrayList<Table> getActiveTablesDAO() {
 		orderTables.clear();
 		for (Table t : tabledao.getTableOrder()) {
