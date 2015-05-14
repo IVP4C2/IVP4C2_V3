@@ -30,10 +30,11 @@ public class ProductDAO {
 			//connection opened succesfully
 			//execute SQL statement to retrieve Tables
 			//Select all product for a given orderNumber
-			ResultSet resultset = connection.executeSQLSelectStatement(
-	                "SELECT p.productNummer, p.productNaam, bp.aantal, p.Merk FROM product p "
-	                + "INNER JOIN bestelling_product bp ON bp.productNummer = p.productNummer "
-	                + "WHERE bestellingNummer = '"+orderNumber+"';");
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `item_id`, `name`, COUNT(DISTINCT(`fk_item_id`)) AS amount " +
+					"FROM `item` `i` " +
+					"INNER JOIN `kpt_orderline` `kol` ON `i`.`item_id` = `kol`.`fk_item_id` " +
+					"INNER JOIN `order` `o` " +
+					"ON `o`.`order_id` = `kol`.`fk_order_id` WHERE `o`.`order_id` = '"+orderNumber+"';");
 
 	            if(resultset != null)
 	            {
@@ -43,10 +44,9 @@ public class ProductDAO {
 	                    {
 	                    	//Create a new Product for each record
 	                       Product newProduct = new Product(
-	                                resultset.getInt("productNummer"),
-	                                resultset.getString("productNaam"),
-	                                resultset.getInt("aantal"),
-	                                resultset.getString("Merk"));
+								   resultset.getInt("item_id"),
+								   resultset.getString("name"),
+								   resultset.getInt("amount"));
 	                       products.add(newProduct); //Add newProduct to product ArrayList
 		                }       
 	                }

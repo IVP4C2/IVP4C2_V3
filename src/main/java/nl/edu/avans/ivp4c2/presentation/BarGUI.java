@@ -176,7 +176,7 @@ public class BarGUI extends JPanel {
 
 			}
 
-		}, 0, 3, TimeUnit.SECONDS);
+		}, 0, 1, TimeUnit.SECONDS);
 	}
 
 	// Methods
@@ -200,13 +200,13 @@ public class BarGUI extends JPanel {
 		for (Table te : tableStatusEmpty) {
 			int tb = te.getTableNumber();
 			tableButton[tb].setBackground(Color.decode("#DFDFDF"));
+			repaint();
 		}
 
 		// Set table status Order
 		for (Table to : tableStatusOrder) {
 			int tb = to.getTableNumber();
-			
-			for(Order o: to.getOrders()) {
+//			for(Order o: to.getOrders()) {
 //				Time newOrderTime = o.getOrderTime();
 //				if(newOrderTime.after(orderTime)) {
 //					orderTime = newOrderTime;
@@ -214,11 +214,10 @@ public class BarGUI extends JPanel {
 //				} else {
 //					tableButton[tb].setBackground(Color.GREEN);
 //				}
-//				
-				System.out.println(o.getOrderTime().toString());
-			}
+//
+//				System.out.println(o.getOrderTime().toString());
+//			}
 			tableButton[tb].setBackground(Color.GREEN);
-			System.out.println("hallooo");
 			repaint();
 		}
 
@@ -304,91 +303,91 @@ public class BarGUI extends JPanel {
 			rightPanel.removeAll();
 			leftPanel.removeAll();
 
-			for (int tb = 1; tb <= 10; tb++) {
-				if (e.getSource() == tableButton[tb]) {
-					final int tableNumber = tb; // create new integer. Easier to
-												// work with.
-					// give the active button a border
-					TitledBorder topBorder = BorderFactory
-							.createTitledBorder("Actief");
-					topBorder.setBorder(BorderFactory
-							.createLineBorder(Color.black));
-					topBorder.setTitlePosition(TitledBorder.TOP);
-					tableButton[tb].setBorder(topBorder);
-
-					// Setup center - left
-
-					try {
-
-						tableLeft = new JTable(
-								buildTableModel(barmanager.getTableOrders(tableNumber)));
-						tableLeft.setBorder(BorderFactory.createEtchedBorder());
-						tableLeft.getTableHeader().setReorderingAllowed(false); // Added
-
-						// Add mouse listener
-						tableLeft.addMouseListener(new MouseAdapter() {
-
-							@Override
-							public void mouseClicked(final MouseEvent e) {
-								if (e.getClickCount() == 1) {
-									final JTable target = (JTable) e
-											.getSource(); // Get left JTable
-									final int row = target.getSelectedRow(); // Get
-																				// row
-									final int column = target
-											.getSelectedColumn(); // Get column
-									int value = (Integer) target.getValueAt(
-											row, column); // Get value from cell
-
-									/*
-									 * Now that we have the orderNumber, we can
-									 * create the right table
-									 */
-
-									try {
-										rightPanel.removeAll();
-
-										tableRight = new JTable(
-												buildTableModel(barmanager
-														.getOrders(tableNumber,
-																value)));
-										tableRight.setBorder(BorderFactory
-												.createEtchedBorder());
-										tableRight.setEnabled(false); // Disable
-																		// user
-																		// input
-										rightPanel.add(
-												new JScrollPane(tableRight))
-												.setBackground(Color.WHITE);
-										rightPanel.revalidate();
-									} catch (SQLException f) {
-										// TODO Auto-generated catch block
-										f.printStackTrace();
-									}
-								}
-							}
-						});
-						leftPanel.add(new JScrollPane(tableLeft))
-								.setBackground(Color.WHITE);
-						leftPanel.revalidate();
-					} catch (SQLException f) {
-						// TODO Auto-generated catch block
-						f.printStackTrace();
-					}
-
-				} else {
-					TitledBorder topBorderInactive = BorderFactory
-							.createTitledBorder("");
-					topBorderInactive.setBorder(BorderFactory
-							.createLineBorder(Color.decode("#DFDFDF")));
-					topBorderInactive.setTitlePosition(TitledBorder.TOP);
-					tableButton[tb].setBorder(topBorderInactive);
-					tableButton[tb].setBorder(BorderFactory
-							.createEtchedBorder());
-				}
-
-			}
-			revalidate();
+//			for (int tb = 1; tb <= 10; tb++) {
+//				if (e.getSource() == tableButton[tb]) {
+//					final int tableNumber = tb; // create new integer. Easier to
+//												// work with.
+//					// give the active button a border
+//					TitledBorder topBorder = BorderFactory
+//							.createTitledBorder("Actief");
+//					topBorder.setBorder(BorderFactory
+//							.createLineBorder(Color.black));
+//					topBorder.setTitlePosition(TitledBorder.TOP);
+//					tableButton[tb].setBorder(topBorder);
+//
+//					// Setup center - left
+//
+//					try {
+//
+//						tableLeft = new JTable(
+//								buildTableModel(barmanager.getTableOrders(tableNumber)));
+//						tableLeft.setBorder(BorderFactory.createEtchedBorder());
+//						tableLeft.getTableHeader().setReorderingAllowed(false); // Added
+//
+//						// Add mouse listener
+//						tableLeft.addMouseListener(new MouseAdapter() {
+//
+//							@Override
+//							public void mouseClicked(final MouseEvent e) {
+//								if (e.getClickCount() == 1) {
+//									final JTable target = (JTable) e
+//											.getSource(); // Get left JTable
+//									final int row = target.getSelectedRow(); // Get
+//																				// row
+//									final int column = target
+//											.getSelectedColumn(); // Get column
+//									int value = (Integer) target.getValueAt(
+//											row, column); // Get value from cell
+//
+//									/*
+//									 * Now that we have the orderNumber, we can
+//									 * create the right table
+//									 */
+//
+//									try {
+//										rightPanel.removeAll();
+//
+//										tableRight = new JTable(
+//												buildTableModel(barmanager
+//														.getOrders(tableNumber,
+//																value)));
+//										tableRight.setBorder(BorderFactory
+//												.createEtchedBorder());
+//										tableRight.setEnabled(false); // Disable
+//																		// user
+//																		// input
+//										rightPanel.add(
+//												new JScrollPane(tableRight))
+//												.setBackground(Color.WHITE);
+//										rightPanel.revalidate();
+//									} catch (SQLException f) {
+//										// TODO Auto-generated catch block
+//										f.printStackTrace();
+//									}
+//								}
+//							}
+//						});
+//						leftPanel.add(new JScrollPane(tableLeft))
+//								.setBackground(Color.WHITE);
+//						leftPanel.revalidate();
+//					} catch (SQLException f) {
+//						// TODO Auto-generated catch block
+//						f.printStackTrace();
+//					}
+//
+//				} else {
+//					TitledBorder topBorderInactive = BorderFactory
+//							.createTitledBorder("");
+//					topBorderInactive.setBorder(BorderFactory
+//							.createLineBorder(Color.decode("#DFDFDF")));
+//					topBorderInactive.setTitlePosition(TitledBorder.TOP);
+//					tableButton[tb].setBorder(topBorderInactive);
+//					tableButton[tb].setBorder(BorderFactory
+//							.createEtchedBorder());
+//				}
+//
+//			}
+//			revalidate();
 
 		}
 	}

@@ -23,9 +23,9 @@ public class TableDAO {
 	/*These string will be used to complete the SQL select statement
      * Since the only variable in the SQL statment is the table status and the status is an ENUM, 
      * we can use final Strins to complete the select statement*/
-	private static final String TABLE_ORDER = "Bestelling";
-	private static final  String TABLE_PAYMENT = "Afrekenen";
-	private static final  String TABLE_EMPTY = "Leeg";
+	private static final int TABLE_ORDER = 1;
+	private static final  int TABLE_PAYMENT = 2;
+	private static final  int TABLE_EMPTY = 4;
 
 	public TableDAO() {
 		// Nothing to be initialized. This is a stateless class. Constructor
@@ -59,7 +59,7 @@ public class TableDAO {
 	*@param String status
 	*@return ArrayList<Table>
 	* */
-	public ArrayList<Table> getTable(String status) {
+	public ArrayList<Table> getTable(int status) {
 		
 		ArrayList<Table> tables = new ArrayList<Table>();
 		//Open db connection
@@ -68,7 +68,9 @@ public class TableDAO {
 			//connection opened succesfully
 			//execute SQL statement to retrieve Tables
 			ResultSet resultset = connection.executeSQLSelectStatement(
-	                "SELECT tafelStatus, tafelNummer, aantalPersonen FROM `tafel` WHERE tafelStatus = '"+status+"';");
+	                "SELECT `t`.`table_number`, `ts`.`status` FROM `table_status` `ts` " +
+							"INNER JOIN `table` `t` ON `ts`.`table_status_id` = `t`.`fk_table_status_id` " +
+							"WHERE `ts`.`table_status_id` = '"+status+"';");
 
 				//If there is a result
 	            if(resultset != null)
@@ -78,15 +80,14 @@ public class TableDAO {
 	                    while(resultset.next())
 	                    {
 	                    	//Create new Table Object for each record
-	                       Table newTable = new Table(
-	                                resultset.getInt("tafelNummer"),
-	                                resultset.getString("tafelStatus"),
-	                                resultset.getInt("aantalpersonen"));
+							Table newTable = new Table(
+									resultset.getInt("table_number"),
+	                                resultset.getString("status"));
 	                       		
 	                       		//Check if status is "Bestelling". If so, there is an order which can be retrieved from the database
-		                       if(resultset.getString("tafelStatus").equals("Bestelling")) {
+		                       if(resultset.getString("status").equals("Bezet")) {
 		                    	   OrderDAO orderDAO = new OrderDAO(); //Create new OrderDAO 
-		                    	   ArrayList<Order> newOrder = orderDAO.getTableOrder(resultset.getInt("tafelNummer")); //Returns ArrayList with orders for tableNumber
+		                    	   ArrayList<Order> newOrder = orderDAO.getTableOrder(resultset.getInt("table_number")); //Returns ArrayList with orders for tableNumber
 		                    	   for(Order o : newOrder) { //Add orders to the new table
 		                    		   newTable.addOrder(o);
 		                    	   }

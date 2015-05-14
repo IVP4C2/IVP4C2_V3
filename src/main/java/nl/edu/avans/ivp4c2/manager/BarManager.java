@@ -44,7 +44,7 @@ public class BarManager {
 				getEmptyTablesDAO();
 			}
 
-		}, 0, 3, TimeUnit.SECONDS);
+		}, 0, 5, TimeUnit.SECONDS);
 	}
 
 	/*

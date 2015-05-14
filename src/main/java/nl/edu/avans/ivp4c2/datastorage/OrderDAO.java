@@ -4,7 +4,9 @@ import nl.edu.avans.ivp4c2.domain.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *This DAO retrieves the order data and creates an Order object.
@@ -31,9 +33,10 @@ public class OrderDAO {
 			// statement.
 			//Select all orders for a given tableNumber
 			ResultSet resultset = connection
-					.executeSQLSelectStatement("SELECT b.bestellingNummer, b.tafelNummer, b.bestellingTijd, b.bestellingStatus "
-							+ "FROM bestelling b INNER JOIN bestelling_product bp ON b.bestellingNummer = bp.bestellingNummer "
-							+ "INNER JOIN product p ON bp.productNummer = p.productNummer WHERE b.tafelNummer = '"+tableNumber+"' GROUP BY bp.bestellingNummer;");
+					.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name` FROM `order` `o` " +
+                            "INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
+                            "INNER JOIN `kpt_table_order` `kto` on `kto`.`fk_order_id` = `o`.`order_id` " +
+                            "WHERE `kto`.`fk_table_id` = '"+tableNumber+"';");
 			
 			if(resultset != null)
             {
@@ -42,18 +45,21 @@ public class OrderDAO {
                     while(resultset.next())
                     {
                     	//Create new Order Object for each record
+                        Date date  = resultset.getTimestamp("send_on");
+                        String dateString = new SimpleDateFormat("HH:mm:ss").format(date);
                        Order newOrder = new Order(
-                    		   resultset.getInt("bestellingNummer"),
-                    		   resultset.getString("bestellingStatus"),
-                    		   resultset.getString("bestellingTijd")
+                    		   resultset.getInt("order_id"),
+                    		   resultset.getString("name"),
+                    		   dateString
                     		   );
                        
-                       //Create new ProductDAO to retrieve and create Product Object for the order
-                       ProductDAO productDAO = new ProductDAO();
-                       ArrayList<Product> products = productDAO.getProduct(resultset.getInt("bestellingNummer")); //Returns an ArrayList with Products
-                       for(Product p : products) { //Add product to the new Order
-                    	   newOrder.addProduct(p);
-                       }
+                           //Create new ProductDAO to retrieve and create Product Object for the order
+                           ProductDAO productDAO = new ProductDAO();
+                           ArrayList<Product> products = productDAO.getProduct(resultset.getInt("order_id")); //Returns an ArrayList with Products
+                           for(Product p : products) { //Add product to the new Order
+                               newOrder.addProduct(p);
+                           }
+
                     }
                     
                 }
