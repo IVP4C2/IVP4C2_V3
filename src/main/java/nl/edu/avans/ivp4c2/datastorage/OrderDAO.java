@@ -47,6 +47,7 @@ public class OrderDAO {
                     	//Create new Order Object for each record
                         Date date  = resultset.getTimestamp("send_on");
                         String dateString = new SimpleDateFormat("HH:mm:ss").format(date);
+
                        Order newOrder = new Order(
                     		   resultset.getInt("order_id"),
                     		   resultset.getString("name"),
