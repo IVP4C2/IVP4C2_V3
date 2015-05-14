@@ -246,6 +246,7 @@ public class BarGUI extends JPanel {
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 
 		for(Order o : t.getOrders()) {
+			System.out.println(o.getOrderNumber());
 			Vector<Object> vector = new Vector<Object>();
 			vector.add(t.getTableNumber());
 			vector.add(o.getOrderNumber());

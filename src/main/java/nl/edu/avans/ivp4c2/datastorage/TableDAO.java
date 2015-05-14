@@ -90,6 +90,7 @@ public class TableDAO {
 		                    	   ArrayList<Order> newOrder = orderDAO.getTableOrder(resultset.getInt("table_number")); //Returns ArrayList with orders for tableNumber
 		                    	   for(Order o : newOrder) { //Add orders to the new table
 		                    		   newTable.addOrder(o);
+
 		                    	   }
 		                       }
 

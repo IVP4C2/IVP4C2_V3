@@ -19,6 +19,8 @@ public class Table {
 	public Table(int tableNumber, String tableStatus) {
 		this.tableNumber = tableNumber;
 		this.tableStatus = tableStatus;
+		specificOrder = new HashMap<Integer, Order>();
+		orders = new ArrayList<Order>();
 	}
 	
 	//Getters
@@ -41,9 +43,9 @@ public class Table {
 	
 	//Setters
 	public void addOrder(Order order) {
-		specificOrder = new HashMap<Integer, Order>();
-		orders = new ArrayList<Order>();
+
 		orders.add(order);
 		specificOrder.put(order.getOrderNumber(), order);
+
 	}
 }
