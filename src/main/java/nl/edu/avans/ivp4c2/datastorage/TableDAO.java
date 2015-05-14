@@ -40,7 +40,7 @@ public class TableDAO {
     }
     
     /*get all tables with status payment(Afrekenen)*/
-    public ArrayList<Table> getTablePayment() {nice
+    public ArrayList<Table> getTablePayment() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_PAYMENT);
     	return fetchedTables;

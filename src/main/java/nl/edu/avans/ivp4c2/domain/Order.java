@@ -17,7 +17,11 @@ public class Order {
 		products = new ArrayList<Product>();
 		
 	}
-	
+
+	public ArrayList<Product> getProducts() {
+		return products;
+	}
+
 	public int getOrderNumber() {
 		return orderNumber;
 	}

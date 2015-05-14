@@ -2,6 +2,7 @@ package nl.edu.avans.ivp4c2.manager;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +14,7 @@ import nl.edu.avans.ivp4c2.domain.Table;
 public class BarManager {
 
 	// private ArrayList<Order> orders;
+	private HashMap<Integer, Table> tableHashmap;
 	private ArrayList<Table> orderTables; // Arraylist for all order tables
 	private ArrayList<Table> paymentTables; // ArrayList for all payment tables
 	private ArrayList<Table> emptyTables; // ArrayList for all empty tables
@@ -20,6 +22,7 @@ public class BarManager {
 
 	public BarManager() {
 		// orders = new ArrayList<Order>();
+		tableHashmap = new HashMap<Integer, Table>();
 		orderTables = new ArrayList<Table>();
 		paymentTables = new ArrayList<Table>();
 		emptyTables = new ArrayList<Table>();
@@ -47,6 +50,16 @@ public class BarManager {
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 
+	/**
+	 * Hashmap that return table object, used to fill the JTable
+	 * @return Table
+	 */
+	public Table getHashTable(int tableNumber) {
+		Table tempTable;
+		tempTable = tableHashmap.get(tableNumber);
+		return tempTable;
+	}
+
 	/*
 	 * ArrayList getters
 	 * 
@@ -64,6 +77,8 @@ public class BarManager {
 		return emptyTables;
 	}
 
+
+
 	/*
 	 * DAO table getters
 	 * 
@@ -79,6 +94,7 @@ public class BarManager {
 		orderTables.clear();
 		for (Table t : tabledao.getTableOrder()) {
 			orderTables.add(t);
+			tableHashmap.put(t.getTableNumber(), t); 	// add active tables to the hashmap
 		}
 		return orderTables;
 	}

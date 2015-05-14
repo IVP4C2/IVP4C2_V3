@@ -1,6 +1,7 @@
 package nl.edu.avans.ivp4c2.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A Table has Orders and Orders have Products
@@ -13,11 +14,11 @@ public class Table {
 	private int tableNumber;
 	private String tableStatus;
 	private ArrayList<Order> orders;
+	private HashMap<Integer, Order> specificOrder;
 	
 	public Table(int tableNumber, String tableStatus) {
 		this.tableNumber = tableNumber;
 		this.tableStatus = tableStatus;
-		ArrayList<Order> orders = new ArrayList<Order>();
 	}
 	
 	//Getters
@@ -33,19 +34,16 @@ public class Table {
 	public ArrayList<Order> getOrders() {
 		return orders;
 	}
+
+	public Order getSpecificOrder(int orderNumber) {
+		return specificOrder.get(orderNumber);
+	}
 	
 	//Setters
 	public void addOrder(Order order) {
+		specificOrder = new HashMap<Integer, Order>();
+		orders = new ArrayList<Order>();
 		orders.add(order);
-	}
-	
-	
-	//Print methods
-	public String toString() {
-		return String.format("%-20s %-20s %-20s", tableNumber, tableStatus);
-	}
-	
-	public void print() {
-		System.out.println(tableNumber + tableStatus);
+		specificOrder.put(order.getOrderNumber(), order);
 	}
 }

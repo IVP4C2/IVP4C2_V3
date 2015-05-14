@@ -60,6 +60,8 @@ public class OrderDAO {
                                newOrder.addProduct(p);
                            }
 
+                        orders.add(newOrder);
+
                     }
                     
                 }

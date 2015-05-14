@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import com.mysql.jdbc.ResultSetMetaData;
 
 import nl.edu.avans.ivp4c2.domain.Order;
+import nl.edu.avans.ivp4c2.domain.Product;
 import nl.edu.avans.ivp4c2.domain.Table;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 
@@ -231,26 +232,48 @@ public class BarGUI extends JPanel {
 	}
 
 	// Method to create JTable
-	public static DefaultTableModel buildTableModel(ResultSet rs)
+	public static DefaultTableModel buildTableModel(Table t)
 			throws SQLException {
 
-		ResultSetMetaData metaData = (ResultSetMetaData) rs.getMetaData();
-
-		// Gets column names from ResultSet
+		// Gets column names from Table
 		Vector<String> columnNames = new Vector<String>();
-		int columnCount = metaData.getColumnCount();
-		for (int column = 1; column <= columnCount; column++) {
-			columnNames.add(metaData.getColumnName(column));
-		}
+		columnNames.add("TafelNr");
+		columnNames.add("BestelNr");
+		columnNames.add("Tijd");
+		columnNames.add("Status");
 
 		// data of the table
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 
-		while (rs.next()) {
+		for(Order o : t.getOrders()) {
 			Vector<Object> vector = new Vector<Object>();
-			for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-				vector.add(rs.getObject(columnIndex));
-			}
+			vector.add(t.getTableNumber());
+			vector.add(o.getOrderNumber());
+			vector.add(o.getOrderTime());
+			vector.add(o.getOrderStatus());
+			data.add(vector);
+		}
+
+		return new DefaultTableModel(data, columnNames);
+	}
+
+
+	// Method to create JTable
+	public static DefaultTableModel buildTableModelRight(Order order)
+			throws SQLException {
+
+		// Gets column names from Table
+		Vector<String> columnNames = new Vector<String>();
+		columnNames.add("ProductNaam");
+		columnNames.add("Aantal");
+
+		// data of the table
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+
+		for(Product p : order.getProducts()) {
+			Vector<Object> vector = new Vector<Object>();
+			vector.add(p.getProductName());
+			vector.add(p.getAmount());
 			data.add(vector);
 		}
 
@@ -299,95 +322,97 @@ public class BarGUI extends JPanel {
 //	}
 
 	class TableButtonHandler implements ActionListener {
+
 		public void actionPerformed(ActionEvent e) {
 			rightPanel.removeAll();
 			leftPanel.removeAll();
 
-//			for (int tb = 1; tb <= 10; tb++) {
-//				if (e.getSource() == tableButton[tb]) {
-//					final int tableNumber = tb; // create new integer. Easier to
-//												// work with.
-//					// give the active button a border
-//					TitledBorder topBorder = BorderFactory
-//							.createTitledBorder("Actief");
-//					topBorder.setBorder(BorderFactory
-//							.createLineBorder(Color.black));
-//					topBorder.setTitlePosition(TitledBorder.TOP);
-//					tableButton[tb].setBorder(topBorder);
-//
-//					// Setup center - left
-//
-//					try {
-//
-//						tableLeft = new JTable(
-//								buildTableModel(barmanager.getTableOrders(tableNumber)));
-//						tableLeft.setBorder(BorderFactory.createEtchedBorder());
-//						tableLeft.getTableHeader().setReorderingAllowed(false); // Added
-//
-//						// Add mouse listener
-//						tableLeft.addMouseListener(new MouseAdapter() {
-//
-//							@Override
-//							public void mouseClicked(final MouseEvent e) {
-//								if (e.getClickCount() == 1) {
-//									final JTable target = (JTable) e
-//											.getSource(); // Get left JTable
-//									final int row = target.getSelectedRow(); // Get
-//																				// row
-//									final int column = target
-//											.getSelectedColumn(); // Get column
-//									int value = (Integer) target.getValueAt(
-//											row, column); // Get value from cell
-//
-//									/*
-//									 * Now that we have the orderNumber, we can
-//									 * create the right table
-//									 */
-//
-//									try {
-//										rightPanel.removeAll();
-//
-//										tableRight = new JTable(
-//												buildTableModel(barmanager
-//														.getOrders(tableNumber,
-//																value)));
-//										tableRight.setBorder(BorderFactory
-//												.createEtchedBorder());
-//										tableRight.setEnabled(false); // Disable
-//																		// user
-//																		// input
-//										rightPanel.add(
-//												new JScrollPane(tableRight))
-//												.setBackground(Color.WHITE);
-//										rightPanel.revalidate();
-//									} catch (SQLException f) {
-//										// TODO Auto-generated catch block
-//										f.printStackTrace();
-//									}
-//								}
-//							}
-//						});
-//						leftPanel.add(new JScrollPane(tableLeft))
-//								.setBackground(Color.WHITE);
-//						leftPanel.revalidate();
-//					} catch (SQLException f) {
-//						// TODO Auto-generated catch block
-//						f.printStackTrace();
-//					}
-//
-//				} else {
-//					TitledBorder topBorderInactive = BorderFactory
-//							.createTitledBorder("");
-//					topBorderInactive.setBorder(BorderFactory
-//							.createLineBorder(Color.decode("#DFDFDF")));
-//					topBorderInactive.setTitlePosition(TitledBorder.TOP);
-//					tableButton[tb].setBorder(topBorderInactive);
-//					tableButton[tb].setBorder(BorderFactory
-//							.createEtchedBorder());
-//				}
-//
-//			}
-//			revalidate();
+			for (int tb = 1; tb <= 10; tb++) {
+				if (e.getSource() == tableButton[tb]) {
+					final int tableNumber = tb; // create new integer. Easier to
+												// work with.
+					// give the active button a border
+					TitledBorder topBorder = BorderFactory
+							.createTitledBorder("Actief");
+					topBorder.setBorder(BorderFactory
+							.createLineBorder(Color.black));
+					topBorder.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorder);
+
+					final Table table = barmanager.getHashTable(tableNumber);
+
+					// Setup center - left
+
+					try {
+
+
+						tableLeft = new JTable(
+								buildTableModel(table));
+						tableLeft.setBorder(BorderFactory.createEtchedBorder());
+						tableLeft.getTableHeader().setReorderingAllowed(false); // Added
+
+						// Add mouse listener
+						tableLeft.addMouseListener(new MouseAdapter() {
+
+							@Override
+							public void mouseClicked(final MouseEvent e) {
+								if (e.getClickCount() == 1) {
+									final JTable target = (JTable) e
+											.getSource(); // Get left JTable
+									final int row = target.getSelectedRow(); // Get
+																				// row
+									final int column = target
+											.getSelectedColumn(); // Get column
+									int value = (Integer) target.getValueAt(
+											row, column); // Get value from cell
+
+									/*
+									 * Now that we have the orderNumber, we can
+									 * create the right table
+									 */
+
+									try {
+										rightPanel.removeAll();
+
+										tableRight = new JTable(
+												buildTableModelRight(table.getSpecificOrder(value)));
+										tableRight.setBorder(BorderFactory
+												.createEtchedBorder());
+										tableRight.setEnabled(false); // Disable
+																		// user
+																		// input
+										rightPanel.add(
+												new JScrollPane(tableRight))
+												.setBackground(Color.WHITE);
+										rightPanel.revalidate();
+									} catch (SQLException f) {
+										// TODO Auto-generated catch block
+										f.printStackTrace();
+									}
+								}
+							}
+						});
+						leftPanel.add(new JScrollPane(tableLeft))
+								.setBackground(Color.WHITE);
+						leftPanel.revalidate();
+					} catch (SQLException f) {
+						// TODO Auto-generated catch block
+						f.printStackTrace();
+					}
+
+				} else {
+					TitledBorder topBorderInactive = BorderFactory
+							.createTitledBorder("");
+					topBorderInactive.setBorder(BorderFactory
+							.createLineBorder(Color.decode("#DFDFDF")));
+					topBorderInactive.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorderInactive);
+					tableButton[tb].setBorder(BorderFactory
+							.createEtchedBorder());
+				}
+
+			}
+			revalidate();
 
 		}
 	}
