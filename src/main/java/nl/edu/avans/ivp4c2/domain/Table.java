@@ -12,13 +12,11 @@ import java.util.ArrayList;
 public class Table {
 	private int tableNumber;
 	private String tableStatus;
-	private int amountPersons;
 	private ArrayList<Order> orders;
 	
-	public Table(int tableNumber, String tableStatus, int amountPersons) {
+	public Table(int tableNumber, String tableStatus) {
 		this.tableNumber = tableNumber;
 		this.tableStatus = tableStatus;
-		this.amountPersons = amountPersons;
 		ArrayList<Order> orders = new ArrayList<Order>();
 	}
 	
@@ -30,10 +28,7 @@ public class Table {
 	public String getTableStatus() {
 		return tableStatus;
 	}
-	
-	public int getAmountPersons() {
-		return amountPersons;
-	}
+
 	
 	public ArrayList<Order> getOrders() {
 		return orders;
@@ -47,10 +42,10 @@ public class Table {
 	
 	//Print methods
 	public String toString() {
-		return String.format("%-20s %-20s %-20s", tableNumber, tableStatus, amountPersons);
+		return String.format("%-20s %-20s %-20s", tableNumber, tableStatus);
 	}
 	
 	public void print() {
-		System.out.println(tableNumber + tableStatus + amountPersons);
+		System.out.println(tableNumber + tableStatus);
 	}
 }
