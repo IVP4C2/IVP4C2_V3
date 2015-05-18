@@ -48,6 +48,10 @@ public class BarGUI extends JPanel {
 	private final int AMOUNT_OF_TABLEBUTTONS = 11;
 	private JButton[] tableButton;
 
+	// Booleans
+	private boolean green;
+	private boolean yellow;
+
 	// Panels
 	private JPanel panelNorth;
 	private JPanel panelNorthLeft;
@@ -207,19 +211,16 @@ public class BarGUI extends JPanel {
 		// Set table status Order
 		for (Table to : tableStatusOrder) {
 			int tb = to.getTableNumber();
-//			for(Order o: to.getOrders()) {
-//				Time newOrderTime = o.getOrderTime();
-//				if(newOrderTime.after(orderTime)) {
-//					orderTime = newOrderTime;
-//					tableButton[tb].setBackground(Color.CYAN);
-//				} else {
-//					tableButton[tb].setBackground(Color.GREEN);
-//				}
-//
-//				System.out.println(o.getOrderTime().toString());
-//			}
-			tableButton[tb].setBackground(Color.GREEN);
-			repaint();
+				for(Order o : to.getOrders()) {
+					System.out.println(o.getDestination());
+				if(o.getDestination() == 1) {
+					tableButton[tb].setBackground(Color.GREEN);
+				} else if(o.getDestination() == 2)  {
+						tableButton[tb].setBackground((Color.YELLOW));
+					}
+
+				}
+			barmanager.getActiveTables();
 		}
 
 		// Set table status Payment
@@ -246,7 +247,6 @@ public class BarGUI extends JPanel {
 		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 
 		for(Order o : t.getOrders()) {
-			System.out.println(o.getOrderNumber());
 			Vector<Object> vector = new Vector<Object>();
 			vector.add(t.getTableNumber());
 			vector.add(o.getOrderNumber());

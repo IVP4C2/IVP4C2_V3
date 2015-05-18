@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
 import nl.edu.avans.ivp4c2.datastorage.*;
 import nl.edu.avans.ivp4c2.domain.Order;
 import nl.edu.avans.ivp4c2.domain.Table;
@@ -19,6 +20,8 @@ public class BarManager {
 	private ArrayList<Table> paymentTables; // ArrayList for all payment tables
 	private ArrayList<Table> emptyTables; // ArrayList for all empty tables
 	private TableDAO tabledao;
+	private OrderDAO orderdao;
+	private int destination;
 
 	public BarManager() {
 		// orders = new ArrayList<Order>();
@@ -27,6 +30,7 @@ public class BarManager {
 		paymentTables = new ArrayList<Table>();
 		emptyTables = new ArrayList<Table>();
 		tabledao = new TableDAO();
+		orderdao = new OrderDAO();
 		getActiveTablesDAO();
 		getPaymentTablesDAO();
 		getEmptyTablesDAO();
@@ -114,5 +118,6 @@ public class BarManager {
 		}
 		return emptyTables;
 	}
+
 
 }

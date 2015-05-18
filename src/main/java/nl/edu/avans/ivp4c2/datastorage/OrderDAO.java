@@ -33,11 +33,16 @@ public class OrderDAO {
 			// statement.
 			//Select all orders for a given tableNumber
 			ResultSet resultset = connection
-					.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name` FROM `order` `o` " +
-                            "INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
-                            "INNER JOIN `kpt_table_order` `kto` on `kto`.`fk_order_id` = `o`.`order_id` " +
-                            "WHERE `kto`.`fk_table_id` = '"+tableNumber+"';");
-			
+					.executeSQLSelectStatement("SELECT  `order`.`order_id` ,  `order`.`send_on` ,  `status`.`name`, `destination`" +
+                            "FROM `order`" +
+                            "INNER JOIN `status`ON `status`.`status_id`= `order`.`fk_status_id`= `status`.`status_id`" +
+                            "INNER JOIN `kpt_table_order` ON `kpt_table_order`.`fk_order_id`= `order`.`order_id`" +
+                            "INNER JOIN `kpt_orderline`ON `kpt_orderline`.`fk_order_id` = `order`.`order_id`" +
+                            "WHERE `kpt_table_order`.`fk_table_id`= '"+tableNumber+"'" +
+                            "ORDER BY `destination` desc" );
+            //AND `kpt_orderline`.`destination`= 1;
+
+
 			if(resultset != null)
             {
                 try
@@ -50,7 +55,8 @@ public class OrderDAO {
                        Order newOrder = new Order(
                     		   resultset.getInt("order_id"),
                     		   resultset.getString("name"),
-                    		   dateString
+                    		   dateString,
+                               resultset.getInt("destination")
                     		   );
                        
                            //Create new ProductDAO to retrieve and create Product Object for the order
