@@ -218,6 +218,16 @@ public class BarGUI extends JPanel {
 //
 //				System.out.println(o.getOrderTime().toString());
 //			}
+
+			/*Hierin uit elk Table object de Order ArrayList halen en er doorheen lopen
+			* Wordt dan iets in deze richting (Zie head van de methode)
+			* for(Order o : to.getOrders()) {
+			* 	if(o.getDestination() == 1) {
+			* 		tabeButton[tb].setBackground(color);
+
+			*	}
+			* }
+			* */
 			tableButton[tb].setBackground(Color.GREEN);
 			repaint();
 		}

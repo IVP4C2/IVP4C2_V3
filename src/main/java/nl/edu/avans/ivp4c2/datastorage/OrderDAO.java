@@ -37,8 +37,8 @@ public class OrderDAO {
                             "INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
                             "INNER JOIN `kpt_table_order` `kto` on `kto`.`fk_order_id` = `o`.`order_id` " +
                             "WHERE `kto`.`fk_table_id` = '"+tableNumber+"';");
-			
-			if(resultset != null)
+
+            if(resultset != null)
             {
                 try
                 {
