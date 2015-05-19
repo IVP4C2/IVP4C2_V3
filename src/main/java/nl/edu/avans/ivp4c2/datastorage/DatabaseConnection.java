@@ -36,8 +36,9 @@ public class DatabaseConnection {
             {   
                 // Try to create a connection with the library database
                 connection = DriverManager.getConnection(
-                    "jdbc:mysql://145.48.6.148/hhc2" , "root", "10ec4u");
-//                        "jdbc:mysql://127.0.0.1/hartigehap" , "root", "");
+//              "jdbc:mysql://145.48.6.148/hhc2" , "root", "10ec4u");
+//              "jdbc:mysql://127.0.0.1/hh" , "root", "");
+                "jdbc:mysql://mysql.famcoolen.nl/avans_hartigehap_c2" , "ivp4c2", "zJp6UoDhZD");
                 if(connection != null)
                 {
                     statement = connection.createStatement();

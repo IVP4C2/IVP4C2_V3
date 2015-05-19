@@ -32,33 +32,20 @@ public class OrderDAO {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			//Select all orders for a given tableNumber
-			ResultSet resultset = connection
-<<<<<<< HEAD
-					.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name` FROM `order` `o` " +
-                            "INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
-                            "INNER JOIN `kpt_table_order` `kto` on `kto`.`fk_order_id` = `o`.`order_id` " +
-                            "WHERE `kto`.`fk_table_id` = '"+tableNumber+"';");
-
-            if(resultset != null)
-=======
-					.executeSQLSelectStatement("SELECT  `order`.`order_id` ,  `order`.`send_on` ,  `status`.`name`, `destination`" +
-                            "FROM `order`" +
-                            "INNER JOIN `status`ON `status`.`status_id`= `order`.`fk_status_id`= `status`.`status_id`" +
-                            "INNER JOIN `kpt_table_order` ON `kpt_table_order`.`fk_order_id`= `order`.`order_id`" +
-                            "INNER JOIN `kpt_orderline`ON `kpt_orderline`.`fk_order_id` = `order`.`order_id`" +
-                            "WHERE `kpt_table_order`.`fk_table_id`= '"+tableNumber+"'" +
-                            "ORDER BY `destination` desc" );
-            //AND `kpt_orderline`.`destination`= 1;
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name`, `o`.`destination` " +
+                    "FROM `order` `o` " +
+                    "INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
+                    "INNER JOIN `kpt_orderline` `ktol` ON `ktol`.`fk_order_id` = `o`.`order_id` " +
+                    "INNER JOIN `kpt_table_order` `ktto` on `ktto`.`fk_order_id` = `o`.`order_id` " +
+                    "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' GROUP BY `o`.`order_id`;");
 
 
-			if(resultset != null)
->>>>>>> 321e24f67e33ca674ac745e77bc3702846796908
+            if (resultset != null)
+
             {
-                try
-                {
-                    while(resultset.next())
-                    {
-                    	//Create new Order Object for each record
+                try {
+                    while (resultset.next()) {
+                        //Create new Order Object for each record
                         Date date  = resultset.getTimestamp("send_on");
                         String dateString = new SimpleDateFormat("HH:mm:ss").format(date);
 

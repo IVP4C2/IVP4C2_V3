@@ -60,7 +60,13 @@ public class BarManager {
 	 */
 	public Table getHashTable(int tableNumber) {
 		Table tempTable;
-		tempTable = tableHashmap.get(tableNumber);
+		if(tableHashmap.containsKey(tableNumber)) {
+			tempTable = tableHashmap.get(tableNumber);
+		}
+		else {
+			tempTable = null;
+		}
+
 		return tempTable;
 	}
 

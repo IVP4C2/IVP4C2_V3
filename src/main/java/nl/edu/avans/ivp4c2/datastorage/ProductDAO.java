@@ -30,10 +30,11 @@ public class ProductDAO {
 			//connection opened succesfully
 			//execute SQL statement to retrieve Tables
 			//Select all product for a given orderNumber
-			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `item_id`, `name`, COUNT(*) AS amount FROM `item` `i` " +
-					"INNER JOIN `kpt_orderline` `kol` ON `i`.`item_id` = `kol`.`fk_item_id` " +
-					"INNER JOIN `order` `o` ON `o`.`order_id` = `kol`.`fk_order_id` " +
-					"WHERE `o`.`order_id` = '"+orderNumber+"' GROUP BY `fk_item_id`;");
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `item_id`, `name`, COUNT(*) AS amount " +
+					"FROM `item` `i` " +
+					"INNER JOIN `kpt_orderline` `ktol` ON `i`.`item_id` = `ktol`.`fk_item_id` " +
+					"INNER JOIN `order` `o` ON `o`.`order_id` = `ktol`.`fk_order_id` " +
+					"WHERE `o`.`order_id` = '"+orderNumber+"' GROUP BY `item_id`;");
 
 	            if(resultset != null)
 	            {
