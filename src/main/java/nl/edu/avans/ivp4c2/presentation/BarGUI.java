@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -194,6 +196,9 @@ public class BarGUI extends JPanel {
 		ArrayList<Table> tableStatusOrder = barmanager.getActiveTables();
 		ArrayList<Table> tableStatusPayment = barmanager.getPaymentTables();
 		ArrayList<Table> tableStatusEmpty = barmanager.getEmptyTables();
+		Date urgentBarOrder = null; //Used to store the Date with the longest waiting bar order
+		Date urgentKitchenOrder = null; //Used to store the Date with the longest waiting kitchen order
+
 
 		// Set table status empty
 		for (Table te : tableStatusEmpty) {
@@ -211,7 +216,7 @@ public class BarGUI extends JPanel {
 			boolean hasBarOrder = false;
 			boolean hasKitchenOrder = false;
 			for (Order o : to.getOrders()) {
-				System.out.println(o.getDestination());
+				/*Check the order destination and time for each order.*/
 				if (o.getDestination() == 1) {
 					hasBarOrder = true;
 				} else if (o.getDestination() == 2) {
@@ -262,7 +267,7 @@ public class BarGUI extends JPanel {
 			Vector<Object> vector = new Vector<Object>();
 			vector.add(t.getTableNumber());
 			vector.add(o.getOrderNumber());
-			vector.add(o.getOrderTime());
+			vector.add(new SimpleDateFormat("HH:mm:ss").format(o.getOrderTime())); //Formats the Date to a useful string
 			vector.add(o.getOrderStatus());
 			data.add(vector);
 		}

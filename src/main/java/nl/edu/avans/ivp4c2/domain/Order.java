@@ -2,16 +2,16 @@ package nl.edu.avans.ivp4c2.domain;
 
 import java.sql.Time;
 import java.util.ArrayList;
-
+import java.util.Date;
 
 public class Order {
 	private int orderNumber;
 	private String orderStatus;
-	private String orderTime;
+	private Date orderTime;
 	private int destination;
 	private ArrayList<Product> products;
 	
-	public Order(int orderNumber, String orderStatus, String orderTime, int destination) {
+	public Order(int orderNumber, String orderStatus, Date orderTime, int destination) {
 		this.orderNumber = orderNumber;
 		this.orderStatus = orderStatus;
 		this.orderTime = orderTime;
@@ -20,15 +20,25 @@ public class Order {
 		
 	}
 
+	/*
+	* @return returns an ArrayLists of products
+	* */
 	public ArrayList<Product> getProducts() {
 		return products;
 	}
 
+	/*
+	* @return returns the order number
+	* */
 	public int getOrderNumber() {
 		return orderNumber;
 	}
 
-	public String getOrderTime() {
+	/*returns the full timestamp as a Date. By returning the full timestamp a Date,
+	it can be used a different points in the code
+	* @return returns the full timestamp as a Date
+	* */
+	public Date getOrderTime() {
 		return orderTime;
 	}
 	

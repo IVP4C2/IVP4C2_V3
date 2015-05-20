@@ -33,11 +33,11 @@ public class OrderDAO {
 			// statement.
 			//Select all orders for a given tableNumber
 			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name`, `o`.`destination` " +
-                    "FROM `order` `o` " +
-                    "INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
+                    "FROM `order` `o` INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
                     "INNER JOIN `kpt_orderline` `ktol` ON `ktol`.`fk_order_id` = `o`.`order_id` " +
                     "INNER JOIN `kpt_table_order` `ktto` on `ktto`.`fk_order_id` = `o`.`order_id` " +
-                    "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' GROUP BY `o`.`order_id`;");
+                    "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' " +
+                    "GROUP BY `o`.`order_id`ORDER BY `o`.`destination` DESC;");
 
 
             if (resultset != null)
@@ -46,13 +46,10 @@ public class OrderDAO {
                 try {
                     while (resultset.next()) {
                         //Create new Order Object for each record
-                        Date date  = resultset.getTimestamp("send_on");
-                        String dateString = new SimpleDateFormat("HH:mm:ss").format(date);
-
                        Order newOrder = new Order(
                     		   resultset.getInt("order_id"),
                     		   resultset.getString("name"),
-                    		   dateString,
+                    		   resultset.getTimestamp("send_on"),
                                resultset.getInt("destination")
                     		   );
                        
