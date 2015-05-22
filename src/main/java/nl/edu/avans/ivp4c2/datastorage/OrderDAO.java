@@ -33,11 +33,12 @@ public class OrderDAO {
 			// statement.
 			//Select all orders for a given tableNumber
 			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name`, `o`.`destination` " +
-                    "FROM `order` `o` INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
-                    "INNER JOIN `kpt_orderline` `ktol` ON `ktol`.`fk_order_id` = `o`.`order_id` " +
-                    "INNER JOIN `kpt_table_order` `ktto` on `ktto`.`fk_order_id` = `o`.`order_id` " +
-                    "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' " +
-                    "GROUP BY `o`.`order_id`ORDER BY `o`.`destination` DESC;");
+                            "FROM `order` `o` INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
+                            "INNER JOIN `kpt_orderline` `ktol` ON `ktol`.`fk_order_id` = `o`.`order_id` " +
+                            "INNER JOIN `kpt_table_order` `ktto` on `ktto`.`fk_order_id` = `o`.`order_id` " +
+                            "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' " +
+                            "AND ((`destination` = '1' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
+                            "OR (`destination` = '2' AND `name` = 'Gereed')) GROUP BY `o`.`order_id` ORDER BY `o`.`destination` DESC;");
 
 
             if (resultset != null)
@@ -59,7 +60,7 @@ public class OrderDAO {
                            for(Product p : products) { //Add product to the new Order
                                newOrder.addProduct(p);
                            }
-
+                        System.out.println(newOrder.getOrderTime());
                         orders.add(newOrder);
 
                     }

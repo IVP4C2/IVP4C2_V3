@@ -1,30 +1,23 @@
 package nl.edu.avans.ivp4c2.domain;
 
-import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Order {
 	private int orderNumber;
 	private String orderStatus;
-	private Date orderTime;
+	private Timestamp orderTime;
 	private int destination;
 	private ArrayList<Product> products;
 	
-	public Order(int orderNumber, String orderStatus, Date orderTime, int destination) {
+	public Order(int orderNumber, String orderStatus, Timestamp orderTime, int destination) {
 		this.orderNumber = orderNumber;
 		this.orderStatus = orderStatus;
 		this.orderTime = orderTime;
 		products = new ArrayList<Product>();
 		this.destination = destination;
 		
-	}
-
-	/*
-	* @return returns an ArrayLists of products
-	* */
-	public ArrayList<Product> getProducts() {
-		return products;
 	}
 
 	/*
@@ -38,10 +31,10 @@ public class Order {
 	it can be used a different points in the code
 	* @return returns the full timestamp as a Date
 	* */
-	public Date getOrderTime() {
+	public Timestamp getOrderTime() {
 		return orderTime;
 	}
-	
+
 	public String getOrderStatus() {
 		return orderStatus;
 	}
@@ -49,8 +42,13 @@ public class Order {
 	public int getDestination() {
 		return destination;
 	}
+	/*
+	* @return returns an ArrayLists of products
+	* */
+	public ArrayList<Product> getProducts() {
+		return products;
+	}
 
-	
 	public void addProduct(Product product) {
 		products.add(product);
 	}

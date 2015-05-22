@@ -3,7 +3,6 @@ package nl.edu.avans.ivp4c2.domain;
 public class Product {
 	private int productNumber;
 	private String productName;
-
 	private int amount;
 	
 	public Product(int productNumber, String productName, int amount) {
@@ -20,7 +19,6 @@ public class Product {
 		return productName;
 	}
 
-	
 	public int getAmount() {
 		return amount;
 	}

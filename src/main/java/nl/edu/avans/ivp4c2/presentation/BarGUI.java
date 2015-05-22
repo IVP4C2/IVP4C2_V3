@@ -193,23 +193,27 @@ public class BarGUI extends JPanel {
 	 * use three methods to set the tableButton colors accordingly
 	 */
 	public void setTableStatus() {
-		ArrayList<Table> tableStatusOrder = barmanager.getActiveTables();
+		ArrayList<Table> tableStatusOrder = barmanager.getOccupiedTables();
 		ArrayList<Table> tableStatusPayment = barmanager.getPaymentTables();
 		ArrayList<Table> tableStatusEmpty = barmanager.getEmptyTables();
-		Date urgentBarOrder = null; //Used to store the Date with the longest waiting bar order
-		Date urgentKitchenOrder = null; //Used to store the Date with the longest waiting kitchen order
+		Date longestBarOrder = null; //Used to store the Date of the longest waiting bar order
+		Date longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
+		Date longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
 
 
 		// Set table status empty
 		for (Table te : tableStatusEmpty) {
 			int tb = te.getTableNumber();
-			tableButton[tb].setBackground(Color.decode("#DFDFDF"));
+//			tableButton[tb].setBackground(Color.decode("#DFDFDF"));
+			tableButton[tb].enable(false);
 			repaint();
 		}
 
 		// Set table status Order
 		for (Table to : tableStatusOrder) {
 			int tb = to.getTableNumber();
+			boolean hasLongestBarOrder = false;
+			boolean hasLongestKitchenOrder = false;
 			/*The two booleans below are used to set the tableButton color accordingly.
 			* If there is an order in the Table's order list with destination 1, hasBarOrder will be set to true
 			* If there is an order in the Table's order list with destination 2, hasKitchenOrder will be set to true.*/
@@ -217,26 +221,43 @@ public class BarGUI extends JPanel {
 			boolean hasKitchenOrder = false;
 			for (Order o : to.getOrders()) {
 				/*Check the order destination and time for each order.*/
-				if (o.getDestination() == 1) {
-					hasBarOrder = true;
-				} else if (o.getDestination() == 2) {
-					hasKitchenOrder = true;
+				if (o.getDestination() == 1 && !hasKitchenOrder) {
+					if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
+						System.out.println("Before bar");
+						tableButton[tb].setBackground(Color.decode("#008A2E"));
+						longestBarOrder = o.getOrderTime();
+						hasLongestBarOrder = true;
+					} else if (!hasLongestBarOrder) {
+						tableButton[tb].setBackground(Color.GREEN);
+					}
+				}
+				if (o.getDestination() == 2) {
+					if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
+						System.out.println("Before kitchen");
+						tableButton[tb].setBackground(Color.ORANGE);
+						longestKitchenOrder = o.getOrderTime();
+						hasLongestKitchenOrder = true;
+						hasKitchenOrder = true;
+					} else if (!hasLongestKitchenOrder) {
+						tableButton[tb].setBackground(Color.YELLOW);
+						hasKitchenOrder = true;
+					}
 				}
 			}
 			/*Only barOrder*/
-			if (hasBarOrder && !hasKitchenOrder) {
-				tableButton[tb].setBackground(Color.GREEN);
-			}
-			/*only kitchenOrder*/
-			else if (!hasBarOrder && hasKitchenOrder) {
-				tableButton[tb].setBackground((Color.YELLOW));
-			}
-			/*barOrder and kitchenOrder*/
-			else if (hasBarOrder && hasKitchenOrder) {
-				tableButton[tb].setBackground((Color.YELLOW));
-			} else {
-				tableButton[tb].setBackground(Color.decode("#DFDFDF"));
-			}
+//			if (hasBarOrder && !hasKitchenOrder) {
+//				tableButton[tb].setBackground(Color.GREEN);
+//			}
+//			/*only kitchenOrder*/
+//			else if (!hasBarOrder && hasKitchenOrder) {
+//				tableButton[tb].setBackground((Color.YELLOW));
+//			}
+//			/*barOrder and kitchenOrder*/
+//			else if (hasBarOrder && hasKitchenOrder) {
+//				tableButton[tb].setBackground((Color.YELLOW));
+//			} else {
+//				tableButton[tb].setBackground(Color.decode("#DFDFDF"));
+//			}
 			repaint();
 		}
 

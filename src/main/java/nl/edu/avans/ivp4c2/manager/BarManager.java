@@ -16,22 +16,20 @@ public class BarManager {
 
 	// private ArrayList<Order> orders;
 	private HashMap<Integer, Table> tableHashmap;
-	private ArrayList<Table> orderTables; // Arraylist for all order tables
+	private ArrayList<Table> occupiedTables; // Arraylist for all order tables
 	private ArrayList<Table> paymentTables; // ArrayList for all payment tables
 	private ArrayList<Table> emptyTables; // ArrayList for all empty tables
 	private TableDAO tabledao;
-	private OrderDAO orderdao;
-	private int destination;
 
 	public BarManager() {
 		// orders = new ArrayList<Order>();
 		tableHashmap = new HashMap<Integer, Table>();
-		orderTables = new ArrayList<Table>();
+		occupiedTables = new ArrayList<Table>();
 		paymentTables = new ArrayList<Table>();
 		emptyTables = new ArrayList<Table>();
 		tabledao = new TableDAO();
-		orderdao = new OrderDAO();
-		getActiveTablesDAO();
+
+		getOccupiedTablesDAO();
 		getPaymentTablesDAO();
 		getEmptyTablesDAO();
 
@@ -46,7 +44,7 @@ public class BarManager {
 		exec.scheduleAtFixedRate(new Runnable() {
 
 			public void run() {
-				getActiveTablesDAO();
+				getOccupiedTablesDAO();
 				getPaymentTablesDAO();
 				getEmptyTablesDAO();
 			}
@@ -75,8 +73,8 @@ public class BarManager {
 	 * 
 	 * These methods return an ArrayList with Table objects
 	 */
-	public ArrayList<Table> getActiveTables() {
-		return orderTables;
+	public ArrayList<Table> getOccupiedTables() {
+		return occupiedTables;
 	}
 
 	public ArrayList<Table> getPaymentTables() {
@@ -98,29 +96,32 @@ public class BarManager {
 	 *
 	 */
 
-
-	// Vult alleen de Arraylists
-	public ArrayList<Table> getActiveTablesDAO() {
-		orderTables.clear();
-		for (Table t : tabledao.getTableOrder()) {
-			orderTables.add(t);
+	//Gets all tables from the database which have the status 'Bezet'
+	public ArrayList<Table> getOccupiedTablesDAO() {
+		occupiedTables.clear();
+		for (Table t : tabledao.getTableOccupied()) {
+			occupiedTables.add(t);
 			tableHashmap.put(t.getTableNumber(), t); 	// add active tables to the hashmap
 		}
-		return orderTables;
+		return occupiedTables;
 	}
 
+	//Retrieves all tebles from the database which have the status 'Afrekenen'
 	public ArrayList<Table> getPaymentTablesDAO() {
 		paymentTables.clear();
 		for (Table t : tabledao.getTablePayment()) {
 			paymentTables.add(t);
+			tableHashmap.put(t.getTableNumber(), t);
 		}
 		return paymentTables;
 	}
 
+	//Retrieves all tables from the database which have the status 'Leeg'
 	public ArrayList<Table> getEmptyTablesDAO() {
 		emptyTables.clear();
 		for (Table t : tabledao.getTableEmpty()) {
 			emptyTables.add(t);
+
 		}
 		return emptyTables;
 	}

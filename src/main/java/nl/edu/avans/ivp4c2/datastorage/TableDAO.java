@@ -23,7 +23,7 @@ public class TableDAO {
 	/*These string will be used to complete the SQL select statement
      * Since the only variable in the SQL statment is the table status and the status is an ENUM, 
      * we can use final Strins to complete the select statement*/
-	private static final int TABLE_ORDER = 1;
+	private static final int TABLE_OCCUPIED = 1;
 	private static final  int TABLE_PAYMENT = 2;
 	private static final  int TABLE_EMPTY = 4;
 
@@ -33,9 +33,9 @@ public class TableDAO {
 	}
 
     /*get all tables with status order(Bestelling)*/
-    public ArrayList<Table> getTableOrder() {
+    public ArrayList<Table> getTableOccupied() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
-    	fetchedTables = getTable(TABLE_ORDER);
+    	fetchedTables = getTable(TABLE_OCCUPIED);
     	return fetchedTables;
     }
     
@@ -59,7 +59,7 @@ public class TableDAO {
 	*@param String status
 	*@return ArrayList<Table>
 	* */
-	public ArrayList<Table> getTable(int status) {
+	private ArrayList<Table> getTable(int status) {
 		
 		ArrayList<Table> tables = new ArrayList<Table>();
 		//Open db connection
@@ -85,7 +85,7 @@ public class TableDAO {
 	                                resultset.getString("status"));
 	                       		
 	                       		//Check if status is "Bestelling". If so, there is an order which can be retrieved from the database
-		                       if(resultset.getString("status").equals("Bezet")) {
+		                       if(resultset.getString("status").equals("Bezet") || resultset.getString("status").equals("Afrekenen")) {
 		                    	   OrderDAO orderDAO = new OrderDAO(); //Create new OrderDAO 
 		                    	   ArrayList<Order> newOrder = orderDAO.getTableOrder(resultset.getInt("table_number")); //Returns ArrayList with orders for tableNumber
 		                    	   for(Order o : newOrder) { //Add orders to the new table
