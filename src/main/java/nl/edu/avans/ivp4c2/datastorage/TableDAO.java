@@ -1,6 +1,5 @@
 package nl.edu.avans.ivp4c2.datastorage;
 
-import nl.edu.avans.ivp4c2.datastorage.DatabaseConnection;
 import nl.edu.avans.ivp4c2.domain.*;
 
 import java.sql.ResultSet;
@@ -20,33 +19,45 @@ import java.util.ArrayList;
  */
 
 public final class TableDAO {
-	/*These string will be used to complete the SQL select statement
+	/*These integer will be used to complete the SQL select statement
      * Since the only variable in the SQL statment is the table status and the status is an ENUM, 
      * we can use final Strins to complete the select statement*/
-	private static final int TABLE_OCCUPIED = 1;
-	private static final int TABLE_PAYMENT = 2;
-	private static final int TABLE_EMPTY = 4;
+	private static final int TABLE_OCCUPIED = 1; //Represents status 'Bezet'
+	private static final int TABLE_PAYMENT = 2; //Represents status 'Afrekenen'
+	private static final int TABLE_EMPTY = 4; //Represents status 'Leeg'
 
 	public TableDAO() {
 		// Nothing to be initialized. This is a stateless class. Constructor
 		// has been added to explicitely make this clear.
 	}
 
-    /*get all tables with status order(Bestelling)*/
+	/**
+	 * Retreives all tables which have the 'Bezet' status.
+	 * Returns these tables in an ArrayList
+	 * @return ArrayList containing Table object
+	 */
     public final static ArrayList<Table> getTableOccupied() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_OCCUPIED);
     	return fetchedTables;
     }
-    
-    /*get all tables with status payment(Afrekenen)*/
+
+	/**
+	 * Retreives all tables which have the 'Afrekenen' status.
+	 * Returns these tables in an ArrayList
+	 * @return ArrayList containing Table object
+	 */
     public final static ArrayList<Table> getTablePayment() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_PAYMENT);
     	return fetchedTables;
     }
-    
-    /*get all tables with status empty(Leeg)*/
+
+	/**
+	 * Retreives all tables which have the 'Leeg' status.
+	 * Returns these tables in an ArrayList
+	 * @return ArrayList containing Table object
+	 */
     public final static ArrayList<Table> getTableEmpty() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_EMPTY);
@@ -54,11 +65,11 @@ public final class TableDAO {
     }
 	
 	
-	/*Retrieves all tables from the database. The retrieved values get stored in Table objects. 
+	/**Retrieves all tables from the database. The retrieved values get stored in Table objects.
 	*A table object contains an ArrayList with Orders. An Order contains an ArrayList with Products
-	*@param String status
-	*@return ArrayList<Table>
-	* */
+	*@param status
+	*@return ArrayList containing Table Objectts
+	*/
 	private final static ArrayList<Table> getTable(int status) {
 		
 		ArrayList<Table> tables = new ArrayList<Table>();
@@ -84,19 +95,16 @@ public final class TableDAO {
 									resultset.getInt("table_number"),
 	                                resultset.getString("status"));
 	                       		
-	                       		//Check if status is "Bestelling". If so, there is an order which can be retrieved from the database
+	                       		//Check if status is 'Bezet' or 'Arekenen'. If so, there is an order which can be retrieved from the database
 		                       if(resultset.getString("status").equals("Bezet") || resultset.getString("status").equals("Afrekenen")) {
 		                    	   OrderDAO orderDAO = new OrderDAO(); //Create new OrderDAO 
 		                    	   ArrayList<Order> newOrder = orderDAO.getTableOrder(resultset.getInt("table_number")); //Returns ArrayList with orders for tableNumber
 		                    	   for(Order o : newOrder) { //Add orders to the new table
 		                    		   newTable.addOrder(o);
-
 		                    	   }
 		                       }
-
 	                        tables.add(newTable); //Add new table to the ArrayList
 	                    }
-	                    
 	                }
 	                catch(SQLException e)
 	                {
@@ -104,9 +112,8 @@ public final class TableDAO {
 	                    tables = null;
 	                }
 	            }
-
-	            connection.closeConnection();
-	        }
-	        return tables;
-	    }
+			connection.closeConnection();
+		}
+		return tables;
+	}
 }

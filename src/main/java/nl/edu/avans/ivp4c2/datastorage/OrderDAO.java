@@ -4,12 +4,10 @@ import nl.edu.avans.ivp4c2.domain.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
- *This DAO retrieves the order data and creates an Order object.
+ *Retrieves the order data and creates an Order object.
  *This DAO uses the ProductDAO to fill the Order with products
  * @author IVP4C2
  */
@@ -20,8 +18,8 @@ public final class OrderDAO {
 		// has been added to explicitely make this clear.
 	}
 	
-	/*Retrieves all orders for a given tableNumber
-	 * @param int tableNumber
+	/**Retrieves all orders for a given tableNumber
+	 * @param tableNumber
 	 * @return ArrayList<Order> */
 	public final static ArrayList<Order> getTableOrder(int tableNumber) {
 		ArrayList<Order> orders = new ArrayList<Order>();

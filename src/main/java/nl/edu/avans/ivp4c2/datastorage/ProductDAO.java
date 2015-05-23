@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- *This DAO retrieves and creates the product for a given orderNumber
+ *Retrieves products from the database using a variable query
  * @author IVP4C2
  */
 public class ProductDAO {
@@ -18,6 +18,12 @@ public class ProductDAO {
 		// has been added to explicitely make this clear.
 	}
 
+	/**
+	 * Retrieve products for an Order. Takes an orderNumber as parameter
+	 * Returns an ArrayList containing products
+	 * @param orderNumber
+	 * @return ArrayList<Product>
+	 */
 	public ArrayList<Product> getProductViaOrder(int orderNumber) {
 		String statement = "SELECT `item_id`, `name`, `price`, COUNT(*) AS amount " +
 				"FROM `item` `i` " +
@@ -27,6 +33,12 @@ public class ProductDAO {
 		return getProduct(statement);
 	}
 
+	/**
+	 * Retrieve products for a Payment. Takes a PaymentNumber as parameter
+	 * Returns an ArrayList containing products
+	 * @param billId
+	 * @return ArrayList<Product>
+	 */
 	public ArrayList<Product> getProductViaBill(int billId) {
 		String statement = "SELECT `item_id`, `name`, `price`, COUNT(*) AS amount FROM `item` `i` " +
 				"INNER JOIN `kpt_orderline` `kol` ON `i`.`item_id` = `kol`.`fk_item_id` " +
@@ -36,10 +48,13 @@ public class ProductDAO {
 		return getProduct(statement);
 	}
 
-	/*Retrieves all products for a given orderNumber
-	 * @param int orderNUmber
-	 * @return ArrayList<Product> */
-	public ArrayList<Product> getProduct(String statement) {
+	/**
+	 * Retrieves products from the database using the query given as a parameter.
+	 * Return an ArrayList containing products
+	 * @param statement
+	 * @return ArrayList<Product>
+	 */
+	private static final ArrayList<Product> getProduct(String statement) {
 		
 		ArrayList<Product> products = new ArrayList<Product>();
 		//Open db connection

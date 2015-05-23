@@ -7,7 +7,7 @@ package nl.edu.avans.ivp4c2.datastorage;
 import java.sql.*;
 
 /**
- *
+ *Used to connect to the Database. Contains the connection details and handles CRUD and Exceptions
  * @author IVP4C2
  */
 public class DatabaseConnection {
