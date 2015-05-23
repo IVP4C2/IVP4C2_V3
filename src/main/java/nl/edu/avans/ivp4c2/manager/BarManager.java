@@ -3,6 +3,7 @@ package nl.edu.avans.ivp4c2.manager;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +35,7 @@ public class BarManager {
 		getEmptyTablesDAO();
 
 		/*
-		 * Calls the three DAO table getters every 3 seconds. These methods are
+		 * Calls the three DAO table getters every 5 seconds. These methods are
 		 * used to keep the ArrayLists up to date. These ArrayList can be used
 		 * by calling the three ArrayList getters. Other methods that should be
 		 * called every X seconds should be added here too
@@ -42,29 +43,25 @@ public class BarManager {
 		ScheduledExecutorService exec = Executors
 				.newSingleThreadScheduledExecutor();
 		exec.scheduleAtFixedRate(new Runnable() {
-
 			public void run() {
 				getOccupiedTablesDAO();
 				getPaymentTablesDAO();
 				getEmptyTablesDAO();
 			}
-
 		}, 0, 5, TimeUnit.SECONDS);
 	}
 
 	/**
-	 * Hashmap that return table object, used to fill the JTable
+	 * Hashmap which returns a table object, used to fill the JTable
 	 * @return Table
 	 */
 	public Table getHashTable(int tableNumber) {
 		Table tempTable;
-		if(tableHashmap.containsKey(tableNumber)) {
-			tempTable = tableHashmap.get(tableNumber);
-		}
-		else {
-			tempTable = null;
-		}
-
+			if(!tableHashmap.containsKey(tableNumber)) {
+				tempTable = null;
+			} else {
+				tempTable = tableHashmap.get(tableNumber);
+			}
 		return tempTable;
 	}
 

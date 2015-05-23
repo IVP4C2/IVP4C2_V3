@@ -13,7 +13,7 @@ import java.util.Date;
  *This DAO uses the ProductDAO to fill the Order with products
  * @author IVP4C2
  */
-public class OrderDAO {
+public final class OrderDAO {
 
 	public OrderDAO() {
 		// Nothing to be initialized. This is a stateless class. Constructor
@@ -23,7 +23,7 @@ public class OrderDAO {
 	/*Retrieves all orders for a given tableNumber
 	 * @param int tableNumber
 	 * @return ArrayList<Order> */
-	public ArrayList<Order> getTableOrder(int tableNumber) {
+	public final static ArrayList<Order> getTableOrder(int tableNumber) {
 		ArrayList<Order> orders = new ArrayList<Order>();
 
 		// First open a database connnection
@@ -39,8 +39,6 @@ public class OrderDAO {
                             "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' " +
                             "AND ((`destination` = '1' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
                             "OR (`destination` = '2' AND `name` = 'Gereed')) GROUP BY `o`.`order_id` ORDER BY `o`.`destination` DESC;");
-
-
             if (resultset != null)
 
             {
@@ -56,7 +54,7 @@ public class OrderDAO {
                        
                            //Create new ProductDAO to retrieve and create Product Object for the order
                            ProductDAO productDAO = new ProductDAO();
-                           ArrayList<Product> products = productDAO.getProduct(resultset.getInt("order_id")); //Returns an ArrayList with Products
+                           ArrayList<Product> products = productDAO.getProductViaOrder(resultset.getInt("order_id")); //Returns an ArrayList with Products
                            for(Product p : products) { //Add product to the new Order
                                newOrder.addProduct(p);
                            }

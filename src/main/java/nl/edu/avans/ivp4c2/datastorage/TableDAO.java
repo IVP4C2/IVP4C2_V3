@@ -19,13 +19,13 @@ import java.util.ArrayList;
  *  @author IVP4C2
  */
 
-public class TableDAO {
+public final class TableDAO {
 	/*These string will be used to complete the SQL select statement
      * Since the only variable in the SQL statment is the table status and the status is an ENUM, 
      * we can use final Strins to complete the select statement*/
 	private static final int TABLE_OCCUPIED = 1;
-	private static final  int TABLE_PAYMENT = 2;
-	private static final  int TABLE_EMPTY = 4;
+	private static final int TABLE_PAYMENT = 2;
+	private static final int TABLE_EMPTY = 4;
 
 	public TableDAO() {
 		// Nothing to be initialized. This is a stateless class. Constructor
@@ -33,21 +33,21 @@ public class TableDAO {
 	}
 
     /*get all tables with status order(Bestelling)*/
-    public ArrayList<Table> getTableOccupied() {
+    public final static ArrayList<Table> getTableOccupied() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_OCCUPIED);
     	return fetchedTables;
     }
     
     /*get all tables with status payment(Afrekenen)*/
-    public ArrayList<Table> getTablePayment() {
+    public final static ArrayList<Table> getTablePayment() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_PAYMENT);
     	return fetchedTables;
     }
     
     /*get all tables with status empty(Leeg)*/
-    public ArrayList<Table> getTableEmpty() {
+    public final static ArrayList<Table> getTableEmpty() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_EMPTY);
     	return fetchedTables;
@@ -59,7 +59,7 @@ public class TableDAO {
 	*@param String status
 	*@return ArrayList<Table>
 	* */
-	private ArrayList<Table> getTable(int status) {
+	private final static ArrayList<Table> getTable(int status) {
 		
 		ArrayList<Table> tables = new ArrayList<Table>();
 		//Open db connection

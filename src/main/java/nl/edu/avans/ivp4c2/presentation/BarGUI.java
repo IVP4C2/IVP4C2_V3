@@ -376,51 +376,54 @@ public class BarGUI extends JPanel {
 							.createLineBorder(Color.black));
 					topBorder.setTitlePosition(TitledBorder.TOP);
 					tableButton[tb].setBorder(topBorder);
-					if (!barmanager.getHashTable(tableNumber).equals(null)) {
-						final Table table = barmanager.getHashTable(tableNumber);
+					Table table = null;
+					table = barmanager.getHashTable(tableNumber);
+					if (!table.equals(null)) {
+							// Setup center - left
+							tableLeft = new JTable(
+									buildTableModel(table));
+							tableLeft.setBorder(BorderFactory.createEtchedBorder());
+							tableLeft.getTableHeader().setReorderingAllowed(false); // Added
 
-						// Setup center - left
-						tableLeft = new JTable(
-								buildTableModel(table));
-						tableLeft.setBorder(BorderFactory.createEtchedBorder());
-						tableLeft.getTableHeader().setReorderingAllowed(false); // Added
+							// Add mouse listener
+							final Table finalTable = table;
+							tableLeft.addMouseListener(new MouseAdapter() {
 
-						// Add mouse listener
-						tableLeft.addMouseListener(new MouseAdapter() {
-
-							@Override
-							public void mouseClicked(final MouseEvent e) {
-								if (e.getClickCount() == 1) {
-									final JTable target = (JTable) e
-											.getSource(); // Get left JTable
-									final int row = target.getSelectedRow(); //Get row selected by user
-									int value = (Integer) target.getValueAt(
-											row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
+								@Override
+								public void mouseClicked(final MouseEvent e) {
+									if (e.getClickCount() == 1) {
+										final JTable target = (JTable) e
+												.getSource(); // Get left JTable
+										final int row = target.getSelectedRow(); //Get row selected by user
+										int value = (Integer) target.getValueAt(
+												row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
 
 									/*
 									 * Now that we have the orderNumber, we can
 									 * create the right table
 									 */
-									rightPanel.removeAll();
-									Order tempOrder = table.getSpecificOrder(value);
-									tableRight = new JTable(
-											buildTableModelRight(table.getSpecificOrder(value)));
-									tableRight.setBorder(BorderFactory
-											.createEtchedBorder());
-									tableRight.setEnabled(false); // Disable
-									// user
-									// input
-									rightPanel.add(
-											new JScrollPane(tableRight))
-											.setBackground(Color.WHITE);
-									rightPanel.revalidate();
+										rightPanel.removeAll();
+										Order tempOrder = finalTable.getSpecificOrder(value);
+										tableRight = new JTable(
+												buildTableModelRight(finalTable.getSpecificOrder(value)));
+										tableRight.setBorder(BorderFactory
+												.createEtchedBorder());
+										tableRight.setEnabled(false); // Disable
+										// user
+										// input
+										rightPanel.add(
+												new JScrollPane(tableRight))
+												.setBackground(Color.WHITE);
+										rightPanel.revalidate();
+									}
 								}
-							}
-						});
-						leftPanel.add(new JScrollPane(tableLeft))
-								.setBackground(Color.WHITE);
-						leftPanel.revalidate();
-					}
+							});
+							leftPanel.add(new JScrollPane(tableLeft))
+									.setBackground(Color.WHITE);
+							leftPanel.revalidate();
+						} else {
+							revalidate();
+						}
 				}
 				else {
 						TitledBorder topBorderInactive = BorderFactory
@@ -431,6 +434,7 @@ public class BarGUI extends JPanel {
 						tableButton[tb].setBorder(topBorderInactive);
 						tableButton[tb].setBorder(BorderFactory
 								.createEtchedBorder());
+					revalidate();
 				}
 			}
 			revalidate();
