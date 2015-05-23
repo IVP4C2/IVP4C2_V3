@@ -15,6 +15,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Vector;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -29,10 +30,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.mysql.jdbc.ResultSetMetaData;
 
+import nl.edu.avans.ivp4c2.domain.Employee;
 import nl.edu.avans.ivp4c2.domain.Order;
 import nl.edu.avans.ivp4c2.domain.Product;
 import nl.edu.avans.ivp4c2.domain.Table;
 import nl.edu.avans.ivp4c2.manager.BarManager;
+import nl.edu.avans.ivp4c2.manager.LoginManager;
 
 
 public class BarGUI extends JPanel {
@@ -42,10 +45,12 @@ public class BarGUI extends JPanel {
 	private Font font;
 
 	// Buttons
+	private JComboBox<Employee> employeeBox;
 	private JButton completeOrderButton;
 	private JButton tableHistoryButton;
 	private JButton signupButton;
 	private JButton signInOutButton;
+
 
 	private final int AMOUNT_OF_TABLEBUTTONS = 11;
 	private JButton[] tableButton;
@@ -74,6 +79,7 @@ public class BarGUI extends JPanel {
 
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
+		LoginManager loginmanager = new LoginManager();
 
 		setLayout(new BorderLayout());
 
@@ -139,6 +145,9 @@ public class BarGUI extends JPanel {
 		panelNorthLeft.add(logo);
 
 		// Setup West panel
+		employeeBox = new JComboBox<Employee>();
+		HashMap<Integer, Employee> employeeNames = loginmanager.getEmployees();
+
 		signupButton = new JButton("Inschrijven");
 		signupButton.setBackground(Color.decode("#DFDFDF"));
 		signupButton.setFont(font);
@@ -152,11 +161,13 @@ public class BarGUI extends JPanel {
 		tableHistoryButton.setFont(font);
 		tableHistoryButton.setBorder(BorderFactory.createEtchedBorder());
 		signInOutButton = new JButton("Aan/afmelden");
+		signInOutButton.addActionListener(new SignInOutHandler());
 		signInOutButton.setBackground(Color.decode("#DFDFDF"));
 		signInOutButton.setFont(font);
 		signInOutButton.setBorder(BorderFactory.createEtchedBorder());
 
 		// Items added to panel West
+		panelWest.add(employeeBox);
 		panelWest.add(completeOrderButton);
 		panelWest.add(tableHistoryButton);
 		panelWest.add(signupButton);
@@ -169,6 +180,7 @@ public class BarGUI extends JPanel {
 
 		add(panelCenter, BorderLayout.CENTER);
 		add(panelWest, BorderLayout.WEST);
+
 
 		/*
 		 * Calls setTableStatus() every second. Other methods that should be
@@ -244,20 +256,6 @@ public class BarGUI extends JPanel {
 					}
 				}
 			}
-			/*Only barOrder*/
-//			if (hasBarOrder && !hasKitchenOrder) {
-//				tableButton[tb].setBackground(Color.GREEN);
-//			}
-//			/*only kitchenOrder*/
-//			else if (!hasBarOrder && hasKitchenOrder) {
-//				tableButton[tb].setBackground((Color.YELLOW));
-//			}
-//			/*barOrder and kitchenOrder*/
-//			else if (hasBarOrder && hasKitchenOrder) {
-//				tableButton[tb].setBackground((Color.YELLOW));
-//			} else {
-//				tableButton[tb].setBackground(Color.decode("#DFDFDF"));
-//			}
 			repaint();
 		}
 
@@ -438,6 +436,13 @@ public class BarGUI extends JPanel {
 				}
 			}
 			revalidate();
+		}
+	}
+
+	class SignInOutHandler implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			new LoginGUI();
+			signInOutButton.setText("asdfsdaf");
 		}
 	}
 }
