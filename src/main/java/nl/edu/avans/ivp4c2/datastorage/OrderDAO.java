@@ -56,7 +56,6 @@ public final class OrderDAO {
                            for(Product p : products) { //Add product to the new Order
                                newOrder.addProduct(p);
                            }
-                        System.out.println(newOrder.getOrderTime());
                         orders.add(newOrder);
 
                     }

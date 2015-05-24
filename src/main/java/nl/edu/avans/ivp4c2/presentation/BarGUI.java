@@ -30,12 +30,10 @@ import javax.swing.table.DefaultTableModel;
 
 import com.mysql.jdbc.ResultSetMetaData;
 
-import nl.edu.avans.ivp4c2.domain.Employee;
-import nl.edu.avans.ivp4c2.domain.Order;
-import nl.edu.avans.ivp4c2.domain.Product;
-import nl.edu.avans.ivp4c2.domain.Table;
+import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
+import nl.edu.avans.ivp4c2.manager.PaymentManager;
 
 
 public class BarGUI extends JPanel {
@@ -117,7 +115,7 @@ public class BarGUI extends JPanel {
 		panelCenter.add(rightPanel);
 
 		// Setup North panel
-		
+
 		/* Reading and setting logo image */
 		BufferedImage image = null;
 		try {
@@ -234,7 +232,7 @@ public class BarGUI extends JPanel {
 			for (Order o : to.getOrders()) {
 				/*Check the order destination and time for each order.*/
 				if (o.getDestination() == 1 && !hasKitchenOrder) {
-					if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
+					if (longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
 						System.out.println("Before bar");
 						tableButton[tb].setBackground(Color.decode("#008A2E"));
 						longestBarOrder = o.getOrderTime();
@@ -244,7 +242,7 @@ public class BarGUI extends JPanel {
 					}
 				}
 				if (o.getDestination() == 2) {
-					if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
+					if (longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
 						System.out.println("Before kitchen");
 						tableButton[tb].setBackground(Color.ORANGE);
 						longestKitchenOrder = o.getOrderTime();
@@ -268,53 +266,6 @@ public class BarGUI extends JPanel {
 
 	}
 
-	// Method to create JTable
-	public static DefaultTableModel buildTableModel(Table t) {
-
-		// Gets column names from Table
-		Vector<String> columnNames = new Vector<String>();
-		columnNames.add("TafelNr");
-		columnNames.add("BestelNr");
-		columnNames.add("Tijd");
-		columnNames.add("Status");
-
-		// data of the table
-		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-
-
-		for (Order o : t.getOrders()) {
-			Vector<Object> vector = new Vector<Object>();
-			vector.add(t.getTableNumber());
-			vector.add(o.getOrderNumber());
-			vector.add(new SimpleDateFormat("HH:mm:ss").format(o.getOrderTime())); //Formats the Date to a useful string
-			vector.add(o.getOrderStatus());
-			data.add(vector);
-		}
-
-		return new DefaultTableModel(data, columnNames);
-	}
-
-
-	// Method to create JTable
-	public static DefaultTableModel buildTableModelRight(Order order) {
-
-		// Gets column names from Table
-		Vector<String> columnNames = new Vector<String>();
-		columnNames.add("ProductNaam");
-		columnNames.add("Aantal");
-
-		// data of the table
-		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-
-		for (Product p : order.getProducts()) {
-			Vector<Object> vector = new Vector<Object>();
-			vector.add(p.getProductName());
-			vector.add(p.getAmount());
-			data.add(vector);
-		}
-
-		return new DefaultTableModel(data, columnNames);
-	}
 
 	// Inner classes
 //	class LeftMenuHandler implements ActionListener {
@@ -358,13 +309,12 @@ public class BarGUI extends JPanel {
 //	}
 
 	class TableButtonHandler implements ActionListener {
-
 		public void actionPerformed(ActionEvent e) {
 			rightPanel.removeAll();
 			leftPanel.removeAll();
-
 			for (int tb = 1; tb <= 10; tb++) {
 				if (e.getSource() == tableButton[tb]) {
+
 					final int tableNumber = tb; // create new integer. Easier to
 					// work with.
 					// give the active button a border
@@ -377,38 +327,23 @@ public class BarGUI extends JPanel {
 					Table table = null;
 					table = barmanager.getHashTable(tableNumber);
 					if (!table.equals(null)) {
-							// Setup center - left
-							tableLeft = new JTable(
-									buildTableModel(table));
-							tableLeft.setBorder(BorderFactory.createEtchedBorder());
-							tableLeft.getTableHeader().setReorderingAllowed(false); // Added
+						if (!table.getTableStatus().equals("Afrekenen")) {
+							final OrderSection orderSection = new OrderSection();
+							JTable tableLeft = orderSection.getTableLeft(table);
 
 							// Add mouse listener
 							final Table finalTable = table;
 							tableLeft.addMouseListener(new MouseAdapter() {
-
 								@Override
 								public void mouseClicked(final MouseEvent e) {
 									if (e.getClickCount() == 1) {
+										rightPanel.removeAll();
 										final JTable target = (JTable) e
 												.getSource(); // Get left JTable
 										final int row = target.getSelectedRow(); //Get row selected by user
-										int value = (Integer) target.getValueAt(
-												row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
-
-									/*
-									 * Now that we have the orderNumber, we can
-									 * create the right table
-									 */
-										rightPanel.removeAll();
+										int value = (Integer) target.getValueAt(row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
 										Order tempOrder = finalTable.getSpecificOrder(value);
-										tableRight = new JTable(
-												buildTableModelRight(finalTable.getSpecificOrder(value)));
-										tableRight.setBorder(BorderFactory
-												.createEtchedBorder());
-										tableRight.setEnabled(false); // Disable
-										// user
-										// input
+										JTable tableRight = orderSection.getTableRight(tempOrder);
 										rightPanel.add(
 												new JScrollPane(tableRight))
 												.setBackground(Color.WHITE);
@@ -419,9 +354,20 @@ public class BarGUI extends JPanel {
 							leftPanel.add(new JScrollPane(tableLeft))
 									.setBackground(Color.WHITE);
 							leftPanel.revalidate();
-						} else {
+						} else if (table.getTableStatus().equals("Afrekenen")) {
+							System.out.println("Status afrekenen");
+							panelCenter.removeAll();
+							PaymentManager paymentManager = new PaymentManager();
+							PaymentSection paymentSection = new PaymentSection();
+							Payment p = paymentManager.getPayment(tableNumber);
+							System.out.println("Afrekenen");
+							panelCenter.add(paymentSection.getPaymentPanel(p));
 							revalidate();
 						}
+						else {
+							revalidate();
+						}
+					}
 				}
 				else {
 						TitledBorder topBorderInactive = BorderFactory

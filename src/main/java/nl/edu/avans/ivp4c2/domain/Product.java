@@ -42,4 +42,12 @@ public class Product {
 	public int getAmount() {
 		return amount;
 	}
+
+	/**
+	 * Returns the price as a double.
+	 * @return price
+	 */
+	public double getPrice() {
+		return price;
+	}
 }
