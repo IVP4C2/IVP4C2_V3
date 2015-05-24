@@ -1,16 +1,12 @@
 package nl.edu.avans.ivp4c2.manager;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
-import com.sun.org.apache.xpath.internal.SourceTree;
 import nl.edu.avans.ivp4c2.datastorage.*;
-import nl.edu.avans.ivp4c2.domain.Order;
 import nl.edu.avans.ivp4c2.domain.Table;
 
 /**
@@ -18,19 +14,11 @@ import nl.edu.avans.ivp4c2.domain.Table;
  * @author IVP4C2
  */
 public class BarManager {
-
-	// private ArrayList<Order> orders;
-	private HashMap<Integer, Table> tableHashmap;
-	private ArrayList<Table> occupiedTables; // ArrayList for all occupied tables
-	private ArrayList<Table> paymentTables; // ArrayList for all payment tables
-	private ArrayList<Table> emptyTables; // ArrayList for all empty tables
+	private HashMap<Integer, Table> tableHashmap; //Used to store all tables
 	private TableDAO tabledao;
 
 	public BarManager() {
 		tableHashmap = new HashMap<Integer, Table>();
-		occupiedTables = new ArrayList<Table>();
-		paymentTables = new ArrayList<Table>();
-		emptyTables = new ArrayList<Table>();
 		tabledao = new TableDAO();
 
 		getOccupiedTablesDAO();
@@ -57,7 +45,7 @@ public class BarManager {
 	/**
 	 * Hashmap which returns a Table object, used to fill the JTable
 	 * @param tableNumber
-	 * @return Table
+	 * @return Table ofr given tableNumber
 	 */
 	public Table getHashTable(int tableNumber) {
 		Table tempTable;
@@ -67,6 +55,10 @@ public class BarManager {
 				tempTable = tableHashmap.get(tableNumber);
 			}
 		return tempTable;
+	}
+
+	public HashMap<Integer, Table> getHashMap() {
+		return tableHashmap;
 	}
 
 
@@ -81,7 +73,13 @@ public class BarManager {
 	 * @return occupied tables
 	 */
 	public ArrayList<Table> getOccupiedTables() {
-		return occupiedTables;
+		ArrayList<Table> arrayList = new ArrayList<Table>();
+		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
+			if(e.getValue().getTableStatus().equals("Bezet")) {
+				arrayList.add(e.getValue());
+			}
+		}
+		return arrayList;
 	}
 
 	/**
@@ -89,7 +87,13 @@ public class BarManager {
 	 * @return payment tables
 	 */
 	public ArrayList<Table> getPaymentTables() {
-		return paymentTables;
+		ArrayList<Table> arrayList = new ArrayList<Table>();
+		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
+			if(e.getValue().getTableStatus().equals("Afrekenen")) {
+				arrayList.add(e.getValue());
+			}
+		}
+		return arrayList;
 	}
 
 	/**
@@ -97,7 +101,13 @@ public class BarManager {
 	 * @return
 	 */
 	public ArrayList<Table> getEmptyTables() {
-		return emptyTables;
+		ArrayList<Table> arrayList = new ArrayList<Table>();
+		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
+			if(e.getValue().getTableStatus().equals("Leeg")) {
+				arrayList.add(e.getValue());
+			}
+		}
+		return arrayList;
 	}
 
 
@@ -110,17 +120,14 @@ public class BarManager {
 	 */
 
 	/**
-	 * Retrieves all tebles from the database which have the status 'Bezet'
+	 * Retrieves all tables from the database which have the status 'Bezet'
 	 * Also adds these tables to the tableHashmap
 	 * @return ArrayList<Table>
 	 */
-	public ArrayList<Table> getOccupiedTablesDAO() {
-		occupiedTables.clear();
+	public void getOccupiedTablesDAO() {
 		for (Table t : tabledao.getTableOccupied()) {
-			occupiedTables.add(t);
 			tableHashmap.put(t.getTableNumber(), t); 	// add active tables to the hashmap
 		}
-		return occupiedTables;
 	}
 
 	/**
@@ -128,25 +135,19 @@ public class BarManager {
 	 * Also adds these tables to the tableHashMap
 	 * @return ArrayList<Table>
 	 */
-	public ArrayList<Table> getPaymentTablesDAO() {
-		paymentTables.clear();
+	public void getPaymentTablesDAO() {
 		for (Table t : tabledao.getTablePayment()) {
-			paymentTables.add(t);
 			tableHashmap.put(t.getTableNumber(), t);
 		}
-		return paymentTables;
 	}
 
 	/**
 	 * Retrieves all tebles from the database which have the status 'Leeg'
 	 * @return ArrayList<Table>
 	 */
-	public ArrayList<Table> getEmptyTablesDAO() {
-		emptyTables.clear();
+	public void getEmptyTablesDAO() {
 		for (Table t : tabledao.getTableEmpty()) {
-			emptyTables.add(t);
-
+			tableHashmap.put(t.getTableNumber(), t);
 		}
-		return emptyTables;
 	}
 }
