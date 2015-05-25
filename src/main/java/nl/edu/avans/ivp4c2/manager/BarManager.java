@@ -61,6 +61,10 @@ public class BarManager {
 		return tableHashmap;
 	}
 
+	public void removeTable(int tableNumber) {
+		tableHashmap.remove(tableNumber);
+	}
+
 
 	/* ArrayList getters
 	 *

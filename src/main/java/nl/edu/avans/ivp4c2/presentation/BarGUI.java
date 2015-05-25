@@ -364,10 +364,13 @@ public class BarGUI extends JPanel {
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			if(paymentManager.completePayment(activeTable)) {
+				barmanager.removeTable(activeTable);
+				tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
+				revalidate();
 				JPanel completeOrderStatus = new JPanel();
 				JLabel label = new JLabel("Rekening afgerond");
 				completeOrderStatus.add(label);
-				JOptionPane.showMessageDialog(BarGUI.this, completeOrderStatus, "Inlogscherm", JOptionPane.CANCEL_OPTION);
+				JOptionPane.showMessageDialog(BarGUI.this, completeOrderStatus, "Inlogscherm", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 	}
