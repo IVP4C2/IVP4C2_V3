@@ -34,6 +34,7 @@ import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
 import nl.edu.avans.ivp4c2.manager.PaymentManager;
+import sun.plugin2.message.ShowStatusMessage;
 
 
 public class BarGUI extends JPanel {
@@ -63,15 +64,13 @@ public class BarGUI extends JPanel {
 	private JPanel panelNorthRight;
 	private JPanel panelWest;
 	private JPanel panelCenter;
+	private int activeTable;
 
 	/*
 	 * Initialize JTable to fill rightPanel and leftPanel. By doing so, we make
 	 * sure there is always an object present in the layout
 	 */
-	private JTable tableLeft = new JTable();
-	private JTable tableRight = new JTable();
-	private JPanel rightPanel = new JPanel(); // rightTable will be set here
-	private JPanel leftPanel = new JPanel(); // leftTable will be set here
+	private PaymentManager paymentManager;
 
 	private BarManager barmanager;
 
@@ -100,19 +99,16 @@ public class BarGUI extends JPanel {
 		panelNorthRight.setLayout(new GridLayout(2, 5));
 		panelWest.setLayout(new GridLayout(4, 1));
 		// panelEast.setLayout(new BorderLayout());
-		panelCenter.setLayout(new GridLayout(1, 2)); // Has 1 row and two
+		panelCenter.setLayout(new GridLayout(1, 1)); // Has 1 row and two
 		// columns. leftPanel
 		// and rightPanel will
 		// be set in these
 		// columns
 
 		// Confire left and right panel
-		leftPanel.setLayout(new GridLayout(1, 1));
-		rightPanel.setLayout(new GridLayout(1, 1));
-		leftPanel.setBackground(Color.WHITE);
-		rightPanel.setBackground(Color.WHITE);
-		panelCenter.add(leftPanel);
-		panelCenter.add(rightPanel);
+
+//		panelCenter.add(leftPanel);
+//		panelCenter.add(rightPanel);
 
 		// Setup North panel
 
@@ -154,6 +150,7 @@ public class BarGUI extends JPanel {
 		completeOrderButton.setBackground(Color.decode("#DFDFDF"));
 		completeOrderButton.setFont(font);
 		completeOrderButton.setBorder(BorderFactory.createEtchedBorder());
+		completeOrderButton.addActionListener(new CompleteOrderHandler());
 		tableHistoryButton = new JButton("Geschiedenis");
 		tableHistoryButton.setBackground(Color.decode("#DFDFDF"));
 		tableHistoryButton.setFont(font);
@@ -268,50 +265,11 @@ public class BarGUI extends JPanel {
 
 
 	// Inner classes
-//	class LeftMenuHandler implements ActionListener {
-//		public void actionPerformed(ActionEvent e) {
-//			if (e.getSource() == barOrderButton) {
-//				barOrderButton.setBackground(Color.DARK_GRAY);
-//				barOrderButton.setForeground(Color.WHITE);
-//				leftPanel.removeAll();
-//				rightPanel.removeAll();
-//			} else {
-//				barOrderButton.setForeground(Color.black);
-//				barOrderButton.setBackground(Color.decode("#DFDFDF"));
-//			}
-//			if (e.getSource() == kitchenOrderButton) {
-//				kitchenOrderButton.setBackground(Color.DARK_GRAY);
-//				kitchenOrderButton.setForeground(Color.WHITE);
-//				leftPanel.removeAll();
-//				rightPanel.removeAll();
-//				try {
-//					JTable kitchenTable = new JTable(
-//							buildTableModel(barmanager.getTableOrder()));
-//					leftPanel.add(new JScrollPane(kitchenTable));
-//					panelCenter.revalidate();
-//				} catch (SQLException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			} else {
-//				kitchenOrderButton.setForeground(Color.black);
-//				kitchenOrderButton.setBackground(Color.decode("#DFDFDF"));
-//			}
-//		}
-//	}
 
-//	class KitchenOrderHandler implements ActionListener {
-//		public void actionPerformed(ActionEvent e) {
-//			kitchenOrderButton.setBackground(Color.DARK_GRAY);
-//			kitchenOrderButton.setForeground(Color.WHITE);
-//			repaint();
-//		}
-//	}
 
 	class TableButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			rightPanel.removeAll();
-			leftPanel.removeAll();
+
 			for (int tb = 1; tb <= 10; tb++) {
 				if (e.getSource() == tableButton[tb]) {
 
@@ -328,6 +286,16 @@ public class BarGUI extends JPanel {
 					table = barmanager.getHashTable(tableNumber);
 					if (!table.equals(null)) {
 						if (!table.getTableStatus().equals("Afrekenen")) {
+							panelCenter.removeAll();
+							JPanel barPanel = new JPanel(new GridLayout(1, 2));
+							JPanel leftPanel = new JPanel(new GridLayout(1, 1));
+							final JPanel rightPanel = new JPanel(new GridLayout(1, 1));
+							leftPanel.setBackground(Color.WHITE);
+							rightPanel.setBackground(Color.WHITE);
+							barPanel.add(leftPanel);
+							barPanel.add(rightPanel);
+							panelCenter.add(barPanel);
+
 							final OrderSection orderSection = new OrderSection();
 							JTable tableLeft = orderSection.getTableLeft(table);
 
@@ -357,9 +325,10 @@ public class BarGUI extends JPanel {
 						} else if (table.getTableStatus().equals("Afrekenen")) {
 							System.out.println("Status afrekenen");
 							panelCenter.removeAll();
-							PaymentManager paymentManager = new PaymentManager();
+							paymentManager = new PaymentManager();
 							PaymentSection paymentSection = new PaymentSection();
 							Payment p = paymentManager.getPayment(tableNumber);
+							activeTable = tableNumber;
 							System.out.println("Afrekenen");
 							panelCenter.add(paymentSection.getPaymentPanel(p));
 							revalidate();
@@ -389,6 +358,17 @@ public class BarGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			new LoginGUI();
 			signInOutButton.setText("asdfsdaf");
+		}
+	}
+
+	class CompleteOrderHandler implements  ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			if(paymentManager.completePayment(activeTable)) {
+				JPanel completeOrderStatus = new JPanel();
+				JLabel label = new JLabel("Rekening afgerond");
+				completeOrderStatus.add(label);
+				JOptionPane.showMessageDialog(BarGUI.this, completeOrderStatus, "Inlogscherm", JOptionPane.CANCEL_OPTION);
+			}
 		}
 	}
 }

@@ -22,28 +22,30 @@ public class PaymentSection {
     private JPanel southRight;
     public PaymentSection() {
         printBill = new JButton("Print Bon");
+        printBill.setBackground(Color.decode("#DFDFDF"));
         panelSouth = new JPanel(new GridLayout(1, 3));
-        southMid = new JPanel(new GridLayout(1, 1));
+        southMid = new JPanel(new BorderLayout());
         southRight = new JPanel(new GridLayout(2, 1));
-        panelSouth.setBackground(Color.GRAY);
-        southMid.setBackground(Color.GRAY);
-        southRight.setBackground(Color.GRAY);
+        panelSouth.setBackground(Color.decode("#DFDFDF"));
+        southMid.setBackground(Color.decode("#DFDFDF"));
+        southRight.setBackground(Color.decode("#DFDFDF"));
     }
 
 
     public JPanel getPaymentPanel(Payment p) {
         this.paymentPanel = new JPanel();
         paymentPanel.setLayout(new BorderLayout());
-        paymentPanel.add(new JScrollPane(new JTable(buildTableModel(p))), BorderLayout.NORTH);
+        paymentPanel.add(new JScrollPane(new JTable(buildTableModel(p))), BorderLayout.CENTER);
 
 
-        southMid.add(new JLabel("Afronden"));
-        southRight.add(new JLabel("Incl btw: " + p.getTotalPrice()*1.21));
+        southMid.add(new JLabel("Totaal Prijs:         "), BorderLayout.EAST);
+        southRight.add(new JLabel("Incl btw: " + String.format("%.2f", p.getTotalPrice()*1.06)));
         southRight.add(new JLabel("Excl btw: " + p.getTotalPrice()));
 
         panelSouth.add(printBill);
         panelSouth.add(southMid);
         panelSouth.add(southRight);
+        paymentPanel.add(panelSouth, BorderLayout.SOUTH);
         return paymentPanel;
     }
     // Method to create JTable

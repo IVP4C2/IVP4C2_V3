@@ -126,7 +126,11 @@ public class BarManager {
 	 */
 	public void getOccupiedTablesDAO() {
 		for (Table t : tabledao.getTableOccupied()) {
-			tableHashmap.put(t.getTableNumber(), t); 	// add active tables to the hashmap
+			if(tableHashmap.containsKey(t.getTableNumber())) {
+				tableHashmap.replace(t.getTableNumber(), t);
+			} else {
+				tableHashmap.put(t.getTableNumber(), t);
+			} 	// add active tables to the hashmap
 		}
 	}
 
@@ -137,7 +141,11 @@ public class BarManager {
 	 */
 	public void getPaymentTablesDAO() {
 		for (Table t : tabledao.getTablePayment()) {
-			tableHashmap.put(t.getTableNumber(), t);
+			if(tableHashmap.containsKey(t.getTableNumber())) {
+				tableHashmap.replace(t.getTableNumber(), t);
+			} else {
+				tableHashmap.put(t.getTableNumber(), t);
+			}
 		}
 	}
 
@@ -147,7 +155,12 @@ public class BarManager {
 	 */
 	public void getEmptyTablesDAO() {
 		for (Table t : tabledao.getTableEmpty()) {
-			tableHashmap.put(t.getTableNumber(), t);
+			if(tableHashmap.containsKey(t.getTableNumber())) {
+				tableHashmap.replace(t.getTableNumber(), t);
+			} else {
+				tableHashmap.put(t.getTableNumber(), t);
+			}
+
 		}
 	}
 }

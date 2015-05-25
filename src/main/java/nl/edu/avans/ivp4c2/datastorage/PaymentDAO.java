@@ -85,7 +85,9 @@ public final class PaymentDAO {
             result = connection.executeUpdateStatement("UPDATE `bill` `b` " +
                     "INNER JOIN `kpt_billed_order` `kbo` ON `b`.`bill_id` = `kbo`.`fk_bill_id` " +
                     "INNER JOIN `order` `o` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
-                    "INNER JOIN `kpt_table_order` `kto` ON `o`.`order_id` = `kto`.`fk_order_id` SET `b`.`ispaid` = '1' " +
+                    "INNER JOIN `kpt_table_order` `kto` ON `o`.`order_id` = `kto`.`fk_order_id` " +
+                    "INNER JOIN `table` `t` ON `kto`.`fk_table_id` = `t`.`table_id` " +
+                    "SET `b`.`ispaid` = '1', `t`.`fk_table_status_id` = '4'  " +
                     "WHERE `kto`.`fk_table_id` = '"+tableNumber+"';");
             connection.closeConnection();
         }
