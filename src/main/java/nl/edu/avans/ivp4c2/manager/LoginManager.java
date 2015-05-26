@@ -1,6 +1,5 @@
 package nl.edu.avans.ivp4c2.manager;
 
-
 import nl.edu.avans.ivp4c2.datastorage.EmployeeDAO;
 import nl.edu.avans.ivp4c2.domain.Employee;
 
@@ -16,12 +15,6 @@ public class LoginManager {
 
     public LoginManager() {
         employeeList = new HashMap();
-        //paymentList = new ArrayList<Payment>();
-        employeeList.put(2, new Employee(2, "Test", "Test"));
-        // System.out.println(employeeList.get(2));
-
-
-
     }
 
     // Methods
@@ -42,20 +35,19 @@ public class LoginManager {
 
 
     /**
-     *
      * @param employeeNumber will be used to find a Employee in the Database or local
      * @return a employee object
      */
 
     public Employee findEmployee(int employeeNumber) {
         Employee employee = employeeList.get(employeeNumber);
-        if(employee == null) {
+        if (employee == null) {
             // when the employee isn't loaded from the database yet, we need to do that first
             // create the employeeDAO to find employees in the database
             EmployeeDAO employeeDAO = new EmployeeDAO();
             employee = employeeDAO.findEmployee(employeeNumber);
 
-            if(employee != null) {
+            if (employee != null) {
                 // Cache the employee that has been found in the database in our main memory.
                 employeeList.put(employeeNumber, employee);
             }
@@ -63,22 +55,28 @@ public class LoginManager {
         return employee;
     }
 
-    // This method will give a list of employees, that will be used to create the JCombBox
     public HashMap<Integer, Employee> getEmployees() {
-        for(Map.Entry<Integer, Employee> entry : employeeList.entrySet()){
-            entry.getValue();
-
-        }
         return employeeList;
     }
-
-
-
-//    public void getEmployees() {
-//        Iterator iterator = employeeList.entrySet().iterator();
-//        while (iterator.hasNext()) {
-//            HashMap.Entry mapEntry = (HashMap.Entry) iterator.next();
-//            mapEntry.getValue();
+//
+//    public void logoutEmployee(Employee e) {
+//        for(Map.Entry<Integer, Employee> entry : employeeList.entrySet()) {
+//           if(entry == e) {
+//               employeeList.remove(entry);
+//           }
+//
+//    private boolean isValidEmployeeNumber(int input) {
+//        boolean status = false;
+//        for(Map.Entry<Integer, Employee> entry : employeeList.entrySet()) {
+//            if(entry.getKey() == input) {
+//                return true;
+//            }
 //        }
+//        return status;
 //    }
+//
+//    public void setValidEmployeeNumber(int input) throws invalidEmployeeNumberException {
+//
+//    }
+
 }

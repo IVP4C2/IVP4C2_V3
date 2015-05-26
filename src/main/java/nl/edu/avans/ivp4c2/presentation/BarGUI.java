@@ -13,10 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Vector;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -66,6 +63,10 @@ public class BarGUI extends JPanel {
 	private JPanel panelCenter;
 	private int activeTable;
 
+	private JTextField logInOutField;
+	private JButton loginButton;
+	private JButton logoutButton;
+
 	/*
 	 * Initialize JTable to fill rightPanel and leftPanel. By doing so, we make
 	 * sure there is always an object present in the layout
@@ -73,10 +74,11 @@ public class BarGUI extends JPanel {
 	private PaymentManager paymentManager;
 
 	private BarManager barmanager;
+	private LoginManager loginmanager;
 
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
-		LoginManager loginmanager = new LoginManager();
+		this.loginmanager = new LoginManager();
 
 		setLayout(new BorderLayout());
 
@@ -97,7 +99,7 @@ public class BarGUI extends JPanel {
 		panelNorthLeft.setLayout(new GridLayout(1, 2));
 		panelNorthLeft.setSize(600, 200);
 		panelNorthRight.setLayout(new GridLayout(2, 5));
-		panelWest.setLayout(new GridLayout(4, 1));
+		panelWest.setLayout(new GridLayout(7, 1));
 		// panelEast.setLayout(new BorderLayout());
 		panelCenter.setLayout(new GridLayout(1, 1)); // Has 1 row and two
 		// columns. leftPanel
@@ -138,35 +140,46 @@ public class BarGUI extends JPanel {
 
 		panelNorthLeft.add(logo);
 
-		// Setup West panel
 		employeeBox = new JComboBox<Employee>();
-		HashMap<Integer, Employee> employeeNames = loginmanager.getEmployees();
+		//HashMap<Integer, Employee> employeeNames = loginmanager.getEmployees();
 
 		signupButton = new JButton("Inschrijven");
 		signupButton.setBackground(Color.decode("#DFDFDF"));
 		signupButton.setFont(font);
 		signupButton.setBorder(BorderFactory.createEtchedBorder());
 		completeOrderButton = new JButton("Afronden");
+        completeOrderButton.addActionListener(new CompleteOrderHandler());
 		completeOrderButton.setBackground(Color.decode("#DFDFDF"));
 		completeOrderButton.setFont(font);
 		completeOrderButton.setBorder(BorderFactory.createEtchedBorder());
-		completeOrderButton.addActionListener(new CompleteOrderHandler());
 		tableHistoryButton = new JButton("Geschiedenis");
 		tableHistoryButton.setBackground(Color.decode("#DFDFDF"));
 		tableHistoryButton.setFont(font);
 		tableHistoryButton.setBorder(BorderFactory.createEtchedBorder());
-		signInOutButton = new JButton("Aan/afmelden");
-		signInOutButton.addActionListener(new SignInOutHandler());
-		signInOutButton.setBackground(Color.decode("#DFDFDF"));
-		signInOutButton.setFont(font);
-		signInOutButton.setBorder(BorderFactory.createEtchedBorder());
+		logInOutField = new JTextField(11);
+		logInOutField.setBorder(BorderFactory.createEtchedBorder());
+		logInOutField.setMargin(new Insets(50, 50, 50, 50));
+		logInOutField.setFont(font);
+		loginButton = new JButton("Aanmelden");
+		loginButton.setFont(font);
+		loginButton.setBackground(Color.decode("#DFDFDF"));
+		loginButton.setBorder(BorderFactory.createEtchedBorder());
+		loginButton.addActionListener(new LogInOutHandler());
+		logoutButton = new JButton(" Afmelden");
+		logoutButton.setFont(font);
+		logoutButton.setBackground(Color.decode("#DFDFDF"));
+		logoutButton.setBorder(BorderFactory.createEtchedBorder());
+		logoutButton.addActionListener(new LogInOutHandler());
 
 		// Items added to panel West
 		panelWest.add(employeeBox);
 		panelWest.add(completeOrderButton);
 		panelWest.add(tableHistoryButton);
 		panelWest.add(signupButton);
-		panelWest.add(signInOutButton);
+		panelWest.add(logInOutField);
+		panelWest.add(loginButton);
+		panelWest.add(logoutButton);
+
 
 		// Add all panels
 		panelNorth.add(panelNorthLeft, BorderLayout.WEST); // Added
@@ -327,7 +340,7 @@ public class BarGUI extends JPanel {
 							panelCenter.removeAll();
 							paymentManager = new PaymentManager();
 							PaymentSection paymentSection = new PaymentSection();
-							Payment p = paymentManager.getPayment(tableNumber);
+							Payment p = paymentManager.getActivePayment(tableNumber);
 							activeTable = tableNumber;
 							System.out.println("Afrekenen");
 							panelCenter.add(paymentSection.getPaymentPanel(p));
@@ -354,24 +367,73 @@ public class BarGUI extends JPanel {
 		}
 	}
 
-	class SignInOutHandler implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-			new LoginGUI();
-			signInOutButton.setText("asdfsdaf");
-		}
-	}
 
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(paymentManager.completePayment(activeTable)) {
-				barmanager.removeTable(activeTable);
-				tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
-				revalidate();
-				JPanel completeOrderStatus = new JPanel();
-				JLabel label = new JLabel("Rekening afgerond");
-				completeOrderStatus.add(label);
-				JOptionPane.showMessageDialog(BarGUI.this, completeOrderStatus, "Inlogscherm", JOptionPane.INFORMATION_MESSAGE);
+            if (employeeBox.getItemCount() > 0) {
+                if (paymentManager.completePayment(activeTable)) {
+                    try {
+                        barmanager.removeTable(activeTable);
+                        tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
+                        revalidate();
+                        panelCenter.removeAll();
+                        JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+            else {
+                JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+	}
+
+	/**
+	 * The Login and logout handler
+	 * This handler makes it possible to let employees login and also logout
+	 * If the employee fill in his employeecode in the textfield and click on login the employee will be logged in
+	 * When the employee also fill in his employeecode and click on logout the employee will be logged out
+	 * For protection whe are using codes that only the employee should know
+	 */
+	class LogInOutHandler extends Component implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				// A employee can be found with his employeenumber and when a employee is found
+				int employeeCode = Integer.parseInt(logInOutField.getText());
+				// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
+				Employee empl = loginmanager.findEmployee(employeeCode);
+				if (empl != null) {
+					employeeBox.removeAllItems();
+					// All the employees will be stored in a list called employees.
+					HashMap<Integer, Employee> employees;
+					employees = loginmanager.getEmployees();
+					// This loop will check if a employee is in the list,
+					// if a employee is above added to the list it will be added to the JComboBox
+					for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
+						Employee em = entry.getValue();
+						employeeBox.addItem(em);
+					}
+					// If a employee is selected in the JComboBox and there is clicked on the logoutButton a employee will logout.
+					// If a employee number is filled in the textField and there is clicked on the logoutButton the employee will also logout.
+					if (e.getSource() == logoutButton) {
+						int input = Integer.parseInt(logInOutField.getText());
+						employees.remove(input);
+						employeeBox.removeAllItems();
+						for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
+							Employee em = entry.getValue();
+							employeeBox.addItem(em);
+						}
+					}
+					logInOutField.revalidate();
+					logInOutField.setText(null);
+				} else {
+					JOptionPane.showMessageDialog(LogInOutHandler.this, "Het ingevoerde nummer wordt niet herkend, probeer het opnieuw! ", "Foutmelding", JOptionPane.ERROR_MESSAGE);
+				}
+			} catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(LogInOutHandler.this, "Vul uw medewerkerscode in", "Foutmelding", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
 }
+

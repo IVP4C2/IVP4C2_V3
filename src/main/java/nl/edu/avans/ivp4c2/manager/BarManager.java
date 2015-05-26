@@ -61,8 +61,12 @@ public class BarManager {
 		return tableHashmap;
 	}
 
-	public void removeTable(int tableNumber) {
-		tableHashmap.remove(tableNumber);
+	public void removeTable(int tableNumber) throws Exception{
+		try {
+			tableHashmap.remove(tableNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 

@@ -55,7 +55,7 @@ public class LoginGUI extends JPanel {
 
     class LogOutHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            System.out.println(loginmanager.getEmployees());
+
         }
     }
 }

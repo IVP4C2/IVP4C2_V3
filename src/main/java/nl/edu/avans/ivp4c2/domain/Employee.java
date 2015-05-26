@@ -61,15 +61,35 @@ public class Employee {
         this.employeeLastName = employeeLastName;
     }
 
+
+
+
     @Override
     public String toString() {
         return employeeFirstName + " " + employeeLastName;
     }
 
     @Override
-    public int hashCode() {
-        return employeeNumber;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        if (employeeNumber != employee.employeeNumber) return false;
+        if (!employeeFirstName.equals(employee.employeeFirstName)) return false;
+        return employeeLastName.equals(employee.employeeLastName);
+
     }
 
+    @Override
+    public int hashCode() {
+        int result = employeeNumber;
+        result = 31 * result + employeeFirstName.hashCode();
+        result = 31 * result + employeeLastName.hashCode();
+        return result;
+    }
 }
+
+
 

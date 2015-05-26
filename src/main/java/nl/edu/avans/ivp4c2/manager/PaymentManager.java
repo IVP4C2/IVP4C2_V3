@@ -19,7 +19,7 @@ public class PaymentManager {
      * @param tableNumber
      * @return payment
      */
-    public Payment getPayment(int tableNumber) {
+    public Payment getActivePayment(int tableNumber) {
         return paymentDAO.getActivePayment(tableNumber);
     }
 
