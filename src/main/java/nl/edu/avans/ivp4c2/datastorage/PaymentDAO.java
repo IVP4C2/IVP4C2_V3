@@ -37,9 +37,7 @@ public final class PaymentDAO {
                     "INNER JOIN `order` `o` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
                     "INNER JOIN `kpt_table_order` `kto` ON `o`.`order_id` = `kto`.`fk_order_id` " +
                     "WHERE `kto`.`fk_table_id` = '7' AND `b`.`ispaid` = '0';");
-            if (resultset != null)
-
-            {
+            if (resultset != null) {
                 try {
                     while (resultset.next()) {
                         //Create new Payment object

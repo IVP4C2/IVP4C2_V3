@@ -54,6 +54,7 @@ public class PaymentSection {
         // Gets column names from Table
         Vector<String> columnNames = new Vector<String>();
         columnNames.add("ProductNr");
+        columnNames.add("ProductNaam");
         columnNames.add("Aantal");
         columnNames.add("Prijs");
 
@@ -64,6 +65,7 @@ public class PaymentSection {
         for (Product p : payment.getProductList()) {
             Vector<Object> vector = new Vector<Object>();
             vector.add(p.getProductNumber());
+            vector.add(p.getProductName());
             vector.add(p.getAmount());
             vector.add(p.getPrice());
             data.add(vector);

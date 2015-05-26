@@ -44,7 +44,7 @@ public class ProductDAO {
 				"INNER JOIN `kpt_orderline` `kol` ON `i`.`item_id` = `kol`.`fk_item_id` " +
 				"INNER JOIN `order` `o` ON `kol`.`fk_order_id` = `o`.`order_id` " +
 				"INNER JOIN `kpt_billed_order` `kbo` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
-				"WHERE `kbo`.`fk_bill_id` = '"+billId+"';";
+				"WHERE `kbo`.`fk_bill_id` = '"+billId+"' GROUP BY `item_id`;";
 		return getProduct(statement);
 	}
 
