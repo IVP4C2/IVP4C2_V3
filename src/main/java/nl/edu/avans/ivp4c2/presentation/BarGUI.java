@@ -115,15 +115,14 @@ public class BarGUI extends JPanel {
 		// Setup North panel
 
 		/* Reading and setting logo image */
-		BufferedImage image = null;
+		ImageIcon image = null;
 		try {
-			image = ImageIO
-					.read(new File("src/main/resources/logo_resized.jpg"));
-		} catch (IOException ex) {
+			image = new ImageIcon(getClass().getClassLoader().getResource("logo_resized.jpg"));
+		} catch (Exception ex) {
 			Logger.getLogger(BarGUI.class.getName())
 					.log(Level.SEVERE, null, ex);
 		}
-		JLabel logo = new JLabel(new ImageIcon(image));
+		JLabel logo = new JLabel(image);
 
 		// Array with the ten table buttons
 		tableButton = new JButton[AMOUNT_OF_TABLEBUTTONS];
