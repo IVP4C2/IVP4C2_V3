@@ -49,4 +49,19 @@ public class Table {
 
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Table table = (Table) o;
+
+		return tableNumber == table.tableNumber;
+
+	}
+
+	@Override
+	public int hashCode() {
+		return tableNumber;
+	}
 }

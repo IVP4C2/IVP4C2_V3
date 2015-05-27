@@ -44,13 +44,16 @@ public class PaymentManager {
      * @return true is completed succesfully
      */
     public boolean completePayment(int tableNumer) {
+        boolean result = false;
         if(paymentMap.containsKey(tableNumer)) {
-            return paymentDAO.completePayment(paymentMap.get(tableNumer).getPaymentNumber());
+            if(paymentDAO.completePayment(paymentMap.get(tableNumer).getPaymentNumber())) {
+                paymentMap.remove(tableNumer);
+                result = true;
+            }
         }
         else {
-            return false;
+            result = false;
         }
-
+        return result;
     }
-
 }
