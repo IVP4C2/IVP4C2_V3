@@ -224,8 +224,8 @@ public class BarGUI extends JPanel {
 		// Set table status empty
 		for (Table te : tableStatusEmpty) {
 			int tb = te.getTableNumber();
-//			tableButton[tb].setBackground(Color.decode("#DFDFDF"));
-			tableButton[tb].enable(false);
+			tableButton[tb].setBackground(Color.decode("#DFDFDF"));
+//			tableButton[tb].setEnabled(false);
 			repaint();
 		}
 
@@ -243,7 +243,6 @@ public class BarGUI extends JPanel {
 				/*Check the order destination and time for each order.*/
 				if (o.getDestination() == 1 && !hasKitchenOrder) {
 					if (longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
-						System.out.println("Before bar");
 						tableButton[tb].setBackground(Color.decode("#008A2E"));
 						longestBarOrder = o.getOrderTime();
 						hasLongestBarOrder = true;
@@ -253,7 +252,6 @@ public class BarGUI extends JPanel {
 				}
 				if (o.getDestination() == 2) {
 					if (longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
-						System.out.println("Before kitchen");
 						tableButton[tb].setBackground(Color.ORANGE);
 						longestKitchenOrder = o.getOrderTime();
 						hasLongestKitchenOrder = true;
