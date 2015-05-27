@@ -79,6 +79,7 @@ public class BarGUI extends JPanel {
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
 		this.loginmanager = new LoginManager();
+		this.paymentManager = new PaymentManager();
 
 		setLayout(new BorderLayout());
 
@@ -335,7 +336,7 @@ public class BarGUI extends JPanel {
 						} else if (table.getTableStatus().equals("Afrekenen")) {
 							System.out.println("Status afrekenen");
 							panelCenter.removeAll();
-							paymentManager = new PaymentManager();
+//							paymentManager = new PaymentManager();
 							PaymentSection paymentSection = new PaymentSection();
 							Payment p = paymentManager.getActivePayment(tableNumber);
 							activeTable = tableNumber;
@@ -365,6 +366,11 @@ public class BarGUI extends JPanel {
 	}
 
 
+	/**
+	 * CONTENTS MIGHT GET REPLACED BY A DEDICATED CompleOrderButton CLASS WTIH EXCEPTION HANDLING
+	 * Handles the CompleteOrder button.
+	 * Depending on the tableStatus, completes the Payment or Order.
+	 */
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
             if (employeeBox.getItemCount() > 0) {

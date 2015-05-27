@@ -66,4 +66,35 @@ public class Payment {
             productList.add(p);
         }
     }
+
+    /*Default equals and hashCode methods*/
+
+    /**
+     * Returns true if the given Object equals 'this',
+     * false if they are not equal
+     * @param obj
+     * @return True is obj equals 'this'
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Payment payment = (Payment) obj;
+
+        if (paymentNumber != payment.paymentNumber) return false;
+        return !(paymentDate != null ? !paymentDate.equals(payment.paymentDate) : payment.paymentDate != null);
+
+    }
+
+    /**
+     * Return the hashCode as an int.
+     * @return hashCode as int
+     */
+    @Override
+    public int hashCode() {
+        int result = paymentNumber;
+        result = 31 * result + (paymentDate != null ? paymentDate.hashCode() : 0);
+        return result;
+    }
 }
