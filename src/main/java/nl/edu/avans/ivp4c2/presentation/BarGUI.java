@@ -75,12 +75,13 @@ public class BarGUI extends JPanel {
 
 	private BarManager barmanager;
 	private LoginManager loginmanager;
+	private OrderSection orderSection;
 
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
 		this.loginmanager = new LoginManager();
 		this.paymentManager = new PaymentManager();
-
+		this.orderSection = new OrderSection();
 		setLayout(new BorderLayout());
 
 		Font font = new Font("SansSerif", Font.PLAIN, 24);
@@ -350,14 +351,14 @@ public class BarGUI extends JPanel {
 					}
 				}
 				else {
-						TitledBorder topBorderInactive = BorderFactory
-								.createTitledBorder("");
-						topBorderInactive.setBorder(BorderFactory
-								.createLineBorder(Color.decode("#DFDFDF")));
-						topBorderInactive.setTitlePosition(TitledBorder.TOP);
-						tableButton[tb].setBorder(topBorderInactive);
-						tableButton[tb].setBorder(BorderFactory
-								.createEtchedBorder());
+					TitledBorder topBorderInactive = BorderFactory
+							.createTitledBorder("");
+					topBorderInactive.setBorder(BorderFactory
+							.createLineBorder(Color.decode("#DFDFDF")));
+					topBorderInactive.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorderInactive);
+					tableButton[tb].setBorder(BorderFactory
+							.createEtchedBorder());
 					revalidate();
 				}
 			}
@@ -374,17 +375,18 @@ public class BarGUI extends JPanel {
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
             if (employeeBox.getItemCount() > 0) {
-                if (paymentManager.completePayment(activeTable)) {
-                    try {
-                        barmanager.removeTable(activeTable);
-                        tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
-                        revalidate();
-                        panelCenter.removeAll();
-                        JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception f) {
-                        JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
+				System.out.println(employeeBox.getSelectedItem().toString());
+				try {
+					paymentManager.completePayment(activeTable);
+					barmanager.removeTable(activeTable);
+					tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
+					revalidate();
+					panelCenter.removeAll();
+					JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
+
+				} catch (Exception f) {
+					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
+				}
             }
             else {
                 JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
