@@ -117,14 +117,23 @@ public class BarGUI extends JPanel {
 		// Setup North panel
 
 		/* Reading and setting logo image */
-		ImageIcon image = null;
+//		ImageIcon image = null;
+//		try {
+//			image = new ImageIcon(getClass().getClassLoader().getResource("src/main/resources/logo_resized.jpg"));
+//		} catch (Exception ex) {
+//			Logger.getLogger(BarGUI.class.getName())
+//					.log(Level.SEVERE, null, ex);
+//		}
+//		JLabel logo = new JLabel(image);
+		BufferedImage image = null;
 		try {
-			image = new ImageIcon(getClass().getClassLoader().getResource("logo_resized.jpg"));
-		} catch (Exception ex) {
+			image = ImageIO
+					.read(new File("src/main/resources/logo_resized.jpg"));
+		} catch (IOException ex) {
 			Logger.getLogger(BarGUI.class.getName())
 					.log(Level.SEVERE, null, ex);
 		}
-		JLabel logo = new JLabel(image);
+		JLabel logo = new JLabel(new ImageIcon(image));
 
 		// Array with the ten table buttons
 		tableButton = new JButton[AMOUNT_OF_TABLEBUTTONS];
@@ -299,41 +308,44 @@ public class BarGUI extends JPanel {
 					if (!table.equals(null)) {
 						if (!table.getTableStatus().equals("Afrekenen")) {
 							panelCenter.removeAll();
-							JPanel barPanel = new JPanel(new GridLayout(1, 2));
-							JPanel leftPanel = new JPanel(new GridLayout(1, 1));
-							final JPanel rightPanel = new JPanel(new GridLayout(1, 1));
-							leftPanel.setBackground(Color.WHITE);
-							rightPanel.setBackground(Color.WHITE);
-							barPanel.add(leftPanel);
-							barPanel.add(rightPanel);
-							panelCenter.add(barPanel);
-
-							final OrderSection orderSection = new OrderSection();
-							JTable tableLeft = orderSection.getTableLeft(table);
-
-							// Add mouse listener
-							final Table finalTable = table;
-							tableLeft.addMouseListener(new MouseAdapter() {
-								@Override
-								public void mouseClicked(final MouseEvent e) {
-									if (e.getClickCount() == 1) {
-										rightPanel.removeAll();
-										final JTable target = (JTable) e
-												.getSource(); // Get left JTable
-										final int row = target.getSelectedRow(); //Get row selected by user
-										int value = (Integer) target.getValueAt(row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
-										Order tempOrder = finalTable.getSpecificOrder(value);
-										JTable tableRight = orderSection.getTableRight(tempOrder);
-										rightPanel.add(
-												new JScrollPane(tableRight))
-												.setBackground(Color.WHITE);
-										rightPanel.revalidate();
-									}
-								}
-							});
-							leftPanel.add(new JScrollPane(tableLeft))
-									.setBackground(Color.WHITE);
-							leftPanel.revalidate();
+//							JPanel barPanel = new JPanel(new GridLayout(1, 2));
+//							JPanel leftPanel = new JPanel(new GridLayout(1, 1));
+//							final JPanel rightPanel = new JPanel(new GridLayout(1, 1));
+//							leftPanel.setBackground(Color.WHITE);
+//							rightPanel.setBackground(Color.WHITE);
+//							barPanel.add(leftPanel);
+//							barPanel.add(rightPanel);
+//							panelCenter.add(barPanel);
+//
+//							final OrderSection orderSection = new OrderSection();
+//							JTable tableLeft = orderSection.getTableLeft(table);
+//
+//							// Add mouse listener
+//							final Table finalTable = table;
+//							tableLeft.addMouseListener(new MouseAdapter() {
+//								@Override
+//								public void mouseClicked(final MouseEvent e) {
+//									if (e.getClickCount() == 1) {
+//										rightPanel.removeAll();
+//										final JTable target = (JTable) e
+//												.getSource(); // Get left JTable
+//										final int row = target.getSelectedRow(); //Get row selected by user
+//										int value = (Integer) target.getValueAt(row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
+//										Order tempOrder = finalTable.getSpecificOrder(value);
+//										JTable tableRight = orderSection.getTableRight(tempOrder);
+//										rightPanel.add(
+//												new JScrollPane(tableRight))
+//												.setBackground(Color.WHITE);
+//										rightPanel.revalidate();
+//									}
+//								}
+//							});
+//							activeTable = tableNumber;
+//							leftPanel.add(new JScrollPane(tableLeft))
+//									.setBackground(Color.WHITE);
+//							leftPanel.revalidate();
+							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
+							panelCenter.revalidate();
 						} else if (table.getTableStatus().equals("Afrekenen")) {
 							System.out.println("Status afrekenen");
 							panelCenter.removeAll();
@@ -365,6 +377,7 @@ public class BarGUI extends JPanel {
 			revalidate();
 		}
 	}
+
 
 
 	/**

@@ -6,6 +6,9 @@ import nl.edu.avans.ivp4c2.domain.Table;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
@@ -26,12 +29,53 @@ public class OrderSection {
         return tableRight;
     }
 
-    public JTable getTableLeft(Table t) {
-        this.tableLeft = new JTable(buildTableModel(t));
-        tableLeft.setBorder(BorderFactory.createEtchedBorder());
-        tableLeft.getTableHeader().setReorderingAllowed(false); // Added
-        return tableLeft;
+//    public JTable getTableLeft(Table t) {
+//        this.tableLeft = new JTable(buildTableModel(t));
+//        tableLeft.setBorder(BorderFactory.createEtchedBorder());
+//        tableLeft.getTableHeader().setReorderingAllowed(false); // Added
+//        return tableLeft;
+//    }
+
+    public JPanel getTableLeft(Table table, JPanel panelCenter) {
+        JPanel barPanel = new JPanel(new GridLayout(1, 2));
+        JPanel leftPanel = new JPanel(new GridLayout(1, 1));
+        final JPanel rightPanel = new JPanel(new GridLayout(1, 1));
+        leftPanel.setBackground(Color.WHITE);
+        rightPanel.setBackground(Color.WHITE);
+        barPanel.add(leftPanel);
+        barPanel.add(rightPanel);
+        panelCenter.add(barPanel);
+
+        final OrderSection orderSection = new OrderSection();
+        tableLeft = new JTable(buildTableModel(table));
+
+        // Add mouse listener
+        final Table finalTable = table;
+        tableLeft.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(final MouseEvent e) {
+                if (e.getClickCount() == 1) {
+                    rightPanel.removeAll();
+                    final JTable target = (JTable) e
+                            .getSource(); // Get left JTable
+                    final int row = target.getSelectedRow(); //Get row selected by user
+                    int value = (Integer) target.getValueAt(row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
+                    Order tempOrder = finalTable.getSpecificOrder(value);
+                    JTable tableRight = orderSection.getTableRight(tempOrder);
+                    rightPanel.add(
+                            new JScrollPane(tableRight))
+                            .setBackground(Color.WHITE);
+                    rightPanel.revalidate();
+                }
+            }
+        });
+
+        leftPanel.add(new JScrollPane(tableLeft))
+                .setBackground(Color.WHITE);
+        leftPanel.revalidate();
+        return barPanel;
     }
+
     // Method to create JTable
     public DefaultTableModel buildTableModel(Table t) {
 
