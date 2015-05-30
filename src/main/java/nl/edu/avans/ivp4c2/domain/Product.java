@@ -53,6 +53,10 @@ public class Product {
 		return price;
 	}
 
+	/**
+	 * Returns the VAT as an Integer.
+	 * @return VAT as an Integer
+	 */
 	public int getBtw() {
 		return btw;
 	}

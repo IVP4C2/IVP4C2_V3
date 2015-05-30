@@ -13,7 +13,8 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 /**
- * Created by Matthijsske on 24-5-2015.
+ * Handles all operations regarding Orders
+ * @author IVP4C2
  */
 public class OrderSection {
     private JTable tableLeft = new JTable();
@@ -21,6 +22,11 @@ public class OrderSection {
     public OrderSection() {
     }
 
+    /**
+     * Returns a JTable for a given Order object
+     * @param o
+     * @return JTable with order details
+     */
     public JTable getTableRight(Order o) {
         this.tableRight = new JTable(buildTableModelRight(o));
         tableRight.setBorder(BorderFactory
@@ -29,13 +35,12 @@ public class OrderSection {
         return tableRight;
     }
 
-//    public JTable getTableLeft(Table t) {
-//        this.tableLeft = new JTable(buildTableModel(t));
-//        tableLeft.setBorder(BorderFactory.createEtchedBorder());
-//        tableLeft.getTableHeader().setReorderingAllowed(false); // Added
-//        return tableLeft;
-//    }
-
+    /**
+     * Returns a JTable for a given Table object. Requires panelCenter to add the JTable to the frame.
+     * @param table
+     * @param panelCenter
+     * @return JTable with table orders
+     */
     public JPanel getTableLeft(Table table, JPanel panelCenter) {
         JPanel barPanel = new JPanel(new GridLayout(1, 2));
         JPanel leftPanel = new JPanel(new GridLayout(1, 1));

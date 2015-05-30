@@ -8,27 +8,21 @@ import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.xobject.PDJpeg;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Arc2D;
-import java.awt.image.BufferedImage;
 import java.awt.print.PrinterJob;
 import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Created by Matthijsske on 24-5-2015.
+ * Handles all the operations regarding payments
+ * @author IVP4C2
  */
 public class PaymentSection {
     private JPanel paymentPanel;
@@ -38,7 +32,7 @@ public class PaymentSection {
     private JPanel southRight;
     private Payment payment;
     private static final String EURO = "\u0080";
-//    private static final DecimalFormat DF = new DecimalFormat("###.##");
+
     public PaymentSection() {
         printBill = new JButton("Print Bon");
         printBill.setBackground(Color.decode("#DFDFDF"));
@@ -52,6 +46,11 @@ public class PaymentSection {
     }
 
 
+    /**
+     * Creates a JPanel with information extracted from a given Payment object
+     * @param payment
+     * @return JPanel with Payment information
+     */
     public JPanel getPaymentPanel(Payment payment) {
         this.paymentPanel = new JPanel();
         this.payment = payment;
@@ -68,6 +67,7 @@ public class PaymentSection {
         paymentPanel.add(panelSouth, BorderLayout.SOUTH);
         return paymentPanel;
     }
+
     // Method to create JTable
     public DefaultTableModel buildTableModel(Payment payment) {
 
@@ -97,8 +97,10 @@ public class PaymentSection {
         return new DefaultTableModel(data, columnNames);
     }
 
+    /**
+     * Called when printBill is clicked.
+     */
     class PrintBillHandler implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
@@ -109,6 +111,13 @@ public class PaymentSection {
         }
     }
 
+
+    /**
+     * Creates a PDF file using a given Payment object.
+     * Gives to option to print the PDF.
+     * @param p
+     * @throws Exception
+     */
     public void GenerateBill(Payment p) throws Exception {
         //Create a new document
         PDDocument document = new PDDocument();
@@ -271,16 +280,25 @@ public class PaymentSection {
         contentStream.close();
         inputStream.close();
 
-        //Save, print and close document
+        //Save document
         document.save("bill"+payment.getPaymentNumber()+".pdf");
 
+        //Print document
         PrinterJob printerJob = PrinterJob.getPrinterJob();
         printerJob.setPageable(document);
         document.print(printerJob);
 
+        //Close document
         document.close();
     }
 
+
+    /**
+     * Rounds a double to 2 decimal places. Returns the result as a String
+     * @param value
+     * @param places
+     * @return String value of rounded Double
+     */
     private static String round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
         BigDecimal bd = new BigDecimal(value);

@@ -39,8 +39,8 @@ public class Payment {
     }
 
     /**
-     * Returns the Total Price from the Payment object
-     * @return TotalPrice double
+     * Returns the Total Price including VAT from the Payment object as a double
+     * @return TotalPrice as a double including VAT
      */
     public double getTotalPrice() {
         double totalPriceIncl = 0;
@@ -50,7 +50,10 @@ public class Payment {
         return totalPriceIncl;
     }
 
-
+    /**
+     * Returns the Total Price excluding VAT as a double
+     * @return Total Price as a double excluding VAT
+     */
     public double getTotalPriceExcl() {
         return totalPrice;
     }
