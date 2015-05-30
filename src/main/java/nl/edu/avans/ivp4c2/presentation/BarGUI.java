@@ -25,8 +25,6 @@ import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
 import nl.edu.avans.ivp4c2.manager.PaymentManager;
-import sun.plugin2.message.ShowStatusMessage;
-
 
 public class BarGUI extends JPanel {
 	// Buttons
