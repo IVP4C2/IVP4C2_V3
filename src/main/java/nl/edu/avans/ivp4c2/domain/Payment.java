@@ -43,6 +43,15 @@ public class Payment {
      * @return TotalPrice double
      */
     public double getTotalPrice() {
+        double totalPriceIncl = 0;
+        for(Product p : productList) {
+            totalPriceIncl += ((p.getPrice()*(p.getBtw()+100)/100)*p.getAmount());
+        }
+        return totalPriceIncl;
+    }
+
+
+    public double getTotalPriceExcl() {
         return totalPrice;
     }
 
@@ -66,6 +75,7 @@ public class Payment {
             productList.add(p);
         }
     }
+
 
     /*Default equals and hashCode methods*/
 
