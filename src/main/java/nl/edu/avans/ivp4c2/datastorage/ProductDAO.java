@@ -25,11 +25,13 @@ public class ProductDAO {
 	 * @return ArrayList<Product>
 	 */
 	public ArrayList<Product> getProductViaOrder(int orderNumber) {
-		String statement = "SELECT `item_id`, `name`, `price`, COUNT(*) AS amount " +
+		String statement = "SELECT `item_id`, `name`, `price`, `t`.`percents`, COUNT(*) AS amount " +
 				"FROM `item` `i` " +
 				"INNER JOIN `kpt_orderline` `ktol` ON `i`.`item_id` = `ktol`.`fk_item_id` " +
 				"INNER JOIN `order` `o` ON `o`.`order_id` = `ktol`.`fk_order_id` " +
-				"WHERE `o`.`order_id` = '"+orderNumber+"' GROUP BY `item_id`;";
+				"INNER JOIN `tax` `t` ON `i`.`fk_tax_id` = `t`.`tax_id` " +
+				"WHERE `o`.`order_id` = '"+orderNumber+"' " +
+				"GROUP BY `item_id`;";
 		return getProduct(statement);
 	}
 
@@ -40,11 +42,14 @@ public class ProductDAO {
 	 * @return ArrayList<Product>
 	 */
 	public ArrayList<Product> getProductViaBill(int billId) {
-		String statement = "SELECT `item_id`, `name`, `price`, COUNT(*) AS amount FROM `item` `i` " +
-				"INNER JOIN `kpt_orderline` `kol` ON `i`.`item_id` = `kol`.`fk_item_id` " +
+		String statement = "SELECT `item_id`, `name`, `price`, `t`.`percents`, COUNT(*) AS amount " +
+				"FROM `item` `i` INNER JOIN `kpt_orderline` `kol` ON `i`.`item_id` = `kol`.`fk_item_id` " +
 				"INNER JOIN `order` `o` ON `kol`.`fk_order_id` = `o`.`order_id` " +
 				"INNER JOIN `kpt_billed_order` `kbo` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
-				"WHERE `kbo`.`fk_bill_id` = '"+billId+"';";
+				"INNER JOIN `tax` `t` ON `t`.`tax_id` = `i`.`fk_tax_id` " +
+				"WHERE `kbo`.`fk_bill_id` = '"+billId+"' " +
+				"AND `o`.`fk_status_id` != '5' " +
+				"GROUP BY `item_id`;";
 		return getProduct(statement);
 	}
 
@@ -76,7 +81,8 @@ public class ProductDAO {
 								   resultset.getInt("item_id"),
 								   resultset.getString("name"),
 								   resultset.getInt("amount"),
-								   resultset.getDouble("price"));
+								   resultset.getDouble("price"),
+								   resultset.getInt("percents"));
 	                       products.add(newProduct); //Add newProduct to product ArrayList
 		                }       
 	                }

@@ -36,10 +36,8 @@ public final class PaymentDAO {
                     "INNER JOIN `kpt_billed_order` `kbo` ON `kbo`.`fk_bill_id` = `b`.`bill_id` " +
                     "INNER JOIN `order` `o` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
                     "INNER JOIN `kpt_table_order` `kto` ON `o`.`order_id` = `kto`.`fk_order_id` " +
-                    "WHERE `kto`.`fk_table_id` = '7' AND `b`.`ispaid` = '0';");
-            if (resultset != null)
-
-            {
+                    "WHERE `kto`.`fk_table_id` = '"+tableNumber+"' AND `b`.`ispaid` = '0';");
+            if (resultset != null) {
                 try {
                     while (resultset.next()) {
                         //Create new Payment object
@@ -69,26 +67,19 @@ public final class PaymentDAO {
     }
 
     /**
-     * Updates the 'ispaid' column in the 'bill' table for the given tableNumber.
+     * Updates the 'ispaid' column in the 'bill' table for the given paymentNumber
      * Returns true if the record was updated successfully, false if not.
-     * @param tableNumber
+     * @param paymentNumber
      * @return true if updated successfully
      */
-    public boolean completePayment(int tableNumber) {
+    public boolean completePayment(int paymentNumber) {
         Boolean result = false;
-
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();
         if (connection.openConnection()) {
             // If a connection was successfully setup, execute the UPDATE statement.
             //executeUpdateStatement returns a boolean which is stored in result
-            result = connection.executeUpdateStatement("UPDATE `bill` `b` " +
-                    "INNER JOIN `kpt_billed_order` `kbo` ON `b`.`bill_id` = `kbo`.`fk_bill_id` " +
-                    "INNER JOIN `order` `o` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
-                    "INNER JOIN `kpt_table_order` `kto` ON `o`.`order_id` = `kto`.`fk_order_id` " +
-                    "INNER JOIN `table` `t` ON `kto`.`fk_table_id` = `t`.`table_id` " +
-                    "SET `b`.`ispaid` = '1', `t`.`fk_table_status_id` = '4'  " +
-                    "WHERE `kto`.`fk_table_id` = '"+tableNumber+"';");
+            result = connection.executeUpdateStatement("UPDATE `bill` SET `ispaid` = '1' WHERE `bill_id` = "+paymentNumber+";");
             connection.closeConnection();
         }
         return result;
