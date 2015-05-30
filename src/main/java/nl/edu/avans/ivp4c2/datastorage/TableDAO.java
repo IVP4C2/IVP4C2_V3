@@ -94,7 +94,6 @@ public final class TableDAO {
 							Table newTable = new Table(
 									resultset.getInt("table_number"),
 	                                resultset.getString("status"));
-							System.out.println(resultset.getString("status"));
 	                       		//Check if status is 'Bezet' or 'Arekenen'. If so, there is an order which can be retrieved from the database
 		                       if(resultset.getString("status").equals("Bezet") || resultset.getString("status").equals("Afrekenen")) {
 		                    	   OrderDAO orderDAO = new OrderDAO(); //Create new OrderDAO 

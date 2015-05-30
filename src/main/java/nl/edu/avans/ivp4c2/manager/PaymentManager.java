@@ -43,16 +43,15 @@ public class PaymentManager {
      * @param tableNumer
      * @return true is completed succesfully
      */
-    public boolean completePayment(int tableNumer) {
+    public boolean completePayment(int tableNumer) throws Exception {
         boolean result = false;
         if(paymentMap.containsKey(tableNumer)) {
             if(paymentDAO.completePayment(paymentMap.get(tableNumer).getPaymentNumber())) {
                 paymentMap.remove(tableNumer);
                 result = true;
             }
-        }
-        else {
-            result = false;
+        } else {
+            throw new Exception("Afronden mislukt");
         }
         return result;
     }

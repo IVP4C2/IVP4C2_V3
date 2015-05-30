@@ -18,7 +18,8 @@ public final class OrderDAO {
 		// has been added to explicitely make this clear.
 	}
 	
-	/**Retrieves all orders for a given tableNumber
+	/**
+     * Retrieves all orders for a given tableNumber
 	 * @param tableNumber
 	 * @return ArrayList<Order> */
 	public final static ArrayList<Order> getTableOrder(int tableNumber) {
@@ -30,13 +31,12 @@ public final class OrderDAO {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			//Select all orders for a given tableNumber
-			ResultSet resultset = connection.executeSQLSelectStatement("SELECT `o`.`order_id`, `o`.`send_on`, `s`.`name`, `o`.`destination` " +
-                            "FROM `order` `o` INNER JOIN `status` `s` ON `o`.`fk_status_id` = `s`.`status_id` " +
-                            "INNER JOIN `kpt_orderline` `ktol` ON `ktol`.`fk_order_id` = `o`.`order_id` " +
-                            "INNER JOIN `kpt_table_order` `ktto` on `ktto`.`fk_order_id` = `o`.`order_id` " +
-                            "WHERE `ktto`.`fk_table_id` = '"+tableNumber+"' " +
-                            "AND ((`destination` = '1' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
-                            "OR (`destination` = '2' AND `name` = 'Gereed')) GROUP BY `o`.`order_id` ORDER BY `o`.`destination` DESC;");
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM SelectOrders_V " +
+                    "WHERE `fk_table_id` = '"+tableNumber+"' " +
+                    "AND ((`destination` = '1' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
+                    "OR (`destination` = '2' AND `name` = 'Gereed')) " +
+                    "GROUP BY `order_id` " +
+                    "ORDER BY `destination` DESC;");
             if (resultset != null)
 
             {

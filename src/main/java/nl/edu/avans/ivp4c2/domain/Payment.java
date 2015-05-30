@@ -39,10 +39,22 @@ public class Payment {
     }
 
     /**
-     * Returns the Total Price from the Payment object
-     * @return TotalPrice double
+     * Returns the Total Price including VAT from the Payment object as a double
+     * @return TotalPrice as a double including VAT
      */
     public double getTotalPrice() {
+        double totalPriceIncl = 0;
+        for(Product p : productList) {
+            totalPriceIncl += ((p.getPrice()*(p.getBtw()+100)/100)*p.getAmount());
+        }
+        return totalPriceIncl;
+    }
+
+    /**
+     * Returns the Total Price excluding VAT as a double
+     * @return Total Price as a double excluding VAT
+     */
+    public double getTotalPriceExcl() {
         return totalPrice;
     }
 
@@ -66,6 +78,7 @@ public class Payment {
             productList.add(p);
         }
     }
+
 
     /*Default equals and hashCode methods*/
 
