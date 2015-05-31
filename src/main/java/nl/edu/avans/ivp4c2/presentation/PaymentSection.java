@@ -19,6 +19,8 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Handles all the operations regarding payments
@@ -106,7 +108,8 @@ public class PaymentSection {
             try {
                 GenerateBill(payment);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Logger logger = Logger.getAnonymousLogger();
+                logger.log(Level.SEVERE, "an exception was thrown in the PaymentSection", ex);
             }
         }
     }

@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import nl.edu.avans.ivp4c2.datastorage.*;
 import nl.edu.avans.ivp4c2.domain.Table;
 
@@ -65,7 +68,8 @@ public class BarManager {
 		try {
 			tableHashmap.remove(tableNumber);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger logger = Logger.getAnonymousLogger();
+			logger.log(Level.SEVERE, "an exception was thrown in the BarManager", e);
 		}
 	}
 

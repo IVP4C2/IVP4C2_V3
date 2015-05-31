@@ -272,7 +272,7 @@ public class BarGUI extends JPanel {
                     /*retrieve the matching table from the barmanager for a given tableNumber*/
 					Table table = barmanager.getHashTable(tb);
                     /*Check if a table object is present*/
-					if (!table.equals(null)) {
+					if (table != null) {
                         /**/
 						if (table.getTableStatus().equals("Bezet") || table.getTableStatus().equals("Hulp")) {
 							panelCenter.removeAll();
