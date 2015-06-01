@@ -14,6 +14,9 @@ import java.awt.*;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.print.PrinterAbortException;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterIOException;
 import java.awt.print.PrinterJob;
 import java.io.*;
 import java.math.BigDecimal;
@@ -124,7 +127,6 @@ public class PaymentSection {
     public void GenerateBill(Payment p) throws Exception {
         //Create a new document
         PDDocument document = new PDDocument();
-
         //Add a new page
         PDPage page = new PDPage();
         document.addPage(page);
@@ -132,6 +134,7 @@ public class PaymentSection {
         //Create a font
         PDFont font1 = PDType1Font.HELVETICA;
         PDFont font2 = PDType1Font.HELVETICA_BOLD;
+
 
         InputStream inputStream = new FileInputStream(new File("src/main/resources/logo_bill.jpg"));
 
@@ -284,12 +287,54 @@ public class PaymentSection {
         inputStream.close();
 
         //Save document
-        document.save("bill"+payment.getPaymentNumber()+".pdf");
+        File dir = new File("C:\\hhbills\\");
+        if(!dir.exists()) {
+            boolean result = false;
+            try {
+                dir.mkdir();
+                result = true;
+            } catch (SecurityException e) {
+                Logger logger = Logger.getAnonymousLogger();
+                logger.log(Level.SEVERE, "unable to create directory: " + dir.getName(), e);
+            }
+
+            if(result) {
+                if(!new File(dir+"\\bill"+payment.getPaymentNumber()+".pdf").isFile()) {
+                    document.save(dir + "\\bill" + payment.getPaymentNumber() + ".pdf");
+                }
+            } else {
+                document.save("bill"+payment.getPaymentNumber()+".pdf");
+                JOptionPane.showMessageDialog(paymentPanel, "Rekening op andere locatie opgeslagen: "
+                        +document.getDocumentInformation().getDictionary().toString(), "Fout", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (dir.exists()) {
+            if(!new File(dir+"\\bill"+payment.getPaymentNumber()+".pdf").isFile()) {
+                document.save(dir + "\\bill" + payment.getPaymentNumber() + ".pdf");
+            } else {
+                File fileName = new File(dir+"\\bill"+payment.getPaymentNumber()+".pdf");
+                System.out.println(fileName);
+                int billVersion = Character.getNumericValue(fileName.getName().charAt(fileName.getName().length() - 5));
+                System.out.println(billVersion);
+                int newVersion = 1;
+                while(fileName.exists()) {
+                    newVersion++;
+                    fileName = new File(dir + "\\bill" + payment.getPaymentNumber() + "_" + newVersion + ".pdf");
+                    System.out.println(fileName.getName());
+                }
+                document.save(dir + "\\bill" + payment.getPaymentNumber() + "_" + newVersion + ".pdf");
+            }
+        }
+
 
         //Print document
         PrinterJob printerJob = PrinterJob.getPrinterJob();
         printerJob.setPageable(document);
-        document.print(printerJob);
+        printerJob.setJobName("Bon Hartige Hap id: "+payment.getPaymentNumber());
+        try {
+            printerJob.print();
+        }catch (PrinterException pe) {
+            JOptionPane.showMessageDialog(paymentPanel, "Rekening kon niet worden geprint: "+pe.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+        }
 
         //Close document
         document.close();

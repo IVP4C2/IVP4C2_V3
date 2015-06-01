@@ -83,6 +83,7 @@ public class Order {
 		this.orderStatus = newStatus;
 	}
 
+
 	/*Default equals and hashCode methods*/
 	@Override
 	public boolean equals(Object o) {

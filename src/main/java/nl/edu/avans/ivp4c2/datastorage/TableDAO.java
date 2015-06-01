@@ -25,6 +25,7 @@ public final class TableDAO {
 	private static final int TABLE_OCCUPIED = 1; //Represents status 'Bezet'
 	private static final int TABLE_PAYMENT = 2; //Represents status 'Afrekenen'
 	private static final int TABLE_EMPTY = 4; //Represents status 'Leeg'
+	private boolean connectionFailPopupShown = false;
 
 	public TableDAO() {
 		// Nothing to be initialized. This is a stateless class. Constructor
@@ -36,7 +37,7 @@ public final class TableDAO {
 	 * Returns these tables in an ArrayList
 	 * @return ArrayList containing Table object
 	 */
-    public final static ArrayList<Table> getTableOccupied() {
+    public final ArrayList<Table> getTableOccupied() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_OCCUPIED);
     	return fetchedTables;
@@ -47,7 +48,7 @@ public final class TableDAO {
 	 * Returns these tables in an ArrayList
 	 * @return ArrayList containing Table object
 	 */
-    public final static ArrayList<Table> getTablePayment() {
+    public final ArrayList<Table> getTablePayment() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_PAYMENT);
     	return fetchedTables;
@@ -58,7 +59,7 @@ public final class TableDAO {
 	 * Returns these tables in an ArrayList
 	 * @return ArrayList containing Table object
 	 */
-    public final static ArrayList<Table> getTableEmpty() {
+    public final ArrayList<Table> getTableEmpty() {
     	ArrayList<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_EMPTY);
     	return fetchedTables;
@@ -70,7 +71,7 @@ public final class TableDAO {
 	*@param status
 	*@return ArrayList containing Table Objectts
 	*/
-	private final static ArrayList<Table> getTable(int status) {
+	private final ArrayList<Table> getTable(int status) {
 		
 		ArrayList<Table> tables = new ArrayList<Table>();
 		//Open db connection
@@ -109,6 +110,7 @@ public final class TableDAO {
 	                {
 	                    System.out.println(e);
 	                    tables = null;
+						connectionFailPopupShown = true;
 	                }
 	            }
 			connection.closeConnection();

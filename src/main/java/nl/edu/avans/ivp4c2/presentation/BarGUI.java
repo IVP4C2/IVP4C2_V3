@@ -90,15 +90,15 @@ public class BarGUI extends JPanel {
 		// Setup North panel
 
 		/* Reading and setting logo image */
-		BufferedImage image = null;
-		try {
-			image = ImageIO
-					.read(new File("src/main/resources/logo_resized.jpg"));
-		} catch (IOException ex) {
-			Logger.getLogger(BarGUI.class.getName())
-					.log(Level.SEVERE, null, ex);
-		}
-		panelNorthLeft.add(new JLabel(new ImageIcon(image)));
+//		BufferedImage image = null;
+//		try {
+//			image = ImageIO
+//					.read(getClass().getResource("logo_resized.jpg"));
+//		} catch (IOException ex) {
+//			Logger.getLogger(BarGUI.class.getName())
+//					.log(Level.SEVERE, null, ex);
+//		}
+		panelNorthLeft.add(new JLabel(new ImageIcon(getClass().getResource("/logo_resized.jpg"))));
 
 		// Array with the ten table buttons
 		tableButton = new JButton[AMOUNT_OF_TABLEBUTTONS];
@@ -316,16 +316,19 @@ public class BarGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
             if (employeeBox.getItemCount() > 0) {
 				System.out.println(employeeBox.getSelectedItem().toString());
-				try {
-					paymentManager.completePayment(activeTable);
-					barmanager.removeTable(activeTable);
-					tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
-					revalidate();
-					panelCenter.removeAll();
-					JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
-
-				} catch (Exception f) {
-					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
+				if(barmanager.getHashTable(activeTable).getTableStatus().equals("Afrekenen")) {
+					try {
+						paymentManager.completePayment(activeTable);
+						barmanager.removeTable(activeTable);
+						tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
+						revalidate();
+						panelCenter.removeAll();
+						JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
+					} catch (Exception f) {
+						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+					}
+				} else if (barmanager.getHashTable(activeTable).getTableStatus().equals("Bezet")) {
+					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling afronden in it3", "Komt nog", JOptionPane.INFORMATION_MESSAGE);
 				}
             }
             else {

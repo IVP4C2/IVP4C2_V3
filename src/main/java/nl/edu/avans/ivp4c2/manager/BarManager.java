@@ -1,5 +1,6 @@
 package nl.edu.avans.ivp4c2.manager;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,11 @@ import java.util.logging.Logger;
 
 import nl.edu.avans.ivp4c2.datastorage.*;
 import nl.edu.avans.ivp4c2.domain.Table;
+import nl.edu.avans.ivp4c2.presentation.BarGUI;
+
+import javax.swing.*;
+
+import static javax.swing.JOptionPane.*;
 
 /**
  * Manager which handles all operations regarding orders and tables
@@ -18,11 +24,11 @@ import nl.edu.avans.ivp4c2.domain.Table;
  */
 public class BarManager {
 	private HashMap<Integer, Table> tableHashmap; //Used to store all tables
-	private TableDAO tabledao;
+	TableDAO tableDAO;
 
 	public BarManager() {
 		tableHashmap = new HashMap<Integer, Table>();
-		tabledao = new TableDAO();
+		tableDAO = new TableDAO();
 
 		getOccupiedTablesDAO();
 		getPaymentTablesDAO();
@@ -137,7 +143,7 @@ public class BarManager {
 	 * @return ArrayList<Table>
 	 */
 	public void getOccupiedTablesDAO() {
-		for (Table t : TableDAO.getTableOccupied()) {
+		for (Table t : tableDAO.getTableOccupied()) {
 			if(tableHashmap.containsKey(t.getTableNumber())) {
 				tableHashmap.replace(t.getTableNumber(), t);
 			} else {
@@ -152,7 +158,7 @@ public class BarManager {
 	 * @return ArrayList<Table>
 	 */
 	public void getPaymentTablesDAO() {
-		for (Table t : TableDAO.getTablePayment()) {
+		for (Table t : tableDAO.getTablePayment()) {
 			if(tableHashmap.containsKey(t.getTableNumber())) {
 				tableHashmap.replace(t.getTableNumber(), t);
 			} else {
@@ -166,7 +172,7 @@ public class BarManager {
 	 * @return ArrayList<Table>
 	 */
 	public void getEmptyTablesDAO() {
-		for (Table t : TableDAO.getTableEmpty()) {
+		for (Table t : tableDAO.getTableEmpty()) {
 			if(tableHashmap.containsKey(t.getTableNumber())) {
 				tableHashmap.replace(t.getTableNumber(), t);
 			} else {

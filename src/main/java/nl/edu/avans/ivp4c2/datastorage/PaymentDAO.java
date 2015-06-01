@@ -72,7 +72,7 @@ public final class PaymentDAO {
      * @param paymentNumber
      * @return true if updated successfully
      */
-    public boolean completePayment(int paymentNumber) {
+    public boolean completePayment(int paymentNumber) throws SQLException {
         Boolean result = false;
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();

@@ -49,6 +49,8 @@ public class PaymentManager {
             if(paymentDAO.completePayment(paymentMap.get(tableNumer).getPaymentNumber())) {
                 paymentMap.remove(tableNumer);
                 result = true;
+            } else {
+                throw new Exception("Afronden mislukt. Geen verbinding met de Database");
             }
         } else {
             throw new Exception("Afronden mislukt");
