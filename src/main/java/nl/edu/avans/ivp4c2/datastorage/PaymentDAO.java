@@ -5,6 +5,7 @@ import nl.edu.avans.ivp4c2.domain.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Retrieves the payment for a given tableNumber.
@@ -50,12 +51,10 @@ public final class PaymentDAO {
 
                         //Create new ProductDAO to retrieve the product from the Database and store them in an ArrayList
                         ProductDAO productDAO = new ProductDAO();
-                        ArrayList<Product> products = productDAO.getProductViaBill(resultset.getInt("bill_id")); //Returns an ArrayList with Products
+                        List<Product> products = productDAO.getProductViaBill(resultset.getInt("bill_id")); //Returns an ArrayList with Products
                         payment.addProduct(products); //Adds the ArrayList to the earlier created Payment object
                     }
-                }
-                catch(SQLException e)
-                {
+                } catch(SQLException e) {
                     System.out.println(e);
                     payment = null;
                 }

@@ -5,6 +5,9 @@ import nl.edu.avans.ivp4c2.domain.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -37,8 +40,8 @@ public final class TableDAO {
 	 * Returns these tables in an ArrayList
 	 * @return ArrayList containing Table object
 	 */
-    public final ArrayList<Table> getTableOccupied() {
-    	ArrayList<Table> fetchedTables = new ArrayList<Table>();
+    public final List<Table> getTableOccupied() {
+    	List<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_OCCUPIED);
     	return fetchedTables;
     }
@@ -48,8 +51,8 @@ public final class TableDAO {
 	 * Returns these tables in an ArrayList
 	 * @return ArrayList containing Table object
 	 */
-    public final ArrayList<Table> getTablePayment() {
-    	ArrayList<Table> fetchedTables = new ArrayList<Table>();
+    public final List<Table> getTablePayment() {
+    	List<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_PAYMENT);
     	return fetchedTables;
     }
@@ -59,8 +62,8 @@ public final class TableDAO {
 	 * Returns these tables in an ArrayList
 	 * @return ArrayList containing Table object
 	 */
-    public final ArrayList<Table> getTableEmpty() {
-    	ArrayList<Table> fetchedTables = new ArrayList<Table>();
+    public final List<Table> getTableEmpty() {
+    	List<Table> fetchedTables = new ArrayList<Table>();
     	fetchedTables = getTable(TABLE_EMPTY);
     	return fetchedTables;
     }
@@ -71,9 +74,9 @@ public final class TableDAO {
 	*@param status
 	*@return ArrayList containing Table Objectts
 	*/
-	private final ArrayList<Table> getTable(int status) {
+	private final List<Table> getTable(int status) {
 		
-		ArrayList<Table> tables = new ArrayList<Table>();
+		List<Table> tables = new ArrayList<Table>();
 		//Open db connection
 		DatabaseConnection connection = new DatabaseConnection();
 		if(connection.openConnection()) {
@@ -85,12 +88,9 @@ public final class TableDAO {
 							"WHERE `ts`.`table_status_id` = '"+status+"';");
 
 				//If there is a result
-	            if(resultset != null)
-	            {
-	                try
-	                {
-	                    while(resultset.next())
-	                    {
+	            if(resultset != null) {
+	                try {
+	                    while(resultset.next()) {
 	                    	//Create new Table Object for each record
 							Table newTable = new Table(
 									resultset.getInt("table_number"),
@@ -98,17 +98,16 @@ public final class TableDAO {
 	                       		//Check if status is 'Bezet' or 'Arekenen'. If so, there is an order which can be retrieved from the database
 		                       if(resultset.getString("status").equals("Bezet") || resultset.getString("status").equals("Afrekenen")) {
 		                    	   OrderDAO orderDAO = new OrderDAO(); //Create new OrderDAO 
-		                    	   ArrayList<Order> newOrder = OrderDAO.getTableOrder(resultset.getInt("table_number")); //Returns ArrayList with orders for tableNumber
+		                    	   List<Order> newOrder = orderDAO.getTableOrder(resultset.getInt("table_number")); //Returns ArrayList with orders for tableNumber
 		                    	   for(Order o : newOrder) { //Add orders to the new table
 		                    		   newTable.addOrder(o);
 		                    	   }
 		                       }
 	                        tables.add(newTable); //Add new table to the ArrayList
 	                    }
-	                }
-	                catch(SQLException e)
-	                {
-	                    System.out.println(e);
+	                } catch(SQLException e) {
+						Logger logger = Logger.getAnonymousLogger();
+						logger.log(Level.SEVERE, "an exception was thrown in the TableDAO", e);
 	                    tables = null;
 						connectionFailPopupShown = true;
 	                }

@@ -3,6 +3,7 @@ package nl.edu.avans.ivp4c2.manager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -90,7 +91,7 @@ public class BarManager {
 	 * Returns the tables which have the 'Bezet' status in an ArrayList
 	 * @return occupied tables
 	 */
-	public ArrayList<Table> getOccupiedTables() {
+	public List<Table> getOccupiedTables() {
 		ArrayList<Table> arrayList = new ArrayList<Table>();
 		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
 			if(e.getValue().getTableStatus().equals("Bezet")) {
@@ -104,7 +105,7 @@ public class BarManager {
 	 * Returns the tables which have the 'Afrekenen' status in an ArrayList
 	 * @return payment tables
 	 */
-	public ArrayList<Table> getPaymentTables() {
+	public List<Table> getPaymentTables() {
 		ArrayList<Table> arrayList = new ArrayList<Table>();
 		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
 			if(e.getValue().getTableStatus().equals("Afrekenen")) {
@@ -118,7 +119,7 @@ public class BarManager {
 	 * Return the tables which have the 'Leeg' status in an ArrrayList
 	 * @return
 	 */
-	public ArrayList<Table> getEmptyTables() {
+	public List<Table> getEmptyTables() {
 		ArrayList<Table> arrayList = new ArrayList<Table>();
 		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
 			if(e.getValue().getTableStatus().equals("Leeg")) {

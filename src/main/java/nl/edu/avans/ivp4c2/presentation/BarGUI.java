@@ -3,22 +3,15 @@ package nl.edu.avans.ivp4c2.presentation;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import nl.edu.avans.ivp4c2.domain.*;
@@ -90,14 +83,6 @@ public class BarGUI extends JPanel {
 		// Setup North panel
 
 		/* Reading and setting logo image */
-//		BufferedImage image = null;
-//		try {
-//			image = ImageIO
-//					.read(getClass().getResource("logo_resized.jpg"));
-//		} catch (IOException ex) {
-//			Logger.getLogger(BarGUI.class.getName())
-//					.log(Level.SEVERE, null, ex);
-//		}
 		panelNorthLeft.add(new JLabel(new ImageIcon(getClass().getResource("/logo_resized.jpg"))));
 
 		// Array with the ten table buttons
@@ -113,7 +98,6 @@ public class BarGUI extends JPanel {
 
 
 		employeeBox = new JComboBox<Employee>();
-		//HashMap<Integer, Employee> employeeNames = loginmanager.getEmployees();
 
 		signupButton = new JButton("Inschrijven");
 		signupButton.setBackground(Color.decode("#DFDFDF"));
@@ -182,14 +166,14 @@ public class BarGUI extends JPanel {
 	 * status 'Bezet', 'Afrekenen' or 'Leeg'.
 	 */
     public void setTableStatus() {
-        ArrayList<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
-        ArrayList<Table> tableStatusPayment = barmanager.getPaymentTables(); //Contains all 'Afrekenen' tables
-        ArrayList<Table> tableStatusEmpty = barmanager.getEmptyTables(); //Contains all 'Leeg' tables
+        List<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
+        List<Table> tableStatusPayment = barmanager.getPaymentTables(); //Contains all 'Afrekenen' tables
+        List<Table> tableStatusEmpty = barmanager.getEmptyTables(); //Contains all 'Leeg' tables
         Timestamp longestBarOrder = null; //Used to store the Date of the longest waiting bar order
         Timestamp longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
         Timestamp longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
-        HashSet<Integer> barOrderTables = new HashSet<>();  //reference to table which get a green color
-        HashSet<Integer> kitchenOrderTables = new HashSet<>(); //reference to table which get a yellow color
+        Set<Integer> barOrderTables = new HashSet<>();  //reference to table which get a green color
+        Set<Integer> kitchenOrderTables = new HashSet<>(); //reference to table which get a yellow color
         /*Sinse only one table can have the longest waiting order,
         we only need to store a reference to the bar and kitchen table*/
         int longestBarTable = 0;
@@ -274,13 +258,12 @@ public class BarGUI extends JPanel {
                     /*Check if a table object is present*/
 					if (table != null) {
                         /**/
-						if (table.getTableStatus().equals("Bezet") || table.getTableStatus().equals("Hulp")) {
+						if ("Bezet".equals(table.getTableStatus()) || "Hulp".equals(table.getTableStatus())) {
 							panelCenter.removeAll();
 							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
                             activeTable = tb;
 							panelCenter.revalidate();
-						} else if (table.getTableStatus().equals("Afrekenen")) {
-							System.out.println("Status afrekenen");
+						} else if ("Afrekenen".equals(table.getTableStatus())) {
 							panelCenter.removeAll();
 							Payment p = paymentManager.getActivePayment(tb);
 							activeTable = tb;
@@ -291,8 +274,7 @@ public class BarGUI extends JPanel {
                             panelCenter.removeAll();
 						}
 					}
-				}
-				else {
+				} else {
 					TitledBorder topBorderInactive = BorderFactory.createTitledBorder("");
 					topBorderInactive.setBorder(BorderFactory.createLineBorder(Color.decode("#DFDFDF")));
                     topBorderInactive.setTitlePosition(TitledBorder.TOP);
@@ -315,8 +297,7 @@ public class BarGUI extends JPanel {
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
             if (employeeBox.getItemCount() > 0) {
-				System.out.println(employeeBox.getSelectedItem().toString());
-				if(barmanager.getHashTable(activeTable).getTableStatus().equals("Afrekenen")) {
+				if("Afrekenen".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
 					try {
 						paymentManager.completePayment(activeTable);
 						barmanager.removeTable(activeTable);
@@ -326,12 +307,13 @@ public class BarGUI extends JPanel {
 						JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
 					} catch (Exception f) {
 						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+						Logger logger = Logger.getAnonymousLogger();
+						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderhandeler", f);
 					}
-				} else if (barmanager.getHashTable(activeTable).getTableStatus().equals("Bezet")) {
+				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
 					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling afronden in it3", "Komt nog", JOptionPane.INFORMATION_MESSAGE);
 				}
-            }
-            else {
+            } else {
                 JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
             }
         }

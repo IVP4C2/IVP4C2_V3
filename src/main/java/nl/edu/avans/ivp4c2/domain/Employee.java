@@ -3,6 +3,7 @@ package nl.edu.avans.ivp4c2.domain;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Bram on 22-5-2015.
@@ -15,7 +16,7 @@ public class Employee {
     private Calendar beginShift;
     private Calendar endSShift;
 
-    private final ArrayList<Order> listDoneOrders;
+    private final List<Order> listDoneOrders;
 
     public Employee(int employeeNumber, String employeeFirstName, String employeeLastName) {
         this.employeeNumber = employeeNumber;

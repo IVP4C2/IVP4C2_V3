@@ -334,6 +334,8 @@ public class PaymentSection {
             printerJob.print();
         }catch (PrinterException pe) {
             JOptionPane.showMessageDialog(paymentPanel, "Rekening kon niet worden geprint: "+pe.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+            Logger logger = Logger.getAnonymousLogger();
+            logger.log(Level.SEVERE, "an exception was thrown in the PaymentSection", pe);
         }
 
         //Close document
@@ -348,10 +350,11 @@ public class PaymentSection {
      * @return String value of rounded Double
      */
     private static String round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+        if (places < 0) {
+            throw new IllegalArgumentException();
+        }
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, BigDecimal.ROUND_HALF_UP);
-        System.out.println(bd);
         return bd.toString();
     }
 }
