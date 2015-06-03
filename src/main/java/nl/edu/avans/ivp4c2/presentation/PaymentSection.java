@@ -287,40 +287,54 @@ public class PaymentSection {
         inputStream.close();
 
         //Save document
+
+        /*Create a new folder*/
         File dir = new File("C:\\hhbills\\");
+        /*Check if the directory exists*/
         if(!dir.exists()) {
+            /*Directory doesn't exist, so try to create a new directory and catch possible exception*/
             boolean result = false;
             try {
-                dir.mkdir();
+                dir.mkdir(); //Create folder
                 result = true;
             } catch (SecurityException e) {
                 Logger logger = Logger.getAnonymousLogger();
                 logger.log(Level.SEVERE, "unable to create directory: " + dir.getName(), e);
             }
 
+            /*result is set to 'true' if the folder was created succesfully.
+            * Since the directory didn't exist yet, the file we want to create can't possibly exist in this location*/
             if(result) {
                 if(!new File(dir+"\\bill"+payment.getPaymentNumber()+".pdf").isFile()) {
-                    document.save(dir + "\\bill" + payment.getPaymentNumber() + ".pdf");
+                    document.save(dir + "\\bill" + payment.getPaymentNumber() + ".pdf"); //Save document as bill<id>.pdf
                 }
+                /*if for some reason the directory wasn't created successfully, save the document in the default location and show the location in a popup*/
             } else {
                 document.save("bill"+payment.getPaymentNumber()+".pdf");
                 JOptionPane.showMessageDialog(paymentPanel, "Rekening op andere locatie opgeslagen: "
                         +document.getDocumentInformation().getDictionary().toString(), "Fout", JOptionPane.ERROR_MESSAGE);
             }
+            /*If the directory already exists, save the document in this directory*/
         } else if (dir.exists()) {
+            /*Check is a file with the same name is present*/
             if(!new File(dir+"\\bill"+payment.getPaymentNumber()+".pdf").isFile()) {
+                /*No file present, save the document*/
                 document.save(dir + "\\bill" + payment.getPaymentNumber() + ".pdf");
             } else {
+                /*File existed already, create a new file and get the billid*/
                 File fileName = new File(dir+"\\bill"+payment.getPaymentNumber()+".pdf");
                 System.out.println(fileName);
+                /*Since the last character before '.pdf' is always the billid or version number, we can easily extract this number from the file name */
                 int billVersion = Character.getNumericValue(fileName.getName().charAt(fileName.getName().length() - 5));
                 System.out.println(billVersion);
                 int newVersion = 1;
+                /*Repeat this loop until bill<id>_<version> is not a file in the directory*/
                 while(fileName.exists()) {
                     newVersion++;
                     fileName = new File(dir + "\\bill" + payment.getPaymentNumber() + "_" + newVersion + ".pdf");
                     System.out.println(fileName.getName());
                 }
+                /*Save the document with the new version number*/
                 document.save(dir + "\\bill" + payment.getPaymentNumber() + "_" + newVersion + ".pdf");
             }
         }
