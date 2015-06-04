@@ -31,7 +31,7 @@ import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
 import nl.edu.avans.ivp4c2.manager.PaymentManager;
-import sun.plugin2.message.ShowStatusMessage;
+//import sun.plugin2.message.ShowStatusMessage;
 
 
 public class BarGUI extends JPanel {
@@ -54,6 +54,10 @@ public class BarGUI extends JPanel {
 	// Booleans
 	private boolean green;
 	private boolean yellow;
+
+	// Collections
+	// All the employees will be stored in a list called employees.
+	HashMap<Integer, Employee> employees;
 
 	// Panels
 	private JPanel panelNorth;
@@ -79,6 +83,8 @@ public class BarGUI extends JPanel {
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
 		this.loginmanager = new LoginManager();
+
+		employees = loginmanager.getEmployees();
 
 		setLayout(new BorderLayout());
 
@@ -148,7 +154,7 @@ public class BarGUI extends JPanel {
 		signupButton.setFont(font);
 		signupButton.setBorder(BorderFactory.createEtchedBorder());
 		completeOrderButton = new JButton("Afronden");
-        completeOrderButton.addActionListener(new CompleteOrderHandler());
+		completeOrderButton.addActionListener(new CompleteOrderHandler());
 		completeOrderButton.setBackground(Color.decode("#DFDFDF"));
 		completeOrderButton.setFont(font);
 		completeOrderButton.setBorder(BorderFactory.createEtchedBorder());
@@ -164,12 +170,12 @@ public class BarGUI extends JPanel {
 		loginButton.setFont(font);
 		loginButton.setBackground(Color.decode("#DFDFDF"));
 		loginButton.setBorder(BorderFactory.createEtchedBorder());
-		loginButton.addActionListener(new LogInOutHandler());
+		loginButton.addActionListener(new LoginHandler());
 		logoutButton = new JButton(" Afmelden");
 		logoutButton.setFont(font);
 		logoutButton.setBackground(Color.decode("#DFDFDF"));
 		logoutButton.setBorder(BorderFactory.createEtchedBorder());
-		logoutButton.addActionListener(new LogInOutHandler());
+		logoutButton.addActionListener(new LogoutHandler());
 
 		// Items added to panel West
 		panelWest.add(employeeBox);
@@ -243,7 +249,7 @@ public class BarGUI extends JPanel {
 				/*Check the order destination and time for each order.*/
 				if (o.getDestination() == 1 && !hasKitchenOrder) {
 					if (longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
-						System.out.println("Before bar");
+						//System.out.println("Before bar");
 						tableButton[tb].setBackground(Color.decode("#008A2E"));
 						longestBarOrder = o.getOrderTime();
 						hasLongestBarOrder = true;
@@ -253,7 +259,7 @@ public class BarGUI extends JPanel {
 				}
 				if (o.getDestination() == 2) {
 					if (longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
-						System.out.println("Before kitchen");
+						//System.out.println("Before kitchen");
 						tableButton[tb].setBackground(Color.ORANGE);
 						longestKitchenOrder = o.getOrderTime();
 						hasLongestKitchenOrder = true;
@@ -345,21 +351,19 @@ public class BarGUI extends JPanel {
 							System.out.println("Afrekenen");
 							panelCenter.add(paymentSection.getPaymentPanel(p));
 							revalidate();
-						}
-						else {
+						} else {
 							revalidate();
 						}
 					}
-				}
-				else {
-						TitledBorder topBorderInactive = BorderFactory
-								.createTitledBorder("");
-						topBorderInactive.setBorder(BorderFactory
-								.createLineBorder(Color.decode("#DFDFDF")));
-						topBorderInactive.setTitlePosition(TitledBorder.TOP);
-						tableButton[tb].setBorder(topBorderInactive);
-						tableButton[tb].setBorder(BorderFactory
-								.createEtchedBorder());
+				} else {
+					TitledBorder topBorderInactive = BorderFactory
+							.createTitledBorder("");
+					topBorderInactive.setBorder(BorderFactory
+							.createLineBorder(Color.decode("#DFDFDF")));
+					topBorderInactive.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorderInactive);
+					tableButton[tb].setBorder(BorderFactory
+							.createEtchedBorder());
 					revalidate();
 				}
 			}
@@ -368,72 +372,103 @@ public class BarGUI extends JPanel {
 	}
 
 
-	class CompleteOrderHandler implements  ActionListener {
+	class CompleteOrderHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-            if (employeeBox.getItemCount() > 0) {
-                if (paymentManager.completePayment(activeTable)) {
-                    try {
-                        barmanager.removeTable(activeTable);
-                        tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
-                        revalidate();
-                        panelCenter.removeAll();
-                        JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception f) {
-                        JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-            else {
-                JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
-            }
-        }
+			if (employeeBox.getItemCount() > 0) {
+				if (paymentManager.completePayment(activeTable)) {
+					try {
+						barmanager.removeTable(activeTable);
+						tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
+						revalidate();
+						panelCenter.removeAll();
+						JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
+					} catch (Exception f) {
+						JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 
 	/**
-	 * The Login and logout handler
-	 * This handler makes it possible to let employees login and also logout
-	 * If the employee fill in his employeecode in the textfield and click on login the employee will be logged in
-	 * When the employee also fill in his employeecode and click on logout the employee will be logged out
-	 * For protection whe are using codes that only the employee should know
+	 * LoginHandler makes it possible to login a unique employee
 	 */
-	class LogInOutHandler extends Component implements ActionListener {
+	class LoginHandler extends Component implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+
 			try {
 				// A employee can be found with his employeenumber and when a employee is found
 				int employeeCode = Integer.parseInt(logInOutField.getText());
 				// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
 				Employee empl = loginmanager.findEmployee(employeeCode);
+
 				if (empl != null) {
 					employeeBox.removeAllItems();
-					// All the employees will be stored in a list called employees.
-					HashMap<Integer, Employee> employees;
-					employees = loginmanager.getEmployees();
 					// This loop will check if a employee is in the list,
 					// if a employee is above added to the list it will be added to the JComboBox
 					for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
 						Employee em = entry.getValue();
 						employeeBox.addItem(em);
 					}
-					// If a employee is selected in the JComboBox and there is clicked on the logoutButton a employee will logout.
-					// If a employee number is filled in the textField and there is clicked on the logoutButton the employee will also logout.
-					if (e.getSource() == logoutButton) {
-						int input = Integer.parseInt(logInOutField.getText());
-						employees.remove(input);
+				} else if (empl == null) {
+					JOptionPane.showMessageDialog(LoginHandler.this, "De medewerkerscode komt niet overeen, probeer het opnieuw!", "Foutmelding: incorrecte medewerkerscode", JOptionPane.ERROR_MESSAGE);
+				}
+
+			} catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(LoginHandler.this, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+			} catch (LoginException ali) { // already logged in
+				JOptionPane.showMessageDialog(LoginHandler.this, "U bent al ingelogd!", "Foutmelding: al ingelogd", JOptionPane.ERROR_MESSAGE);
+			}
+			logInOutField.setText("");
+		}
+	}
+
+	/**
+	 * LogoutHandler makes it possible to logout a unique employee
+	 */
+	class LogoutHandler extends Component implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// If a employee is selected in the JComboBox and there is clicked on the logoutButton a employee will logout.
+			// If a employee number is filled in the textField and there is clicked on the logoutButton the employee will also logout.
+
+			try {
+				if (e.getSource() == logoutButton) {
+					int employeeCode = Integer.parseInt(logInOutField.getText());
+					// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
+					Employee empl = loginmanager.findEmployee(employeeCode);
+					
+					if(empl != null ) {
+						// logout with selection in JCombobox and logout button
+//						Employee emplOutBox = (Employee) employeeBox.getSelectedItem();
+//						loginmanager.logoutEmployee(emplOutBox);
+	
+						// logout with employee number and logout button
+		
+						employees.remove(empl);
+	
+						// rebuild the JCombobox
 						employeeBox.removeAllItems();
 						for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
 							Employee em = entry.getValue();
 							employeeBox.addItem(em);
 						}
+					} else {
+						JOptionPane.showMessageDialog(LogoutHandler.this, "niet gevonden", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
 					}
-					logInOutField.revalidate();
-					logInOutField.setText(null);
-				} else {
-					JOptionPane.showMessageDialog(LogInOutHandler.this, "Het ingevoerde nummer wordt niet herkend, probeer het opnieuw! ", "Foutmelding", JOptionPane.ERROR_MESSAGE);
 				}
-			} catch (NumberFormatException nfe) {
-				JOptionPane.showMessageDialog(LogInOutHandler.this, "Vul uw medewerkerscode in", "Foutmelding", JOptionPane.ERROR_MESSAGE);
+
+			}  catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(LogoutHandler.this, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+			}  catch (LoginException le) { // not logged in yet
+				JOptionPane.showMessageDialog(LogoutHandler.this, "U moet eerst ingelogd zijn om te kunnen afmelden", "Foutmelding: afmelden", JOptionPane.ERROR_MESSAGE);
 			}
+			logInOutField.setText("");
 		}
 	}
+
+
 }
+
 

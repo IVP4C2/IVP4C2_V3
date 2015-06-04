@@ -42,12 +42,6 @@ public class Employee {
     public String getEmployeeInitials() {
         return employeeInitials;
     }
-//
-//    public void setOrders(Order o) {
-//        for(Loan o : ListdoneOrders) {
-//            listDone
-//        }
-//    }
 
     public void setEmployeeFirstName(String employeeFirstName) {
         this.employeeFirstName = employeeFirstName;
@@ -69,7 +63,6 @@ public class Employee {
         return employeeFirstName + " " + employeeLastName;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
