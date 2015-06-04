@@ -1,13 +1,23 @@
 package nl.edu.avans.ivp4c2.manager;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import nl.edu.avans.ivp4c2.datastorage.*;
 import nl.edu.avans.ivp4c2.domain.Table;
+import nl.edu.avans.ivp4c2.presentation.BarGUI;
+
+import javax.swing.*;
+
+import static javax.swing.JOptionPane.*;
 
 /**
  * Manager which handles all operations regarding orders and tables
@@ -15,11 +25,11 @@ import nl.edu.avans.ivp4c2.domain.Table;
  */
 public class BarManager {
 	private HashMap<Integer, Table> tableHashmap; //Used to store all tables
-	private TableDAO tabledao;
+	TableDAO tableDAO;
 
 	public BarManager() {
 		tableHashmap = new HashMap<Integer, Table>();
-		tabledao = new TableDAO();
+		tableDAO = new TableDAO();
 
 		getOccupiedTablesDAO();
 		getPaymentTablesDAO();
@@ -65,7 +75,8 @@ public class BarManager {
 		try {
 			tableHashmap.remove(tableNumber);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Logger logger = Logger.getAnonymousLogger();
+			logger.log(Level.SEVERE, "an exception was thrown in the BarManager", e);
 		}
 	}
 
@@ -80,7 +91,7 @@ public class BarManager {
 	 * Returns the tables which have the 'Bezet' status in an ArrayList
 	 * @return occupied tables
 	 */
-	public ArrayList<Table> getOccupiedTables() {
+	public List<Table> getOccupiedTables() {
 		ArrayList<Table> arrayList = new ArrayList<Table>();
 		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
 			if(e.getValue().getTableStatus().equals("Bezet")) {
@@ -94,7 +105,7 @@ public class BarManager {
 	 * Returns the tables which have the 'Afrekenen' status in an ArrayList
 	 * @return payment tables
 	 */
-	public ArrayList<Table> getPaymentTables() {
+	public List<Table> getPaymentTables() {
 		ArrayList<Table> arrayList = new ArrayList<Table>();
 		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
 			if(e.getValue().getTableStatus().equals("Afrekenen")) {
@@ -108,7 +119,7 @@ public class BarManager {
 	 * Return the tables which have the 'Leeg' status in an ArrrayList
 	 * @return
 	 */
-	public ArrayList<Table> getEmptyTables() {
+	public List<Table> getEmptyTables() {
 		ArrayList<Table> arrayList = new ArrayList<Table>();
 		for(Map.Entry<Integer, Table> e : tableHashmap.entrySet()) {
 			if(e.getValue().getTableStatus().equals("Leeg")) {
@@ -133,7 +144,7 @@ public class BarManager {
 	 * @return ArrayList<Table>
 	 */
 	public void getOccupiedTablesDAO() {
-		for (Table t : tabledao.getTableOccupied()) {
+		for (Table t : tableDAO.getTableOccupied()) {
 			if(tableHashmap.containsKey(t.getTableNumber())) {
 				tableHashmap.replace(t.getTableNumber(), t);
 			} else {
@@ -148,7 +159,7 @@ public class BarManager {
 	 * @return ArrayList<Table>
 	 */
 	public void getPaymentTablesDAO() {
-		for (Table t : tabledao.getTablePayment()) {
+		for (Table t : tableDAO.getTablePayment()) {
 			if(tableHashmap.containsKey(t.getTableNumber())) {
 				tableHashmap.replace(t.getTableNumber(), t);
 			} else {
@@ -162,7 +173,7 @@ public class BarManager {
 	 * @return ArrayList<Table>
 	 */
 	public void getEmptyTablesDAO() {
-		for (Table t : tabledao.getTableEmpty()) {
+		for (Table t : tableDAO.getTableEmpty()) {
 			if(tableHashmap.containsKey(t.getTableNumber())) {
 				tableHashmap.replace(t.getTableNumber(), t);
 			} else {

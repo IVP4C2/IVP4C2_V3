@@ -2,7 +2,6 @@ package nl.edu.avans.ivp4c2.domain;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  *
@@ -84,4 +83,24 @@ public class Order {
 		this.orderStatus = newStatus;
 	}
 
+
+	/*Default equals and hashCode methods*/
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Order order = (Order) o;
+
+		if (orderNumber != order.orderNumber) return false;
+		return !(orderTime != null ? !orderTime.equals(order.orderTime) : order.orderTime != null);
+
+	}
+
+	@Override
+	public int hashCode() {
+		int result = orderNumber;
+		result = 31 * result + (orderTime != null ? orderTime.hashCode() : 0);
+		return result;
+	}
 }

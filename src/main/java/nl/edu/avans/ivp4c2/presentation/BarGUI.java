@@ -3,43 +3,23 @@ package nl.edu.avans.ivp4c2.presentation;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
+import java.sql.Timestamp;
+
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
-
-import com.mysql.jdbc.ResultSetMetaData;
-
 import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
 import nl.edu.avans.ivp4c2.manager.PaymentManager;
-//import sun.plugin2.message.ShowStatusMessage;
-
 
 public class BarGUI extends JPanel {
-
-	// Attributes
-	private JLabel logo;
-	private Font font;
-
 	// Buttons
 	private JComboBox<Employee> employeeBox;
 	private JButton completeOrderButton;
@@ -47,17 +27,14 @@ public class BarGUI extends JPanel {
 	private JButton signupButton;
 	private JButton signInOutButton;
 
-
 	private final int AMOUNT_OF_TABLEBUTTONS = 11;
 	private JButton[] tableButton;
 
-	// Booleans
-	private boolean green;
-	private boolean yellow;
 
 	// Collections
 	// All the employees will be stored in a list called employees.
 	HashMap<Integer, Employee> employees;
+
 
 	// Panels
 	private JPanel panelNorth;
@@ -79,12 +56,19 @@ public class BarGUI extends JPanel {
 
 	private BarManager barmanager;
 	private LoginManager loginmanager;
+	private OrderSection orderSection;
+	private PaymentSection paymentSection;
 
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
 		this.loginmanager = new LoginManager();
 
 		employees = loginmanager.getEmployees();
+
+
+		this.paymentManager = new PaymentManager();
+		this.orderSection = new OrderSection();
+		this.paymentSection = new PaymentSection();
 
 		setLayout(new BorderLayout());
 
@@ -95,41 +79,22 @@ public class BarGUI extends JPanel {
 		panelNorthLeft = new JPanel();
 		panelNorthRight = new JPanel();
 		panelWest = new JPanel();
-		// panelEast = new JPanel();
 		panelCenter = new JPanel();
 		panelCenter.setBackground(Color.WHITE);
 
 		panelNorth.setLayout(new BorderLayout()); // Added
-		// Removed panelNorth gridlayout, interfered with earlier declared
-		// BorderLayout
 		panelNorthLeft.setLayout(new GridLayout(1, 2));
 		panelNorthLeft.setSize(600, 200);
 		panelNorthRight.setLayout(new GridLayout(2, 5));
 		panelWest.setLayout(new GridLayout(7, 1));
-		// panelEast.setLayout(new BorderLayout());
-		panelCenter.setLayout(new GridLayout(1, 1)); // Has 1 row and two
-		// columns. leftPanel
-		// and rightPanel will
-		// be set in these
-		// columns
-
-		// Confire left and right panel
-
-//		panelCenter.add(leftPanel);
-//		panelCenter.add(rightPanel);
+        /*Has room for one JPanel. The panel can change depending on the table Status.
+        * panelCenter.removeAll() will remove the current JPanel and a new one can be placed */
+		panelCenter.setLayout(new GridLayout(1, 1)); // Has room for one JPanel. The panel displayed here will change depending on the tableStatus
 
 		// Setup North panel
 
 		/* Reading and setting logo image */
-		BufferedImage image = null;
-		try {
-			image = ImageIO
-					.read(new File("src/main/resources/logo_resized.jpg"));
-		} catch (IOException ex) {
-			Logger.getLogger(BarGUI.class.getName())
-					.log(Level.SEVERE, null, ex);
-		}
-		JLabel logo = new JLabel(new ImageIcon(image));
+		panelNorthLeft.add(new JLabel(new ImageIcon(getClass().getResource("/logo_resized.jpg"))));
 
 		// Array with the ten table buttons
 		tableButton = new JButton[AMOUNT_OF_TABLEBUTTONS];
@@ -139,15 +104,11 @@ public class BarGUI extends JPanel {
 			tableButton[tb].addActionListener(new TableButtonHandler());
 			tableButton[tb].setFont(font);
 			tableButton[tb].setBorder(BorderFactory.createEtchedBorder());
-			panelNorthRight.add(tableButton[tb]); // Adding tableButtons here.
-			// Using a second method for
-			// this will be useless
+			panelNorthRight.add(tableButton[tb]);
 		}
 
-		panelNorthLeft.add(logo);
 
 		employeeBox = new JComboBox<Employee>();
-		//HashMap<Integer, Employee> employeeNames = loginmanager.getEmployees();
 
 		signupButton = new JButton("Inschrijven");
 		signupButton.setBackground(Color.decode("#DFDFDF"));
@@ -191,10 +152,8 @@ public class BarGUI extends JPanel {
 		panelNorth.add(panelNorthLeft, BorderLayout.WEST); // Added
 		panelNorth.add(panelNorthRight, BorderLayout.CENTER); // Added
 		add(panelNorth, BorderLayout.NORTH);
-
 		add(panelCenter, BorderLayout.CENTER);
 		add(panelWest, BorderLayout.WEST);
-
 
 		/*
 		 * Calls setTableStatus() every second. Other methods that should be
@@ -214,156 +173,126 @@ public class BarGUI extends JPanel {
 	// Methods
 
 	/*
-	 * Using new method to set table status. Since a table can only have the
-	 * status 'Bestelling', 'Afrekenen' or 'Leeg', We can anticipate this and
-	 * use three methods to set the tableButton colors accordingly
+	 * Using new method to set table status. Atable can only have the
+	 * status 'Bezet', 'Afrekenen' or 'Leeg'.
 	 */
-	public void setTableStatus() {
-		ArrayList<Table> tableStatusOrder = barmanager.getOccupiedTables();
-		ArrayList<Table> tableStatusPayment = barmanager.getPaymentTables();
-		ArrayList<Table> tableStatusEmpty = barmanager.getEmptyTables();
-		Date longestBarOrder = null; //Used to store the Date of the longest waiting bar order
-		Date longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
-		Date longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
+
+    public void setTableStatus() {
+        List<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
+        List<Table> tableStatusPayment = barmanager.getPaymentTables(); //Contains all 'Afrekenen' tables
+        List<Table> tableStatusEmpty = barmanager.getEmptyTables(); //Contains all 'Leeg' tables
+        Timestamp longestBarOrder = null; //Used to store the Date of the longest waiting bar order
+        Timestamp longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
+        Timestamp longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
+        Set<Integer> barOrderTables = new HashSet<Integer>();  //reference to table which get a green color
+        Set<Integer> kitchenOrderTables = new HashSet<Integer>(); //reference to table which get a yellow color
+        /*Sinse only one table can have the longest waiting order,
+        we only need to store a reference to the bar and kitchen table*/
+        int longestBarTable = 0;
+        int longestKitchenTable = 0;
+
+        // Set tableButtons for tables with status 'Leeg'
+        for (Table te : tableStatusEmpty) {
+            int tb = te.getTableNumber();
+            tableButton[tb].setBackground(Color.decode("#DFDFDF")); //Set button color. grey color.
+            tableButton[tb].setEnabled(false); //Table is empty. Therefore, the button is disabled
+            repaint();
+        }
 
 
-		// Set table status empty
-		for (Table te : tableStatusEmpty) {
-			int tb = te.getTableNumber();
-//			tableButton[tb].setBackground(Color.decode("#DFDFDF"));
-			tableButton[tb].enable(false);
-			repaint();
-		}
+        // Set tableButtons for tables with status 'Bezet'
+        for (Table to : tableStatusOrder) {
+            int tb = to.getTableNumber();
+            boolean hasKitchenOrder = false;
+            tableButton[tb].setEnabled(true); //Table is occupied. Therefore, the button is enabled
+            for(Order o : to.getOrders()) {
+                if(o.getDestination() == 2) {
+                    kitchenOrderTables.add(tb);
+                    hasKitchenOrder = true;
+                    if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
+                        longestKitchenTable = tb;
+                        longestKitchenOrder = o.getOrderTime();
+                    }
+                }
+                if(o.getDestination() == 1 && !hasKitchenOrder) {
+                    barOrderTables.add(tb);
+                    if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
+                        longestBarTable = tb;
+                        longestBarOrder = o.getOrderTime();
 
-		// Set table status Order
-		for (Table to : tableStatusOrder) {
-			int tb = to.getTableNumber();
-			boolean hasLongestBarOrder = false;
-			boolean hasLongestKitchenOrder = false;
-			/*The two booleans below are used to set the tableButton color accordingly.
-			* If there is an order in the Table's order list with destination 1, hasBarOrder will be set to true
-			* If there is an order in the Table's order list with destination 2, hasKitchenOrder will be set to true.*/
-			boolean hasBarOrder = false;
-			boolean hasKitchenOrder = false;
-			for (Order o : to.getOrders()) {
-				/*Check the order destination and time for each order.*/
-				if (o.getDestination() == 1 && !hasKitchenOrder) {
-					if (longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
-						//System.out.println("Before bar");
-						tableButton[tb].setBackground(Color.decode("#008A2E"));
-						longestBarOrder = o.getOrderTime();
-						hasLongestBarOrder = true;
-					} else if (!hasLongestBarOrder) {
-						tableButton[tb].setBackground(Color.GREEN);
-					}
-				}
-				if (o.getDestination() == 2) {
-					if (longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
-						//System.out.println("Before kitchen");
-						tableButton[tb].setBackground(Color.ORANGE);
-						longestKitchenOrder = o.getOrderTime();
-						hasLongestKitchenOrder = true;
-						hasKitchenOrder = true;
-					} else if (!hasLongestKitchenOrder) {
-						tableButton[tb].setBackground(Color.YELLOW);
-						hasKitchenOrder = true;
-					}
-				}
-			}
-			repaint();
-		}
+                    }
+                }
+            }
+        }
+        /*Set colors*/
+        for(int i : barOrderTables) {
+            tableButton[i].setBackground(Color.GREEN);
+        }
+        for(int i : kitchenOrderTables) {
+            tableButton[i].setBackground(Color.YELLOW);
+        }
 
-		// Set table status Payment
-		for (Table tp : tableStatusPayment) {
-			int tb = tp.getTableNumber();
-			tableButton[tb].setBackground(Color.RED);
-			repaint();
-		}
+        if(longestBarTable > 0) {
+            tableButton[longestBarTable].setBackground(Color.decode("#008A2E"));
+        }
+        if(longestKitchenTable > 0) {
+            tableButton[longestKitchenTable].setBackground(Color.ORANGE);
+        }
 
-	}
+        // Set tableButtons for tables with status 'Afrekenen'
+        for (Table tp : tableStatusPayment) {
+            int tb = tp.getTableNumber();
+            tableButton[tb].setEnabled(true); //Table wants to pay. Therefore, the button is enabled
+            tableButton[tb].setBackground(Color.RED);
+            repaint();
+        }
 
+    }
 
 	// Inner classes
-
-
+    /**
+     *Adds a different JPanel to panelCenter depending on the table status
+     * Uses classes OrderSection and PaymentSection
+     */
 	class TableButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
 			for (int tb = 1; tb <= 10; tb++) {
 				if (e.getSource() == tableButton[tb]) {
 
-					final int tableNumber = tb; // create new integer. Easier to
-					// work with.
-					// give the active button a border
-					TitledBorder topBorder = BorderFactory
-							.createTitledBorder("Actief");
-					topBorder.setBorder(BorderFactory
-							.createLineBorder(Color.black));
+					/*Set border on clicked table button*/
+					TitledBorder topBorder = BorderFactory.createTitledBorder("Actief");
+					topBorder.setBorder(BorderFactory.createLineBorder(Color.black));
 					topBorder.setTitlePosition(TitledBorder.TOP);
 					tableButton[tb].setBorder(topBorder);
-					Table table = null;
-					table = barmanager.getHashTable(tableNumber);
-					if (!table.equals(null)) {
-						if (!table.getTableStatus().equals("Afrekenen")) {
-							panelCenter.removeAll();
-							JPanel barPanel = new JPanel(new GridLayout(1, 2));
-							JPanel leftPanel = new JPanel(new GridLayout(1, 1));
-							final JPanel rightPanel = new JPanel(new GridLayout(1, 1));
-							leftPanel.setBackground(Color.WHITE);
-							rightPanel.setBackground(Color.WHITE);
-							barPanel.add(leftPanel);
-							barPanel.add(rightPanel);
-							panelCenter.add(barPanel);
 
-							final OrderSection orderSection = new OrderSection();
-							JTable tableLeft = orderSection.getTableLeft(table);
-
-							// Add mouse listener
-							final Table finalTable = table;
-							tableLeft.addMouseListener(new MouseAdapter() {
-								@Override
-								public void mouseClicked(final MouseEvent e) {
-									if (e.getClickCount() == 1) {
-										rightPanel.removeAll();
-										final JTable target = (JTable) e
-												.getSource(); // Get left JTable
-										final int row = target.getSelectedRow(); //Get row selected by user
-										int value = (Integer) target.getValueAt(row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
-										Order tempOrder = finalTable.getSpecificOrder(value);
-										JTable tableRight = orderSection.getTableRight(tempOrder);
-										rightPanel.add(
-												new JScrollPane(tableRight))
-												.setBackground(Color.WHITE);
-										rightPanel.revalidate();
-									}
-								}
-							});
-							leftPanel.add(new JScrollPane(tableLeft))
-									.setBackground(Color.WHITE);
-							leftPanel.revalidate();
-						} else if (table.getTableStatus().equals("Afrekenen")) {
-							System.out.println("Status afrekenen");
+                    /*retrieve the matching table from the barmanager for a given tableNumber*/
+					Table table = barmanager.getHashTable(tb);
+                    /*Check if a table object is present*/
+					if (table != null) {
+                        /**/
+						if ("Bezet".equals(table.getTableStatus()) || "Hulp".equals(table.getTableStatus())) {
 							panelCenter.removeAll();
-							paymentManager = new PaymentManager();
-							PaymentSection paymentSection = new PaymentSection();
-							Payment p = paymentManager.getActivePayment(tableNumber);
-							activeTable = tableNumber;
-							System.out.println("Afrekenen");
+							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
+                            activeTable = tb;
+							panelCenter.revalidate();
+						} else if ("Afrekenen".equals(table.getTableStatus())) {
+							panelCenter.removeAll();
+							Payment p = paymentManager.getActivePayment(tb);
+							activeTable = tb;
 							panelCenter.add(paymentSection.getPaymentPanel(p));
 							revalidate();
-						} else {
-							revalidate();
+						}
+						else {
+                            panelCenter.removeAll();
 						}
 					}
 				} else {
-					TitledBorder topBorderInactive = BorderFactory
-							.createTitledBorder("");
-					topBorderInactive.setBorder(BorderFactory
-							.createLineBorder(Color.decode("#DFDFDF")));
-					topBorderInactive.setTitlePosition(TitledBorder.TOP);
-					tableButton[tb].setBorder(topBorderInactive);
-					tableButton[tb].setBorder(BorderFactory
-							.createEtchedBorder());
+					TitledBorder topBorderInactive = BorderFactory.createTitledBorder("");
+					topBorderInactive.setBorder(BorderFactory.createLineBorder(Color.decode("#DFDFDF")));
+                    topBorderInactive.setTitlePosition(TitledBorder.TOP);
+                    tableButton[tb].setBorder(topBorderInactive);
+					tableButton[tb].setBorder(BorderFactory.createEtchedBorder());
 					revalidate();
 				}
 			}
@@ -372,24 +301,35 @@ public class BarGUI extends JPanel {
 	}
 
 
-	class CompleteOrderHandler implements ActionListener {
+
+	/**
+	 * CONTENTS MIGHT GET REPLACED BY A DEDICATED CompleOrderButton CLASS WTIH EXCEPTION HANDLING
+	 * Handles the CompleteOrder button.
+	 * Depending on the tableStatus, completes the Payment or Order.
+	 */
+	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if (employeeBox.getItemCount() > 0) {
-				if (paymentManager.completePayment(activeTable)) {
+            if (employeeBox.getItemCount() > 0) {
+				if("Afrekenen".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
 					try {
+						paymentManager.completePayment(activeTable);
 						barmanager.removeTable(activeTable);
 						tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
 						revalidate();
 						panelCenter.removeAll();
 						JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
 					} catch (Exception f) {
-						JOptionPane.showMessageDialog(BarGUI.this, "Bestelling kon niet worden afgerond", "Fout", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+						Logger logger = Logger.getAnonymousLogger();
+						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderhandeler", f);
 					}
+				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
+					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling afronden in it3", "Komt nog", JOptionPane.INFORMATION_MESSAGE);
 				}
-			} else {
-				JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
-			}
-		}
+            } else {
+                JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
+            }
+        }
 	}
 
 	/**

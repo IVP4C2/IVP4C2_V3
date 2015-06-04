@@ -20,59 +20,43 @@ public class DatabaseConnection {
     // execution method.
     private Statement statement;
     
-    public DatabaseConnection()
-    {
+    public DatabaseConnection() {
         connection = null;
         statement = null;
     }
     
-    public boolean openConnection()
-    {
+    public boolean openConnection() {
         boolean result = false;
 
-        if(connection == null)
-        {
-            try
-            {   
+        if(connection == null) {
+            try {
                 // Try to create a connection with the library database
                 connection = DriverManager.getConnection(
 //              "jdbc:mysql://145.48.6.148/hhc2" , "root", "10ec4u");
 //              "jdbc:mysql://127.0.0.1/hh" , "root", "");
                 "jdbc:mysql://mysql.famcoolen.nl/avans_hartigehap_c2" , "ivp4c2", "zJp6UoDhZD");
-                if(connection != null)
-                {
+                if(connection != null) {
                     statement = connection.createStatement();
                 }
-                
                 result = true;
-            }
-            catch(SQLException e)
-            {
+            } catch(SQLException e) {
                 System.out.println(e);
                 result = false;
             }
-        }
-        else
-        {
+        } else {
             // A connection was already initalized.
             result = true;
         }
-        
         return result;
     }
     
-    public boolean connectionIsOpen()
-    {
+    public boolean connectionIsOpen() {
         boolean open = false;
         
-        if(connection != null && statement != null)
-        {
-            try
-            {
+        if(connection != null && statement != null) {
+            try {
                 open = !connection.isClosed() && !statement.isClosed();
-            }
-            catch(SQLException e)
-            {
+            } catch(SQLException e) {
                 System.out.println(e);
                 open = false;
             }
@@ -83,35 +67,27 @@ public class DatabaseConnection {
         return open;
     }
     
-    public void closeConnection()
-    {
-        try
-        {
+    public void closeConnection() {
+        try {
             statement.close();
             
             // Close the connection
             connection.close();
-        }
-        catch(Exception e) {
+        } catch(Exception e) {
             System.out.println(e);
         }
     }
     
-    public ResultSet executeSQLSelectStatement(String query)
-    {
+    public ResultSet executeSQLSelectStatement(String query) {
         ResultSet resultset = null;
         
         // First, check whether a some query was passed and the connection with
         // the database.
-        if(query != null && connectionIsOpen())
-        {
+        if(query != null && connectionIsOpen()) {
             // Then, if succeeded, execute the query.
-            try
-            {
+            try {
                 resultset = statement.executeQuery(query);
-            }
-            catch(SQLException e)
-            {
+            } catch(SQLException e) {
                 System.out.println(e);
                 resultset = null;
             }
@@ -120,22 +96,17 @@ public class DatabaseConnection {
         return resultset;
     }
     
-    public boolean executeSQLDeleteStatement(String query)
-    {
+    public boolean executeSQLDeleteStatement(String query) {
         boolean result = false;
         
         // First, check whether a some query was passed and the connection with
         // the database.
-        if(query != null && connectionIsOpen())
-        {
+        if(query != null && connectionIsOpen()) {
             // Then, if succeeded, execute the query.
-            try
-            {
+            try {
                 statement.executeUpdate(query);
                 result = true;
-            }
-            catch(SQLException e)
-            {
+            } catch(SQLException e) {
                 System.out.println(e);
                 result = false;
             }
@@ -148,15 +119,11 @@ public class DatabaseConnection {
         
         boolean result = false;
         
-        if(query != null && connectionIsOpen())
-        {
-            try
-            {
+        if(query != null && connectionIsOpen()) {
+            try {
                 statement.executeUpdate(query);
                 result = true;
-            }
-            catch(SQLException e)
-            {
+            } catch(SQLException e) {
                 System.out.println(e);
                 result = false;
             }

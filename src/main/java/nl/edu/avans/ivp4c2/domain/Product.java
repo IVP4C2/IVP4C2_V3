@@ -9,12 +9,14 @@ public class Product {
 	private String productName;
 	private int amount;
 	private double price;
+	private int btw;
 	
-	public Product(int productNumber, String productName, int amount, double price) {
+	public Product(int productNumber, String productName, int amount, double price, int btw) {
 		this.productNumber = productNumber;
 		this.productName = productName;
 		this.amount = amount;
 		this.price = price;
+		this.btw = btw;
 	}
 
 	/**
@@ -49,5 +51,13 @@ public class Product {
 	 */
 	public double getPrice() {
 		return price;
+	}
+
+	/**
+	 * Returns the VAT as an Integer.
+	 * @return VAT as an Integer
+	 */
+	public int getBtw() {
+		return btw;
 	}
 }
