@@ -2,6 +2,7 @@ package nl.edu.avans.ivp4c2.manager;
 
 import nl.edu.avans.ivp4c2.datastorage.EmployeeDAO;
 import nl.edu.avans.ivp4c2.domain.Employee;
+import nl.edu.avans.ivp4c2.domain.LoginException;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ import java.util.*;
 public class LoginManager {
     private Employee employee;
     private HashMap<Integer, Employee> employeeList;
-    //private ArrayList<Payment> paymentList;
+    //private boolean existence = false;
 
     public LoginManager() {
         employeeList = new HashMap();
@@ -39,44 +40,48 @@ public class LoginManager {
      * @return a employee object
      */
 
-    public Employee findEmployee(int employeeNumber) {
-        Employee employee = employeeList.get(employeeNumber);
-        if (employee == null) {
-            // when the employee isn't loaded from the database yet, we need to do that first
-            // create the employeeDAO to find employees in the database
-            EmployeeDAO employeeDAO = new EmployeeDAO();
-            employee = employeeDAO.findEmployee(employeeNumber);
+    public Employee findEmployee(int employeeNumber) throws LoginException {
+            employee = null;
 
-            if (employee != null) {
-                // Cache the employee that has been found in the database in our main memory.
-                employeeList.put(employeeNumber, employee);
+            if (employee == null) {
+                // when the employee isn't loaded from the database yet, we need to do that first
+                // create the employeeDAO to find employees in the database
+                EmployeeDAO employeeDAO = new EmployeeDAO();
+                employee = employeeDAO.findEmployee(employeeNumber);
+
+                if (employee != null)  {
+                    if(checkForExistence(employee)) {
+                        System.out.println("U bent al ingelogd");
+                        throw new LoginException("U bent al ingelogd");
+                    }
+                    else {
+                        // Cache the employee that has been found in the database in our main memory.
+                        employeeList.put(employeeNumber, employee);
+                        System.out.println("bestaat nog niet, object wordt toegevoegd");
+                    }
+                }
             }
+            return employee;
         }
-        return employee;
-    }
+
 
     public HashMap<Integer, Employee> getEmployees() {
         return employeeList;
     }
-//
-//    public void logoutEmployee(Employee e) {
-//        for(Map.Entry<Integer, Employee> entry : employeeList.entrySet()) {
-//           if(entry == e) {
-//               employeeList.remove(entry);
-//           }
-//
-//    private boolean isValidEmployeeNumber(int input) {
-//        boolean status = false;
-//        for(Map.Entry<Integer, Employee> entry : employeeList.entrySet()) {
-//            if(entry.getKey() == input) {
-//                return true;
-//            }
-//        }
-//        return status;
-//    }
-//
-//    public void setValidEmployeeNumber(int input) throws invalidEmployeeNumberException {
-//
-//    }
 
+    public void logoutEmployee(Employee e) throws LoginException {
+        if(employeeList.containsValue(e)) {
+            employeeList.remove(e);
+        } else {
+            throw new LoginException("message");
+        }
+    }
+
+    public boolean checkForExistence(Employee e) {
+        if(employeeList.containsValue(e)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

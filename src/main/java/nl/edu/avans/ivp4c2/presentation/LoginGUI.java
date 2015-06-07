@@ -3,6 +3,7 @@ package nl.edu.avans.ivp4c2.presentation;
 import com.sun.org.apache.xpath.internal.SourceTree;
 import com.sun.org.apache.xpath.internal.SourceTreeManager;
 import nl.edu.avans.ivp4c2.domain.Employee;
+import nl.edu.avans.ivp4c2.domain.LoginException;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
 
 import javax.swing.*;
@@ -48,7 +49,11 @@ public class LoginGUI extends JPanel {
             int employeeCode =   Integer.parseInt(logInOutField.getText());
 
             System.out.println(employeeCode);
-            System.out.println(loginmanager.findEmployee(employeeCode));
+            try {
+                System.out.println(loginmanager.findEmployee(employeeCode));
+            } catch (LoginException e1) {
+                e1.printStackTrace();
+            }
 
         }
     }

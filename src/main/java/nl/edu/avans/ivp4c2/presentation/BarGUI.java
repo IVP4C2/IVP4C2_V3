@@ -32,6 +32,12 @@ public class BarGUI extends JPanel {
 	private final int AMOUNT_OF_TABLEBUTTONS = 11;
 	private JButton[] tableButton;
 
+
+	// Collections
+	// All the employees will be stored in a list called employees.
+	HashMap<Integer, Employee> employees;
+
+
 	// Panels
 	private JPanel panelNorth;
 	private JPanel panelNorthLeft;
@@ -58,9 +64,14 @@ public class BarGUI extends JPanel {
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
 		this.loginmanager = new LoginManager();
+
+		employees = loginmanager.getEmployees();
+
+
 		this.paymentManager = new PaymentManager();
 		this.orderSection = new OrderSection();
 		this.paymentSection = new PaymentSection();
+
 		setLayout(new BorderLayout());
 
 		Font font = new Font("SansSerif", Font.PLAIN, 24);
@@ -123,12 +134,12 @@ public class BarGUI extends JPanel {
 		loginButton.setFont(font);
 		loginButton.setBackground(Color.decode("#DFDFDF"));
 		loginButton.setBorder(BorderFactory.createEtchedBorder());
-		loginButton.addActionListener(new LogInOutHandler());
+		loginButton.addActionListener(new LoginHandler());
 		logoutButton = new JButton(" Afmelden");
 		logoutButton.setFont(font);
 		logoutButton.setBackground(Color.decode("#DFDFDF"));
 		logoutButton.setBorder(BorderFactory.createEtchedBorder());
-		logoutButton.addActionListener(new LogInOutHandler());
+		logoutButton.addActionListener(new LogoutHandler());
 
 		// Items added to panel West
 		panelWest.add(employeeBox);
@@ -168,6 +179,7 @@ public class BarGUI extends JPanel {
 	 * Using new method to set table status. Atable can only have the
 	 * status 'Bezet', 'Afrekenen' or 'Leeg'.
 	 */
+
     public void setTableStatus() {
         List<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
         List<Table> tableStatusPayment = barmanager.getPaymentTables(); //Contains all 'Afrekenen' tables
@@ -175,8 +187,8 @@ public class BarGUI extends JPanel {
         Timestamp longestBarOrder = null; //Used to store the Date of the longest waiting bar order
         Timestamp longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
         Timestamp longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
-        Set<Integer> barOrderTables = new HashSet<>();  //reference to table which get a green color
-        Set<Integer> kitchenOrderTables = new HashSet<>(); //reference to table which get a yellow color
+        Set<Integer> barOrderTables = new HashSet<Integer>();  //reference to table which get a green color
+        Set<Integer> kitchenOrderTables = new HashSet<Integer>(); //reference to table which get a yellow color
         /*Sinse only one table can have the longest waiting order,
         we only need to store a reference to the bar and kitchen table*/
         int longestBarTable = 0;
@@ -189,6 +201,7 @@ public class BarGUI extends JPanel {
             tableButton[tb].setEnabled(false); //Table is empty. Therefore, the button is disabled
             repaint();
         }
+
 
         // Set tableButtons for tables with status 'Bezet'
         for (Table to : tableStatusOrder) {
@@ -373,50 +386,82 @@ public class BarGUI extends JPanel {
 	}
 
 	/**
-	 * The Login and logout handler
-	 * This handler makes it possible to let employees login and also logout
-	 * If the employee fill in his employeecode in the textfield and click on login the employee will be logged in
-	 * When the employee also fill in his employeecode and click on logout the employee will be logged out
-	 * For protection whe are using codes that only the employee should know
+	 * LoginHandler makes it possible to login a unique employee
 	 */
-	class LogInOutHandler extends Component implements ActionListener {
+	class LoginHandler extends Component implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
+
 			try {
 				// A employee can be found with his employeenumber and when a employee is found
 				int employeeCode = Integer.parseInt(logInOutField.getText());
 				// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
 				Employee empl = loginmanager.findEmployee(employeeCode);
+
 				if (empl != null) {
 					employeeBox.removeAllItems();
-					// All the employees will be stored in a list called employees.
-					HashMap<Integer, Employee> employees;
-					employees = loginmanager.getEmployees();
 					// This loop will check if a employee is in the list,
 					// if a employee is above added to the list it will be added to the JComboBox
 					for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
 						Employee em = entry.getValue();
 						employeeBox.addItem(em);
 					}
-					// If a employee is selected in the JComboBox and there is clicked on the logoutButton a employee will logout.
-					// If a employee number is filled in the textField and there is clicked on the logoutButton the employee will also logout.
-					if (e.getSource() == logoutButton) {
-						int input = Integer.parseInt(logInOutField.getText());
-						employees.remove(input);
+				} else if (empl == null) {
+					JOptionPane.showMessageDialog(LoginHandler.this, "De medewerkerscode komt niet overeen, probeer het opnieuw!", "Foutmelding: incorrecte medewerkerscode", JOptionPane.ERROR_MESSAGE);
+				}
+
+			} catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(LoginHandler.this, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+			} catch (LoginException ali) { // already logged in
+				JOptionPane.showMessageDialog(LoginHandler.this, "U bent al ingelogd!", "Foutmelding: al ingelogd", JOptionPane.ERROR_MESSAGE);
+			}
+			logInOutField.setText("");
+		}
+	}
+
+	/**
+	 * LogoutHandler makes it possible to logout a unique employee
+	 */
+	class LogoutHandler extends Component implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			// If a employee is selected in the JComboBox and there is clicked on the logoutButton a employee will logout.
+			// If a employee number is filled in the textField and there is clicked on the logoutButton the employee will also logout.
+
+			try {
+				if (e.getSource() == logoutButton) {
+					int employeeCode = Integer.parseInt(logInOutField.getText());
+					// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
+					Employee empl = loginmanager.findEmployee(employeeCode);
+					
+					if(empl != null ) {
+						// logout with selection in JCombobox and logout button
+//						Employee emplOutBox = (Employee) employeeBox.getSelectedItem();
+//						loginmanager.logoutEmployee(emplOutBox);
+	
+						// logout with employee number and logout button
+		
+						employees.remove(empl);
+	
+						// rebuild the JCombobox
 						employeeBox.removeAllItems();
 						for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
 							Employee em = entry.getValue();
 							employeeBox.addItem(em);
 						}
+					} else {
+						JOptionPane.showMessageDialog(LogoutHandler.this, "niet gevonden", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
 					}
-					logInOutField.revalidate();
-					logInOutField.setText(null);
-				} else {
-					JOptionPane.showMessageDialog(LogInOutHandler.this, "Het ingevoerde nummer wordt niet herkend, probeer het opnieuw! ", "Foutmelding", JOptionPane.ERROR_MESSAGE);
 				}
-			} catch (NumberFormatException nfe) {
-				JOptionPane.showMessageDialog(LogInOutHandler.this, "Vul uw medewerkerscode in", "Foutmelding", JOptionPane.ERROR_MESSAGE);
+
+			}  catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(LogoutHandler.this, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+			}  catch (LoginException le) { // not logged in yet
+				JOptionPane.showMessageDialog(LogoutHandler.this, "U moet eerst ingelogd zijn om te kunnen afmelden", "Foutmelding: afmelden", JOptionPane.ERROR_MESSAGE);
 			}
+			logInOutField.setText("");
 		}
 	}
+
+
 }
+
 

@@ -104,7 +104,6 @@ public class PaymentSection {
      * Called when printBill is clicked.
      */
     class PrintBillHandler implements ActionListener {
-        @Override
         public void actionPerformed(ActionEvent e) {
             try {
                 GenerateBill(payment);
