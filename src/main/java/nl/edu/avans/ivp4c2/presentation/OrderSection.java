@@ -92,14 +92,18 @@ public class OrderSection {
      * Returns the OrderNumber from the selected order
      * @return OrderNumber as an Integer
      */
-    public int getSelectedOrder() throws NullPointerException{
-        int orderNumber = 0;
+    public Order getSelectedOrder() throws NullPointerException{
+        Order order;
         try {
-            orderNumber = tempOrder.getOrderNumber();
+            order = tempOrder;
         } catch (NullPointerException e) {
             throw new NullPointerException("Geen bestelling geselecteerd");
         }
-        return orderNumber;
+        return order;
+    }
+
+    public void clearSelecterOrder() {
+        tempOrder = null;
     }
 
     // Method to create JTable

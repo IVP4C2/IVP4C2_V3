@@ -318,14 +318,52 @@ public class BarGUI extends JPanel {
 						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandeler", f);
 					}
 				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
-					try {
-						OrderDAO orderDAO = new OrderDAO();
-						orderDAO.completeOrder(orderSection.getSelectedOrder());
-						JOptionPane.showMessageDialog(BarGUI.this, "Bestelling Succesvol Afgerond", "Bestelling Afgerond", JOptionPane.INFORMATION_MESSAGE);
-					} catch (Exception f) {
-						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
-						Logger logger = Logger.getAnonymousLogger();
-						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", f);
+					if(orderSection.getSelectedOrder() != null) {
+						JPanel optionPanel = new JPanel();
+						optionPanel.add(new JButton("In Behandeling")).setBackground(Color.decode("#DFDFDF"));
+						optionPanel.add(new JButton("Gereed")).setBackground(Color.decode("#DFDFDF"));
+						optionPanel.add(new JButton("Geserveerd")).setBackground(Color.decode("#DFDFDF"));
+						String[] buttons = {"In Behandeling", "Gereed", "Geserveerd"};
+//					JOptionPane.showMessageDialog(BarGUI.this, optionPanel, "Status", JOptionPane.DEFAULT_OPTION);
+						int optionPane = JOptionPane.showOptionDialog(BarGUI.this, "Status Aanpassen", "Status",
+								JOptionPane.DEFAULT_OPTION, 0, null, buttons, buttons[2]);
+						try {
+							OrderDAO orderDAO = new OrderDAO();
+							switch (optionPane) {
+								case 0:
+									System.out.println("In behandeling");
+									int status = 2;
+									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus("In behandeling");
+									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
+									panelCenter.revalidate();
+									break;
+								case 1:
+									System.out.println("Gereed");
+									status = 3;
+//									orderSection.getSelectedOrder().setOrderStatus("Gereed");
+									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus("Gereed");
+									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
+									panelCenter.revalidate();
+									break;
+								case 2:
+									System.out.println("Geserveerd");
+									status = 4;
+									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus("Geserveerd");
+									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
+									panelCenter.revalidate();
+									break;
+								default:
+									break;
+							}
+							panelCenter.revalidate();
+							orderSection.clearSelecterOrder();
+						} catch (Exception f) {
+							JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+							Logger logger = Logger.getAnonymousLogger();
+							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", f);
+						}
+					} else {
+						JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een bestelling", "Fout", JOptionPane.ERROR_MESSAGE);
 					}
 				}
             } else {

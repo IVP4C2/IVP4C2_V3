@@ -72,11 +72,11 @@ public final class OrderDAO {
 		return orders;
 	}
 
-    public boolean completeOrder(int orderNumber) throws SQLException{
+    public boolean updateOrder(int orderNumber, int status) throws SQLException{
         boolean result = false;
         DatabaseConnection connection = new DatabaseConnection();
         if(connection.openConnection()) {
-            String updateStatement = "UPDATE `order` SET `fk_status_id` = '4' WHERE `order_id` = "+orderNumber+";";
+            String updateStatement = "UPDATE `order` SET `fk_status_id` = '"+status+"' WHERE `order_id` = "+orderNumber+";";
             result = connection.executeUpdateStatement(updateStatement);
         }
         return result;
