@@ -105,7 +105,8 @@ public class BarGUI extends JPanel {
 		signupButton.setBackground(Color.decode("#DFDFDF"));
 		signupButton.setFont(font);
 		signupButton.setBorder(BorderFactory.createEtchedBorder());
-		completeOrderButton = new JButton("Afronden");
+		completeOrderButton = new JButton();
+		completeOrderButton.setText("Status Aanpassen");
         completeOrderButton.addActionListener(new CompleteOrderHandler());
 		completeOrderButton.setBackground(Color.decode("#DFDFDF"));
 		completeOrderButton.setFont(font);
@@ -261,11 +262,15 @@ public class BarGUI extends JPanel {
 					if (table != null) {
                         /**/
 						if ("Bezet".equals(table.getTableStatus()) || "Hulp".equals(table.getTableStatus())) {
+							completeOrderButton.setText("Status Aanpassen");
+							panelWest.revalidate();
 							panelCenter.removeAll();
 							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
                             activeTable = tb;
 							panelCenter.revalidate();
 						} else if ("Afrekenen".equals(table.getTableStatus())) {
+							completeOrderButton.setText("Afronden");
+							panelWest.revalidate();
 							panelCenter.removeAll();
 							Payment p = paymentManager.getActivePayment(tb);
 							activeTable = tb;
