@@ -311,6 +311,10 @@ public class BarGUI extends JPanel {
 						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderhandeler", f);
 					}
 				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
+
+
+					barmanager.getHashTable(activeTable);
+
 					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling afronden in it3", "Komt nog", JOptionPane.INFORMATION_MESSAGE);
 				}
             } else {
