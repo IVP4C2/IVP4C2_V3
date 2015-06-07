@@ -339,7 +339,7 @@ public class BarGUI extends JPanel {
 						String[] buttons = {"In Behandeling", "Gereed", "Geserveerd"};
 //					JOptionPane.showMessageDialog(BarGUI.this, optionPanel, "Status", JOptionPane.DEFAULT_OPTION);
 						int optionPane = JOptionPane.showOptionDialog(BarGUI.this, "Status Aanpassen", "Status",
-								JOptionPane.DEFAULT_OPTION, 0, null, buttons, buttons[2]);
+								JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
 						try {
 							OrderDAO orderDAO = new OrderDAO();
 							switch (optionPane) {
