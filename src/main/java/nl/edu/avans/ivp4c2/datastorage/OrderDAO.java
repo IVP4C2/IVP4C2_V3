@@ -2,6 +2,7 @@ package nl.edu.avans.ivp4c2.datastorage;
 
 import nl.edu.avans.ivp4c2.domain.*;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -70,4 +71,14 @@ public final class OrderDAO {
 		//Return orders ArrayList to be used in TableDAO
 		return orders;
 	}
+
+    public boolean completeOrder(int orderNumber) throws SQLException{
+        boolean result = false;
+        DatabaseConnection connection = new DatabaseConnection();
+        if(connection.openConnection()) {
+            String updateStatement = "UPDATE `order` SET `fk_status_id` = '4' WHERE `order_id` = "+orderNumber+";";
+            result = connection.executeUpdateStatement(updateStatement);
+        }
+        return result;
+    }
 }

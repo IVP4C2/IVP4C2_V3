@@ -14,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
+import nl.edu.avans.ivp4c2.datastorage.OrderDAO;
 import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
@@ -308,14 +310,18 @@ public class BarGUI extends JPanel {
 					} catch (Exception f) {
 						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
 						Logger logger = Logger.getAnonymousLogger();
-						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderhandeler", f);
+						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandeler", f);
 					}
 				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
-
-
-					barmanager.getHashTable(activeTable);
-
-					JOptionPane.showMessageDialog(BarGUI.this, "Bestelling afronden in it3", "Komt nog", JOptionPane.INFORMATION_MESSAGE);
+					try {
+						OrderDAO orderDAO = new OrderDAO();
+						orderDAO.completeOrder(orderSection.getSelectedOrder());
+						JOptionPane.showMessageDialog(BarGUI.this, "Bestelling Succesvol Afgerond", "Bestelling Afgerond", JOptionPane.INFORMATION_MESSAGE);
+					} catch (Exception f) {
+						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+						Logger logger = Logger.getAnonymousLogger();
+						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", f);
+					}
 				}
             } else {
                 JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
