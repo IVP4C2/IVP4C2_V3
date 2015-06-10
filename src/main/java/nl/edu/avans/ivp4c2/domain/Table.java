@@ -2,7 +2,7 @@ package nl.edu.avans.ivp4c2.domain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * A Table has Orders and Orders have Products
@@ -14,7 +14,7 @@ import java.util.Map;
 public class Table {
 	private int tableNumber;
 	private String tableStatus;
-	private ArrayList<Order> orders;
+	private List<Order> orders;
 	private HashMap<Integer, Order> specificOrder;
 	
 	public Table(int tableNumber, String tableStatus) {
@@ -47,7 +47,8 @@ public class Table {
 	 * Returns all the orders which have not been served or payed
 	 * @return orders in an ArrayList
 	 */
-	public ArrayList<Order> getOrders() {
+
+	public List<Order> getOrders() {
 		return orders;
 	}
 

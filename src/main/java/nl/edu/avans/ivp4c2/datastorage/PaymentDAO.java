@@ -33,11 +33,9 @@ public final class PaymentDAO {
             // If a connection was successfully setup, execute the SELECT
             // statement.
             //Retrieve the Payment from the database
-            ResultSet resultset = connection.executeSQLSelectStatement("SELECT `b`.`total_price`, `b`.`bill_id`, `b`.`send_on` FROM `bill` `b` " +
-                    "INNER JOIN `kpt_billed_order` `kbo` ON `kbo`.`fk_bill_id` = `b`.`bill_id` " +
-                    "INNER JOIN `order` `o` ON `kbo`.`fk_order_id` = `o`.`order_id` " +
-                    "INNER JOIN `kpt_table_order` `kto` ON `o`.`order_id` = `kto`.`fk_order_id` " +
-                    "WHERE `kto`.`fk_table_id` = '"+tableNumber+"' AND `b`.`ispaid` = '0';");
+
+            ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM SelectPayment_V WHERE `fk_table_id` = '"+tableNumber+"';");
+
             if (resultset != null) {
                 try {
                     while (resultset.next()) {

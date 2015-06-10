@@ -2,7 +2,6 @@ package nl.edu.avans.ivp4c2.presentation;
 
 import nl.edu.avans.ivp4c2.domain.Customer;
 import nl.edu.avans.ivp4c2.manager.RegisterManager;
-import nl.edu.avans.ivp4c2.presentation.BarGUI.LogoutHandler;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -85,6 +84,7 @@ public class RegisterSection extends JPanel {
 		add(registerOutput);
 
 	}
+
 
 	// Inner class
 	class registerHandler extends Component implements ActionListener {

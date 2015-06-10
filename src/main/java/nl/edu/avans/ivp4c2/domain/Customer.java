@@ -3,8 +3,6 @@ package nl.edu.avans.ivp4c2.domain;
 import java.sql.Time;
 import java.time.*;
 
-import nl.edu.avans.ivp4c2.presentation.CustomerException;
-
 public class Customer {
 	// Attributes
 	private String lastname;
@@ -35,7 +33,6 @@ public class Customer {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-	
 
 	public String getNameInitials() {
 		return nameInitials;

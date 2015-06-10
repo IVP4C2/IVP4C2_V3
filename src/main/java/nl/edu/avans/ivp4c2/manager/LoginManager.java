@@ -1,87 +1,97 @@
 package nl.edu.avans.ivp4c2.manager;
 
+
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import nl.edu.avans.ivp4c2.datastorage.EmployeeDAO;
 import nl.edu.avans.ivp4c2.domain.Employee;
-import nl.edu.avans.ivp4c2.domain.LoginException;
-
+import nl.edu.avans.ivp4c2.domain.AlreadyLoggedInException;
+import nl.edu.avans.ivp4c2.domain.NoDBConnectionException;
+import nl.edu.avans.ivp4c2.domain.WrongEmployeeNumberException;
 import java.util.*;
 
 /**
  * Created by Bram on 22-5-2015.
  */
 public class LoginManager {
-    private Employee employee;
-    private HashMap<Integer, Employee> employeeList;
-    //private boolean existence = false;
+	private Employee employee;
+	private HashSet<Employee> employeeList = new HashSet<Employee>();
+	private boolean existence = false;
 
-    public LoginManager() {
-        employeeList = new HashMap();
-    }
+	public LoginManager() {
+		/*employeeList = new HashSet<Employee>();*/
+		// paymentList = new ArrayList<Payment>();
+		// employeeList.add(new Employee(2, "Test", "Test"));
+		// System.out.println(employeeList.get(2));
 
-    // Methods
-    /**
-     *  This method will be used to login a Employee
-     * @param employeeNumber
-     * @return a Employee
-     */
+	}
 
-
-    /** TO DO
-     *
-     * EmployeeDAO geeft een employee object terug
-     * de manager zoekt een employee in de database dmv de dao
-     * voegt deze toe aan de lijst
-     * geef deze lijst aan de GUI en plaats alles in een Combobox
-     */
-
-
-    /**
-     * @param employeeNumber will be used to find a Employee in the Database or local
-     * @return a employee object
-     */
-
-    public Employee findEmployee(int employeeNumber) throws LoginException {
-            employee = null;
-
-            if (employee == null) {
-                // when the employee isn't loaded from the database yet, we need to do that first
-                // create the employeeDAO to find employees in the database
-                EmployeeDAO employeeDAO = new EmployeeDAO();
-                employee = employeeDAO.findEmployee(employeeNumber);
-
-                if (employee != null)  {
-                    if(checkForExistence(employee)) {
-                        System.out.println("U bent al ingelogd");
-                        throw new LoginException("U bent al ingelogd");
-                    }
-                    else {
-                        // Cache the employee that has been found in the database in our main memory.
-                        employeeList.put(employeeNumber, employee);
-                        System.out.println("bestaat nog niet, object wordt toegevoegd");
-                    }
-                }
-            }
-            return employee;
+	//Methods
+	public Employee findEmployee(int employeeNumber) throws AlreadyLoggedInException, WrongEmployeeNumberException, NoDBConnectionException {
+        Employee employee = null;
+        
+        if(employee == null) {
+            // when the employee isn't loaded from the database yet, we need to do that first
+            // create the employeeDAO to find employees in the database
+            EmployeeDAO employeeDAO = new EmployeeDAO();
+            employee = employeeDAO.findEmployee(employeeNumber);
         }
-
-
-    public HashMap<Integer, Employee> getEmployees() {
-        return employeeList;
-    }
-
-    public void logoutEmployee(Employee e) throws LoginException {
-        if(employeeList.containsValue(e)) {
-            employeeList.remove(e);
+        
+        if (employee != null) {
+        	checkForExistence(employee);
+        	
+        	if (existence == true) {
+        		existence = false;
+        		throw new AlreadyLoggedInException("U bent al ingelogd");
+        	}else if (existence == false) {
+        		employeeList.add(employee);
+        	}
         } else {
-            throw new LoginException("message");
+        	throw new WrongEmployeeNumberException("");
         }
+
+        return employee;
     }
 
-    public boolean checkForExistence(Employee e) {
-        if(employeeList.containsValue(e)) {
-            return true;
-        } else {
-            return false;
+	// This method will give a list of employees, that will be used to create
+	// the JCombBox
+	public HashSet<Employee> getEmployees() {
+
+		return employeeList;
+	}
+
+
+	//This methode will remove an employee from the employeeList
+	//Only if there is an active database connection
+	public boolean removeEmployeeFromList(Employee e) throws NoDBConnectionException {
+
+		EmployeeDAO employeeDAO = new EmployeeDAO();
+        boolean databaseConnection = employeeDAO.removeEmployee(e);
+        
+        if (databaseConnection == true) {
+			if (employeeList.contains(e)) {
+				employeeList.remove(e);
+			}
+			return true;
+        }else {
+        	throwDBConnectionException();
+        	return false;
         }
-    }
+	}
+	
+	//This methode will check if an employee already exists
+	//in the employeeList
+	public void checkForExistence(Employee e) {
+		if (employeeList.contains(e)) {
+			existence = true;
+		}else {
+			existence = false;
+		}
+		
+	}
+	
+	public void throwDBConnectionException() throws NoDBConnectionException {
+		throw new NoDBConnectionException("Hoi");
+	}
 }
+

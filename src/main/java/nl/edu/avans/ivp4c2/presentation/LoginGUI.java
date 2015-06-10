@@ -51,7 +51,11 @@ public class LoginGUI extends JPanel {
             System.out.println(employeeCode);
             try {
                 System.out.println(loginmanager.findEmployee(employeeCode));
+<<<<<<< HEAD
             } catch (LoginException e1) {
+=======
+            } catch (Exception e1) {
+>>>>>>> fe303ad8775c7a3dde2a024d8cd406d0d99a3bbc
                 e1.printStackTrace();
             }
 

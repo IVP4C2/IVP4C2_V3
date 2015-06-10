@@ -102,7 +102,8 @@ public class OrderSection {
         return order;
     }
 
-    public void clearSelecterOrder() {
+
+    public void clearSelectedOrder() {
         tempOrder = null;
     }
 

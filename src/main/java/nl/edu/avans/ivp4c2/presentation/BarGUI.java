@@ -32,11 +32,7 @@ public class BarGUI extends JPanel {
 	private final int AMOUNT_OF_TABLEBUTTONS = 11;
 	private JButton[] tableButton;
 
-
-	// Collections
-	// All the employees will be stored in a list called employees.
-	HashMap<Integer, Employee> employees;
-
+	private HashSet<Employee> employeeList;
 
 	// Panels
 	private JPanel panelNorth;
@@ -64,10 +60,6 @@ public class BarGUI extends JPanel {
 	public BarGUI(BarManager barmanager) {
 		this.barmanager = barmanager;
 		this.loginmanager = new LoginManager();
-
-		employees = loginmanager.getEmployees();
-
-
 		this.paymentManager = new PaymentManager();
 		this.orderSection = new OrderSection();
 		this.paymentSection = new PaymentSection();
@@ -119,7 +111,7 @@ public class BarGUI extends JPanel {
 		signupButton.addActionListener(new SignupHandler());
 		completeOrderButton = new JButton();
 		completeOrderButton.setText("Status Aanpassen");
-        completeOrderButton.addActionListener(new CompleteOrderHandler());
+		completeOrderButton.addActionListener(new CompleteOrderHandler());
 		completeOrderButton.setBackground(Color.decode("#DFDFDF"));
 		completeOrderButton.setFont(font);
 		completeOrderButton.setBorder(BorderFactory.createEtchedBorder());
@@ -135,12 +127,12 @@ public class BarGUI extends JPanel {
 		loginButton.setFont(font);
 		loginButton.setBackground(Color.decode("#DFDFDF"));
 		loginButton.setBorder(BorderFactory.createEtchedBorder());
-		loginButton.addActionListener(new LoginHandler());
+		loginButton.addActionListener(new LogInOutHandler());
 		logoutButton = new JButton(" Afmelden");
 		logoutButton.setFont(font);
 		logoutButton.setBackground(Color.decode("#DFDFDF"));
 		logoutButton.setBorder(BorderFactory.createEtchedBorder());
-		logoutButton.addActionListener(new LogoutHandler());
+		logoutButton.addActionListener(new LogInOutHandler());
 
 		// Items added to panel West
 		panelWest.add(employeeBox);
@@ -180,84 +172,83 @@ public class BarGUI extends JPanel {
 	 * Using new method to set table status. Atable can only have the
 	 * status 'Bezet', 'Afrekenen' or 'Leeg'.
 	 */
-
-    public void setTableStatus() {
-        List<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
-        List<Table> tableStatusPayment = barmanager.getPaymentTables(); //Contains all 'Afrekenen' tables
-        List<Table> tableStatusEmpty = barmanager.getEmptyTables(); //Contains all 'Leeg' tables
-        Timestamp longestBarOrder = null; //Used to store the Date of the longest waiting bar order
-        Timestamp longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
-        Timestamp longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
-        Set<Integer> barOrderTables = new HashSet<Integer>();  //reference to table which get a green color
-        Set<Integer> kitchenOrderTables = new HashSet<Integer>(); //reference to table which get a yellow color
+	public void setTableStatus() {
+		List<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
+		List<Table> tableStatusPayment = barmanager.getPaymentTables(); //Contains all 'Afrekenen' tables
+		List<Table> tableStatusEmpty = barmanager.getEmptyTables(); //Contains all 'Leeg' tables
+		Timestamp longestBarOrder = null; //Used to store the Date of the longest waiting bar order
+		Timestamp longestKitchenOrder = null; //Used to store the Date of the longest waiting kitchen order
+		Timestamp longestPaymentRequest = null; //Used to store the Date of the longest waiting payment request
+		Set<Integer> barOrderTables = new HashSet<Integer>();  //reference to table which get a green color
+		Set<Integer> kitchenOrderTables = new HashSet<Integer>(); //reference to table which get a yellow color
         /*Sinse only one table can have the longest waiting order,
         we only need to store a reference to the bar and kitchen table*/
-        int longestBarTable = 0;
-        int longestKitchenTable = 0;
+		int longestBarTable = 0;
+		int longestKitchenTable = 0;
 
-        // Set tableButtons for tables with status 'Leeg'
-        for (Table te : tableStatusEmpty) {
-            int tb = te.getTableNumber();
-            tableButton[tb].setBackground(Color.decode("#DFDFDF")); //Set button color. grey color.
-            tableButton[tb].setEnabled(false); //Table is empty. Therefore, the button is disabled
-            repaint();
-        }
+		// Set tableButtons for tables with status 'Leeg'
+		for (Table te : tableStatusEmpty) {
+			int tb = te.getTableNumber();
+			tableButton[tb].setBackground(Color.decode("#DFDFDF")); //Set button color. grey color.
+			tableButton[tb].setEnabled(false); //Table is empty. Therefore, the button is disabled
+			repaint();
+		}
 
 
-        // Set tableButtons for tables with status 'Bezet'
-        for (Table to : tableStatusOrder) {
-            int tb = to.getTableNumber();
-            boolean hasKitchenOrder = false;
-            tableButton[tb].setEnabled(true); //Table is occupied. Therefore, the button is enabled
-            for(Order o : to.getOrders()) {
-                if(o.getDestination() == 2) {
-                    kitchenOrderTables.add(tb);
-                    hasKitchenOrder = true;
-                    if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
-                        longestKitchenTable = tb;
-                        longestKitchenOrder = o.getOrderTime();
-                    }
-                }
-                if(o.getDestination() == 1 && !hasKitchenOrder) {
-                    barOrderTables.add(tb);
-                    if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
-                        longestBarTable = tb;
-                        longestBarOrder = o.getOrderTime();
+		// Set tableButtons for tables with status 'Bezet'
+		for (Table to : tableStatusOrder) {
+			int tb = to.getTableNumber();
+			boolean hasKitchenOrder = false;
+			tableButton[tb].setEnabled(true); //Table is occupied. Therefore, the button is enabled
+			for(Order o : to.getOrders()) {
+				if(o.getDestination() == 2) {
+					kitchenOrderTables.add(tb);
+					hasKitchenOrder = true;
+					if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
+						longestKitchenTable = tb;
+						longestKitchenOrder = o.getOrderTime();
+					}
+				}
+				if(o.getDestination() == 1 && !hasKitchenOrder) {
+					barOrderTables.add(tb);
+					if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
+						longestBarTable = tb;
+						longestBarOrder = o.getOrderTime();
 
-                    }
-                }
-            }
-        }
+					}
+				}
+			}
+		}
         /*Set colors*/
-        for(int i : barOrderTables) {
-            tableButton[i].setBackground(Color.GREEN);
-        }
-        for(int i : kitchenOrderTables) {
-            tableButton[i].setBackground(Color.YELLOW);
-        }
+		for(int i : barOrderTables) {
+			tableButton[i].setBackground(Color.GREEN);
+		}
+		for(int i : kitchenOrderTables) {
+			tableButton[i].setBackground(Color.YELLOW);
+		}
 
-        if(longestBarTable > 0) {
-            tableButton[longestBarTable].setBackground(Color.decode("#008A2E"));
-        }
-        if(longestKitchenTable > 0) {
-            tableButton[longestKitchenTable].setBackground(Color.ORANGE);
-        }
+		if(longestBarTable > 0) {
+			tableButton[longestBarTable].setBackground(Color.decode("#008A2E"));
+		}
+		if(longestKitchenTable > 0) {
+			tableButton[longestKitchenTable].setBackground(Color.ORANGE);
+		}
 
-        // Set tableButtons for tables with status 'Afrekenen'
-        for (Table tp : tableStatusPayment) {
-            int tb = tp.getTableNumber();
-            tableButton[tb].setEnabled(true); //Table wants to pay. Therefore, the button is enabled
-            tableButton[tb].setBackground(Color.RED);
-            repaint();
-        }
+		// Set tableButtons for tables with status 'Afrekenen'
+		for (Table tp : tableStatusPayment) {
+			int tb = tp.getTableNumber();
+			tableButton[tb].setEnabled(true); //Table wants to pay. Therefore, the button is enabled
+			tableButton[tb].setBackground(Color.RED);
+			repaint();
+		}
 
-    }
+	}
 
 	// Inner classes
-    /**
-     *Adds a different JPanel to panelCenter depending on the table status
-     * Uses classes OrderSection and PaymentSection
-     */
+	/**
+	 *Adds a different JPanel to panelCenter depending on the table status
+	 * Uses classes OrderSection and PaymentSection
+	 */
 	class TableButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -280,7 +271,7 @@ public class BarGUI extends JPanel {
 							panelWest.revalidate();
 							panelCenter.removeAll();
 							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
-                            activeTable = tb;
+							activeTable = tb;
 							panelCenter.revalidate();
 						} else if ("Afrekenen".equals(table.getTableStatus())) {
 							completeOrderButton.setText("Afronden");
@@ -292,14 +283,15 @@ public class BarGUI extends JPanel {
 							revalidate();
 						}
 						else {
-                            panelCenter.removeAll();
+							panelCenter.removeAll();
+
 						}
 					}
 				} else {
 					TitledBorder topBorderInactive = BorderFactory.createTitledBorder("");
 					topBorderInactive.setBorder(BorderFactory.createLineBorder(Color.decode("#DFDFDF")));
-                    topBorderInactive.setTitlePosition(TitledBorder.TOP);
-                    tableButton[tb].setBorder(topBorderInactive);
+					topBorderInactive.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorderInactive);
 					tableButton[tb].setBorder(BorderFactory.createEtchedBorder());
 					revalidate();
 				}
@@ -317,7 +309,8 @@ public class BarGUI extends JPanel {
 	 */
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
-            if (employeeBox.getItemCount() > 0) {
+
+			if (employeeBox.getItemCount() > 0) {
 				if("Afrekenen".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
 					try {
 						paymentManager.completePayment(activeTable);
@@ -370,7 +363,7 @@ public class BarGUI extends JPanel {
 									break;
 							}
 							panelCenter.revalidate();
-							orderSection.clearSelecterOrder();
+							orderSection.clearSelectedOrder();
 						} catch (Exception f) {
 							JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
 							Logger logger = Logger.getAnonymousLogger();
@@ -380,91 +373,86 @@ public class BarGUI extends JPanel {
 						JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een bestelling", "Fout", JOptionPane.ERROR_MESSAGE);
 					}
 				}
-            } else {
-                JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-	}
-
-	/**
-	 * LoginHandler makes it possible to login a unique employee
-	 */
-	class LoginHandler extends Component implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
-
-			try {
-				// A employee can be found with his employeenumber and when a employee is found
-				int employeeCode = Integer.parseInt(logInOutField.getText());
-				// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
-				Employee empl = loginmanager.findEmployee(employeeCode);
-
-				if (empl != null) {
-					employeeBox.removeAllItems();
-					// This loop will check if a employee is in the list,
-					// if a employee is above added to the list it will be added to the JComboBox
-					for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
-						Employee em = entry.getValue();
-						employeeBox.addItem(em);
-					}
-				} else if (empl == null) {
-					JOptionPane.showMessageDialog(LoginHandler.this, "De medewerkerscode komt niet overeen, probeer het opnieuw!", "Foutmelding: incorrecte medewerkerscode", JOptionPane.ERROR_MESSAGE);
-				}
-
-			} catch (NumberFormatException nfe) {
-				JOptionPane.showMessageDialog(LoginHandler.this, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
-			} catch (LoginException ali) { // already logged in
-				JOptionPane.showMessageDialog(LoginHandler.this, "U bent al ingelogd!", "Foutmelding: al ingelogd", JOptionPane.ERROR_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
 			}
-			logInOutField.setText("");
 		}
 	}
 
-	/**
-	 * LogoutHandler makes it possible to logout a unique employee
-	 */
-	class LogoutHandler extends Component implements ActionListener {
+	// Inner class
+	// Will log a employee in and can log a employee out
+	// And add / remove them from the employeelist automatically
+	class LogInOutHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			// If a employee is selected in the JComboBox and there is clicked on the logoutButton a employee will logout.
-			// If a employee number is filled in the textField and there is clicked on the logoutButton the employee will also logout.
+
+			// Put the employeeList from the loginmanager in 'lijstje'
+			employeeList = new HashSet<Employee>();
+			employeeList = loginmanager.getEmployees();
 
 			try {
-				if (e.getSource() == logoutButton) {
-					int employeeCode = Integer.parseInt(logInOutField.getText());
-					// This method will check if a employee excists in the database and it exists it will be loaded in the memory.
-					Employee empl = loginmanager.findEmployee(employeeCode);
-					
-					if(empl != null ) {
-						// logout with selection in JCombobox and logout button
-//						Employee emplOutBox = (Employee) employeeBox.getSelectedItem();
-//						loginmanager.logoutEmployee(emplOutBox);
-	
-						// logout with employee number and logout button
-		
-						employees.remove(empl);
-	
-						// rebuild the JCombobox
+				if (e.getSource() == loginButton) {
+					if (!logInOutField.getText().equals("")) {
+						// Dit werkt
+						int employeeCode = Integer.parseInt(logInOutField.getText());
+
+						// System.out.println(employeeCode);
+						Employee employee = loginmanager.findEmployee(employeeCode);
+
+						// Remove all items from the JComboBox
 						employeeBox.removeAllItems();
-						for (Map.Entry<Integer, Employee> entry : employees.entrySet()) {
-							Employee em = entry.getValue();
-							employeeBox.addItem(em);
+
+						for (Employee ef : employeeList) {
+							employeeBox.addItem(ef);
 						}
+
+						logInOutField.setText("");
 					} else {
-						JOptionPane.showMessageDialog(LogoutHandler.this, "niet gevonden", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(panelCenter, "Voer eerst u medewerkersnummer in om in te kunnen loggen", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+						logInOutField.setText("");
 					}
 				}
 
-			}  catch (NumberFormatException nfe) {
-				JOptionPane.showMessageDialog(LogoutHandler.this, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
-			}  catch (LoginException le) { // not logged in yet
-				JOptionPane.showMessageDialog(LogoutHandler.this, "U moet eerst ingelogd zijn om te kunnen afmelden", "Foutmelding: afmelden", JOptionPane.ERROR_MESSAGE);
+				if (e.getSource() == logoutButton) {
+					if (employeeBox.getItemCount() != 0 && logInOutField.getText().equals("")) {
+						Employee employee = (Employee) employeeBox.getSelectedItem();
+						boolean removeSuccess = loginmanager.removeEmployeeFromList(employee);
+
+						// Remove all items from the JComboBox
+						employeeBox.removeAllItems();
+
+						for (Employee ef : employeeList) {
+							employeeBox.addItem(ef);
+						}
+						logInOutField.setText("");
+					} else if (employeeBox.getItemCount() != 0 && !logInOutField.getText().equals("")) {
+						JOptionPane.showMessageDialog(panelCenter, "Het medewerkersveld moet leeg zijn om uit te kunnen loggen", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+						logInOutField.setText("");
+					} else {
+						JOptionPane.showMessageDialog(panelCenter, "Er zijn nog geen medewerkers ingelogd, log eerst in", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+						logInOutField.setText("");
+					}
+				}
+			} catch (NumberFormatException nfe) {
+				JOptionPane.showMessageDialog(panelCenter, "Medewerkerscode wordt niet herkend, deze bestaat alleen uit cijfers!", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
+				logInOutField.setText("");
+			} catch (AlreadyLoggedInException alie) { // not logged in yet
+				JOptionPane.showMessageDialog(panelCenter, "U bent al aangemeld", "Foutmelding: Aanmelden", JOptionPane.ERROR_MESSAGE);
+				logInOutField.setText("");
+			} catch (NoDBConnectionException ndce) { // not logged in yet
+				JOptionPane.showMessageDialog(panelCenter, "Geen connectie met de database, probeer later opnieuw", "Foutmelding: Aanmelden", JOptionPane.ERROR_MESSAGE);
+				logInOutField.setText("");
+			} catch (WrongEmployeeNumberException wene) {
+				JOptionPane.showMessageDialog(panelCenter, "Het ingevoerde medewerkersnummer bestaat niet", "Foutmelding: Aanmelden", JOptionPane.ERROR_MESSAGE);
+				logInOutField.setText("");
 			}
-			logInOutField.setText("");
 		}
 	}
-	
+
+
 	class SignupHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			
+
+
 			panelCenter.removeAll();
 			System.out.println("show signup area");
 			RegisterSection rs = new RegisterSection();
@@ -472,8 +460,5 @@ public class BarGUI extends JPanel {
 			panelCenter.revalidate();
 		}
 	}
-
-
 }
-
 
