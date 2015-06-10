@@ -91,9 +91,9 @@ public class PaymentSection {
             vector.add(p.getProductNumber());
             vector.add(p.getProductName());
             vector.add(round(p.getPrice(), 2));
-            vector.add(round((p.getPrice() * (p.getBtw() + 100) / 100), 2)+ " ("+p.getBtw()+"%)");
+            vector.add(round((p.getPrice() * (p.getVat() + 100) / 100), 2)+ " ("+p.getVat()+"%)");
             vector.add(p.getAmount());
-            vector.add(round(p.getAmount() * (p.getPrice() * (p.getBtw() + 100) / 100), 2));
+            vector.add(round(p.getAmount() * (p.getPrice() * (p.getVat() + 100) / 100), 2));
             data.add(vector);
         }
 
@@ -222,7 +222,7 @@ public class PaymentSection {
             contentStream.beginText();
             contentStream.setFont(font1, 10);
             contentStream.moveTextPositionByAmount(100+220, 540-(20*i));
-            contentStream.drawString(EURO+" "+round((product.getPrice() * (product.getBtw() + 100) / 100), 2) + " ("+product.getBtw()+"%)");
+            contentStream.drawString(EURO+" "+round((product.getPrice() * (product.getVat() + 100) / 100), 2) + " ("+product.getVat()+"%)");
             contentStream.endText();
             System.out.println(i);
 
@@ -237,7 +237,7 @@ public class PaymentSection {
             contentStream.beginText();
             contentStream.setFont(font1, 10);
             contentStream.moveTextPositionByAmount(100+420, 540-(20*i));
-            contentStream.drawString(EURO+" "+round(product.getAmount() * (product.getPrice() * (product.getBtw() + 100) / 100), 2));
+            contentStream.drawString(EURO+" "+round(product.getAmount() * (product.getPrice() * (product.getVat() + 100) / 100), 2));
             contentStream.endText();
 
             endY = 500-(20*i);

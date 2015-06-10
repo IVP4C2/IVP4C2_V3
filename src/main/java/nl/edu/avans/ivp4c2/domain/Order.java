@@ -2,6 +2,7 @@ package nl.edu.avans.ivp4c2.domain;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -13,7 +14,7 @@ public class Order {
 	private String orderStatus;
 	private Timestamp orderTime;
 	private int destination;
-	private ArrayList<Product> products;
+	private List<Product> products;
 	
 	public Order(int orderNumber, String orderStatus, Timestamp orderTime, int destination) {
 		this.orderNumber = orderNumber;
@@ -62,7 +63,7 @@ public class Order {
 	 * Returns an ArrayList containing all products for the order
 	* @return ArrayLists containing products
 	* */
-	public ArrayList<Product> getProducts() {
+	public List<Product> getProducts() {
 		return products;
 	}
 
