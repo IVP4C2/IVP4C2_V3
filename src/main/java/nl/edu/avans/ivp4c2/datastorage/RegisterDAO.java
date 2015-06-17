@@ -1,6 +1,7 @@
 package nl.edu.avans.ivp4c2.datastorage;
 import nl.edu.avans.ivp4c2.domain.Customer;
 import nl.edu.avans.ivp4c2.domain.Employee;
+import nl.edu.avans.ivp4c2.domain.NoDBConnectionException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,12 +20,12 @@ public class RegisterDAO {
         // has been added to explicitely make this clear.
     }
     
-    public Customer findCustomer(String emailaddress) {
+    public Customer findCustomer(String emailaddress) throws NoDBConnectionException{
     	Customer customer = null;
 
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();
-        if (connection.openConnection()) {
+        if (connection.openConnection() == false) {
             // If a connection was successfully setup, execute the SELECT statement.
             ResultSet resultset = connection.executeSQLSelectStatement(
                     "SELECT * FROM customer WHERE email = '" + emailaddress + "';");
@@ -54,13 +55,15 @@ public class RegisterDAO {
             // We had a database connection opened. Since we're finished,
             // we need to close it.
             connection.closeConnection();
+        } else {
+        	throw new NoDBConnectionException("No Database Connection");
         }
 
         return customer;
 
     }
     
-    public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) {
+    public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) throws NoDBConnectionException{
     	DatabaseConnection connection = null;
     	Customer customer = null;
 
@@ -83,8 +86,14 @@ public class RegisterDAO {
          	connection.executeUpdateStatement(query);
         	connection.closeConnection();
         	
-        	customer = findCustomer(emailaddress);
+        	try {
+        		customer = findCustomer(emailaddress);
+        	} catch (NoDBConnectionException ndbce) {
+        		//Do nothing for now 
+        	}
 
+        } else {
+        	throw new NoDBConnectionException("No Database Connection");
         }
 		return customer;
     }
