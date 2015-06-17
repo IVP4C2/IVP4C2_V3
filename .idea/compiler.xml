@@ -24,9 +24,17 @@
         <processorPath useClasspath="true" />
         <module name="avans.ivp4c2.proftaak.iteratie1" />
       </profile>
+      <profile default="false" name="Annotation profile for HartigeHapBedienen" enabled="true">
+        <sourceOutputDir name="target\generated-sources\annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="HartigeHapBedienen" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="avans.ivp4c2.proftaak.iteratie1" target="1.5" />
+      <module name="HartigeHapBedienen" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
