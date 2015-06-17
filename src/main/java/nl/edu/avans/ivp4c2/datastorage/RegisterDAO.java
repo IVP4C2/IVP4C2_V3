@@ -25,7 +25,7 @@ public class RegisterDAO {
 
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();
-        if (connection.openConnection() == false) {
+        if (connection.openConnection()) {
             // If a connection was successfully setup, execute the SELECT statement.
             ResultSet resultset = connection.executeSQLSelectStatement(
                     "SELECT * FROM customer WHERE email = '" + emailaddress + "';");
