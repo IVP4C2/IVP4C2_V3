@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/HartigeHapBedienen.iml" filepath="$PROJECT_DIR$/HartigeHapBedienen.iml" />
       <module fileurl="file://$PROJECT_DIR$/avans.ivp4c2.proftaak.iteratie1.iml" filepath="$PROJECT_DIR$/avans.ivp4c2.proftaak.iteratie1.iml" />
     </modules>
   </component>
