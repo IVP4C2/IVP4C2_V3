@@ -1,6 +1,9 @@
 package nl.edu.avans.ivp4c2.presentation;
 
 import nl.edu.avans.ivp4c2.domain.Customer;
+import nl.edu.avans.ivp4c2.domain.CustomerExistsException;
+import nl.edu.avans.ivp4c2.domain.NoDBConnectionException;
+import nl.edu.avans.ivp4c2.domain.RegisterValidator;
 import nl.edu.avans.ivp4c2.manager.RegisterManager;
 
 import java.awt.BorderLayout;
@@ -89,71 +92,117 @@ public class RegisterSection extends JPanel {
 
 	}
 
-
 	// Inner class
 	class registerHandler extends Component implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			Customer customer = null;
 			RegisterManager customerManager = new RegisterManager();
 			String emailaddress = emailField.getText();
+			
+			//Maak register validator aan: 
+			RegisterValidator registervalidator = new RegisterValidator();
 
 			// Check is customer already exists, if exists show catch message
 			if (!emailField.getText().equals("")) {
-				System.out.println("Veld is ingevuld");
-				customer = customerManager.findCustomer(emailaddress);
-				System.out.println(customer);
+				if (registervalidator.validateEmail(emailaddress)) {
+					try {
+						customer = customerManager.findCustomer(emailaddress);
+					} catch (NoDBConnectionException | CustomerExistsException ndce) {
+						JOptionPane
+								.showMessageDialog(
+										this,
+										"Geen connectie met de database, probeer later opnieuw",
+										"Foutmelding: Aanmelden",
+										JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(registerHandler.this,
+							"Voer een geldig emailadres in!",
+							"Foutmelding: Ongeldig emailadres",
+							JOptionPane.ERROR_MESSAGE);
+				}
 				if (customer != null) {
 					JOptionPane.showMessageDialog(registerHandler.this,
-							"De klant bestaat al",
-							"Foutmelding: Bestaal al",
+							"De klant bestaat al", "Foutmelding: Bestaal al",
 							JOptionPane.ERROR_MESSAGE);
 				} else {
-					if (!lastnameField.getText().equals("") && !initialsField.getText().equals("") && !firstnameField.getText().equals("") && !addressField.getText().equals("")
-						&& !residenceField.getText().equals("") && !zipcodeField.getText().equals("") && !emailField.getText().equals("")) {
+					if (!lastnameField.getText().equals("")
+							&& !initialsField.getText().equals("")
+							&& !firstnameField.getText().equals("")
+							&& !addressField.getText().equals("")
+							&& !residenceField.getText().equals("")
+							&& !zipcodeField.getText().equals("")
+							&& !emailField.getText().equals("")) {
 						
-						customer = customerManager.registerCustomer(lastnameField.getText(), initialsField.getText(), firstnameField.getText(), addressField.getText(), residenceField.getText(), 
-						zipcodeField.getText(), emailField.getText());
-						
-						System.out.println("customer toegevoegd: " + customer);
-						registeredCustomer
-								.setText("De volgende klant is toegevoegd:"
-										+ "\n" + "\n" + "Achternaam: " + " "
-										+ customer.getFirstname()
-										+ "\n"
-										+ "Voorletter(s): "
-										+ " "
-										+ customer.getNameInitials()
-										+ "\n"
-										+ "Voornaam: "
-										+ " "
-										+ customer.getFirstname()
-										+ "\n"
-										+ "Adres + huisnr: "
-										+ " "
-										+ customer.getFirstname()
-										+ "\n"
-										+ "Plaats: "
-										+ " "
-										+ customer.getFirstname()
-										+ "\n"
-										+ "Postcode en plaats: "
-										+ " "
-										+ customer.getFirstname()
-										+ "\n"
-										+ "E-mailadres: "
-										+ " "
-										+ customer.getFirstname());
+						if (registervalidator.validateZipcode(zipcodeField.getText())) {
 
-						registerPanel.revalidate();
-						registerPanel.removeAll();
-						registerOutput.add(registeredCustomer);
-						registeredCustomer.setEditable(false);
-						
+							try {
+								customer = customerManager.registerCustomer(
+										lastnameField.getText(),
+										initialsField.getText(),
+										firstnameField.getText(),
+										addressField.getText(),
+										residenceField.getText(),
+										zipcodeField.getText(),
+										emailField.getText());
+							} catch (NoDBConnectionException e1) {
+								JOptionPane
+										.showMessageDialog(
+												this,
+												"Geen connectie met de database, probeer later opnieuw",
+												"Foutmelding: Aanmelden",
+												JOptionPane.ERROR_MESSAGE);
+							}
+							try {
+								System.out.println("customer toegevoegd: "
+										+ customer);
+								registeredCustomer
+										.setText("De volgende klant is toegevoegd:"
+												+ "\n" + "\n" + "Achternaam: "
+												+ " "
+												+ customer.getLastname()
+												+ "\n"
+												+ "Voorletter(s): "
+												+ " "
+												+ customer.getNameInitials()
+												+ "\n"
+												+ "Voornaam: "
+												+ " "
+												+ customer.getFirstname()
+												+ "\n"
+												+ "Adres:"
+												+ " "
+												+ customer.getAddress()
+												+ "\n"
+												+ "Plaats: "
+												+ " "
+												+ customer.getResidence()
+												+ "\n"
+												+ "Postcode: "
+												+ " "
+												+ customer.getZipcode()
+												+ "\n"
+												+ "E-mailadres: "
+												+ " "
+												+ customer.getEmailaddress());
+	
+								registerPanel.revalidate();
+								registerPanel.removeAll();
+								registerOutput.add(registeredCustomer);
+								registeredCustomer.setEditable(false);
+							} catch (NullPointerException ne) {
+							}
+						} else {
+							JOptionPane.showMessageDialog(registerHandler.this,
+									"Voer een geldige postcode in",
+									"Foutmelding: Ongeldige postcode",
+									JOptionPane.ERROR_MESSAGE);
+						}
 					}else {
 						JOptionPane.showMessageDialog(registerHandler.this,
-								"Vul alle invulvelden in!",
-								"Foutmelding: gegevens niet ingevuld",
-								JOptionPane.ERROR_MESSAGE);
+						"Vul alle invulvelden in!",
+						"Foutmelding: gegevens niet ingevuld",
+						JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			} else {
