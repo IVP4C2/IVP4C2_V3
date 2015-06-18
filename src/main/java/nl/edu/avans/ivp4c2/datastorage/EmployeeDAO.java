@@ -30,11 +30,11 @@ public class EmployeeDAO {
 
 		// First open a database connnection
 		DatabaseConnection connection = new DatabaseConnection();
-		if (connection.openConnection()) {
+		if (connection.connectAsUDI()) {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			ResultSet resultset = connection
-					.executeSQLSelectStatement("SELECT employee_id, firstname, lastname FROM employee WHERE employee_id = "
+					.executeSQLSelectStatement("SELECT employee_id, firstname, lastname FROM selectemployee_v WHERE employee_id = "
 							+ employeeNumber + ";");
 	
 			if (resultset != null) {
@@ -61,7 +61,7 @@ public class EmployeeDAO {
 					employee = null;
 				} 
 			}
-			String query = ("INSERT INTO `avans_hartigehap_c2`.`active_employee` "
+			String query = ("INSERT INTO `active_employee` "
 					+ "(`fk_employee_id`, `starttime`, `endtime`)" + "VALUES ('" + employeeNumber + "', NOW(), NOW());");
 	
 

@@ -79,13 +79,11 @@ public final class TableDAO {
 		List<Table> tables = new ArrayList<Table>();
 		//Open db connection
 		DatabaseConnection connection = new DatabaseConnection();
-		if(connection.openConnection()) {
+		if(connection.connectAsSelect()) {
 			//connection opened succesfully
 			//execute SQL statement to retrieve Tables
 			ResultSet resultset = connection.executeSQLSelectStatement(
-	                "SELECT `t`.`table_number`, `ts`.`status` FROM `table_status` `ts` " +
-							"INNER JOIN `table` `t` ON `ts`.`table_status_id` = `t`.`fk_table_status_id` " +
-							"WHERE `ts`.`table_status_id` = '"+status+"';");
+	                "SELECT `table_number`, `status` FROM `selecttables_v` WHERE `table_status_id` = '"+status+"';");
 
 				//If there is a result
 	            if(resultset != null) {

@@ -14,19 +14,19 @@ import com.mysql.jdbc.Statement;
  * @author IVP4C2
  */
 public class CustomerDAO {
-	private LocalDate registerDate;
+    private LocalDate registerDate;
 
     public CustomerDAO () {
         // Nothing to be initialized. This is a stateless class. Constructor
         // has been added to explicitely make this clear.
     }
-    
+
     public Customer findCustomer(String emailaddress) {
-    	Customer customer = null;
+        Customer customer = null;
 
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();
-        if (connection.openConnection()) {
+        if (connection.connectAsUDI()) {
             // If a connection was successfully setup, execute the SELECT statement.
             ResultSet resultset = connection.executeSQLSelectStatement(
                     "SELECT * FROM customer WHERE email = '" + emailaddress + "';");
@@ -36,11 +36,11 @@ public class CustomerDAO {
                     // The employeeNumber is unique for a employee, so in case the resultset does contain data, we need its first entry.
                     if (resultset.next()) {
                         //int employeeNumberFromDb = resultset.getInt("employee_id");
-                    	String lastNameFromDb = resultset.getString("lastname");
-                    	String nameInitialsFromDb = resultset.getString("initials");
-                    	String firstNameFromDb = resultset.getString("firstname");
-                    	String addressFromDb = resultset.getString("address");
-                    	String residenceFromDb = resultset.getString("residence");                  
+                        String lastNameFromDb = resultset.getString("lastname");
+                        String nameInitialsFromDb = resultset.getString("initials");
+                        String firstNameFromDb = resultset.getString("firstname");
+                        String addressFromDb = resultset.getString("address");
+                        String residenceFromDb = resultset.getString("residence");
                         String zipcodeFromDb = resultset.getString("zipcode");
                         String emailaddressFromDb = resultset.getString("email");
 
@@ -61,38 +61,35 @@ public class CustomerDAO {
         return customer;
 
     }
-    
+
     public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) {
-    	Customer customer = null;
-    	DatabaseConnection connection = null;
-	
+        Customer customer = null;
+        DatabaseConnection connection = null;
 
-    	 // First open a database connnection
+
+        // First open a database connnection
         connection = new DatabaseConnection();
-        if (connection.openConnection()) {
+        if (connection.connectAsUDI()) {
+            System.out.println("connectie is open");
 
-//        	statement = connection.createStatement();
-//        	
-        	System.out.println("connectie is open");
-        	
-        	String query = ("INSERT INTO `avans_hartigehap_c2`.`customer` "
-					+ "(`initials`, `firstname`, `lastname`, `address`, `residence`, `zipcode`, "
-					+ "`email`) "
-					+ "VALUES ('" + nameInitials + "', '" + firstname + "', '" + lastname + "', '" + address + "', '" + residence + "', "
-					+ "'" + zipcode + "', '" + emailaddress + "');");
-        	
-        	//customer = new Customer(String lastname, String nameInitials, String firstname, String address, String residence, y zipcode, emailaddress);
-         
-         	connection.executeUpdateStatement(query);
-        	System.out.println(query);
-        	System.out.println("Record is toegevoegd!");
-        	
-        	customer = new Customer(lastname, nameInitials, firstname, address, residence,  zipcode, emailaddress);
-        	
-        	connection.closeConnection();
+            String query = ("INSERT INTO `avans_hartigehap_c2`.`customer` "
+                    + "(`initials`, `firstname`, `lastname`, `address`, `residence`, `zipcode`, "
+                    + "`email`) "
+                    + "VALUES ('" + nameInitials + "', '" + firstname + "', '" + lastname + "', '" + address + "', '" + residence + "', "
+                    + "'" + zipcode + "', '" + emailaddress + "');");
+
+            //customer = new Customer(String lastname, String nameInitials, String firstname, String address, String residence, y zipcode, emailaddress);
+
+            connection.executeUpdateStatement(query);
+            System.out.println(query);
+            System.out.println("Record is toegevoegd!");
+
+            customer = new Customer(lastname, nameInitials, firstname, address, residence,  zipcode, emailaddress);
+
+            connection.closeConnection();
 
         }
-		return customer;
+        return customer;
     }
 }
 

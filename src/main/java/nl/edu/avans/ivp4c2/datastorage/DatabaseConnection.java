@@ -13,6 +13,9 @@ import java.sql.*;
 public class DatabaseConnection {
     
     private Connection connection;
+    private static final String DB_NAME = "jdbc:mysql://145.48.6.148/hhc";
+    private static String DB_USER = "root";
+    private static String DB_PASS = "10ec4u";
     
     // The Statement object has been defined as a field because some methods
     // may return a ResultSet object. If so, the statement object may not
@@ -24,6 +27,28 @@ public class DatabaseConnection {
         connection = null;
         statement = null;
     }
+
+    /**
+     * This user is allowed to execute SELECT queries.
+     * Should be used when only SELECTing data from the database. Should be used together with views
+     * @return
+     */
+    public boolean connectAsSelect() {
+        DB_USER = "Barselect";
+        DB_PASS = "hhc2barselect";
+        return openConnection();
+    }
+
+    /**
+     * This user is allowed to execute INSERT, UPDATE and SELECT statements
+     * Should be used when INSERTing or UPDATEing a row. It has the SELECT privilege so it can return results when needed
+     * @return
+     */
+    public boolean connectAsUDI() {
+        DB_USER = "Barudi";
+        DB_PASS = "hhc2barudi";
+        return openConnection();
+    }
     
     public boolean openConnection() {
         boolean result = false;
@@ -31,10 +56,7 @@ public class DatabaseConnection {
         if(connection == null) {
             try {
                 // Try to create a connection with the library database
-                connection = DriverManager.getConnection(
-//              "jdbc:mysql://145.48.6.148/hhc2" , "root", "10ec4u");
-//              "jdbc:mysql://127.0.0.1/hh" , "root", "");
-                "jdbc:mysql://mysql.famcoolen.nl/avans_hartigehap_c2" , "ivp4c2", "zJp6UoDhZD");
+                connection = DriverManager.getConnection(DB_NAME, DB_USER, DB_PASS);
                 if(connection != null) {
                     statement = connection.createStatement();
                 }
@@ -47,6 +69,8 @@ public class DatabaseConnection {
             // A connection was already initalized.
             result = true;
         }
+        DB_USER = "root";
+        DB_PASS = "10ec4u";
         return result;
     }
     
@@ -121,6 +145,8 @@ public class DatabaseConnection {
         
         if(query != null && connectionIsOpen()) {
             try {
+                DB_USER = "Barudi";
+                DB_PASS = "hhc2barudi";
                 statement.executeUpdate(query);
                 result = true;
             } catch(SQLException e) {

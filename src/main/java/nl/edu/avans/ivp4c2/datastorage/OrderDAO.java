@@ -31,7 +31,7 @@ public final class OrderDAO {
 
 		// First open a database connnection
 		DatabaseConnection connection = new DatabaseConnection();
-		if (connection.openConnection()) {
+		if (connection.connectAsSelect()) {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			//Select all orders for a given tableNumber
@@ -75,7 +75,7 @@ public final class OrderDAO {
     public boolean updateOrder(int orderNumber, int status) throws SQLException{
         boolean result = false;
         DatabaseConnection connection = new DatabaseConnection();
-        if(connection.openConnection()) {
+        if(connection.connectAsUDI()) {
             String updateStatement = "UPDATE `order` SET `fk_status_id` = '"+status+"' WHERE `order_id` = "+orderNumber+";";
             result = connection.executeUpdateStatement(updateStatement);
         }

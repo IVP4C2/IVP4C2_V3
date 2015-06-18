@@ -38,7 +38,7 @@ public class RegisterDAO {
                     	String nameInitialsFromDb = resultset.getString("initials");
                     	String firstNameFromDb = resultset.getString("firstname");
                     	String addressFromDb = resultset.getString("address");
-                    	String residenceFromDb = resultset.getString("residence");                  
+                    	String residenceFromDb = resultset.getString("city");
                         String zipcodeFromDb = resultset.getString("zipcode");
                         String emailaddressFromDb = resultset.getString("email");
 
@@ -66,14 +66,14 @@ public class RegisterDAO {
 
     	 // First open a database connnection
         connection = new DatabaseConnection();
-        if (connection.openConnection()) {
+        if (connection.connectAsUDI()) {
 
 //        	statement = connection.createStatement();
 //        	
         	System.out.println("connectie is open");
         	
-        	String query = ("INSERT INTO `avans_hartigehap_c2`.`customer` "
-					+ "(`initials`, `firstname`, `lastname`, `address`, `residence`, `zipcode`, "
+        	String query = ("INSERT INTO `customer` "
+					+ "(`initials`, `firstname`, `lastname`, `address`, `city`, `zipcode`, "
 					+ "`email`) "
 					+ "VALUES ('" + lastname + "', '" + nameInitials + "', '" + firstname + "', '" + address + "', '" + residence + "', "
 					+ "'" + zipcode + "', '" + emailaddress + "');");

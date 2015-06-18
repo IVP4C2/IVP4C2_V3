@@ -52,6 +52,10 @@ public class RegisterSection extends JPanel {
 		registerButton = new JButton("Inschrijven");
 		registerButton.addActionListener(new registerHandler());
 
+
+		String zipcode = zipcodeField.getText().replace(" ", "");
+
+
 		Font font = new Font("SansSerif", Font.PLAIN, 18);
 		registeredCustomer = new JTextArea();
 		registeredCustomer.setFont(font);

@@ -326,42 +326,35 @@ public class BarGUI extends JPanel {
 					}
 				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
 					if(orderSection.getSelectedOrder() != null) {
-						JPanel optionPanel = new JPanel();
-						optionPanel.add(new JButton("In Behandeling")).setBackground(Color.decode("#DFDFDF"));
-						optionPanel.add(new JButton("Gereed")).setBackground(Color.decode("#DFDFDF"));
-						optionPanel.add(new JButton("Geserveerd")).setBackground(Color.decode("#DFDFDF"));
 						String[] buttons = {"In Behandeling", "Gereed", "Geserveerd"};
-//					JOptionPane.showMessageDialog(BarGUI.this, optionPanel, "Status", JOptionPane.DEFAULT_OPTION);
 						int optionPane = JOptionPane.showOptionDialog(BarGUI.this, "Status Aanpassen", "Status",
 								JOptionPane.DEFAULT_OPTION, 0, null, buttons, buttons[2]);
 						try {
 							OrderDAO orderDAO = new OrderDAO();
+							int status = 0;
+							String orderStatus = null;
 							switch (optionPane) {
 								case 0:
 									System.out.println("In behandeling");
-									int status = 2;
-									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus("In behandeling");
-									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
-									panelCenter.revalidate();
+									status = 2;
+									orderStatus = "In behandelng";
 									break;
 								case 1:
 									System.out.println("Gereed");
 									status = 3;
-//									orderSection.getSelectedOrder().setOrderStatus("Gereed");
-									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus("Gereed");
-									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
-									panelCenter.revalidate();
+									orderStatus = "Gereed";
 									break;
 								case 2:
 									System.out.println("Geserveerd");
 									status = 4;
-									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus("Geserveerd");
-									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
-									panelCenter.revalidate();
+									orderStatus = "Geserveerd";
 									break;
 								default:
 									break;
 							}
+							orderSection.getSelectedOrder().setOrderStatus(orderStatus);
+							barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus(orderStatus);
+							orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
 							panelCenter.revalidate();
 							orderSection.clearSelectedOrder();
 						} catch (Exception f) {

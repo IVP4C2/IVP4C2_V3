@@ -26,13 +26,7 @@ public class ProductDAO {
 	 * @return ArrayList<Product>
 	 */
 	public List<Product> getProductViaOrder(int orderNumber) {
-		String statement = "SELECT `item_id`, `name`, `price`, `t`.`percents`, COUNT(*) AS amount " +
-				"FROM `item` `i` " +
-				"INNER JOIN `kpt_orderline` `ktol` ON `i`.`item_id` = `ktol`.`fk_item_id` " +
-				"INNER JOIN `order` `o` ON `o`.`order_id` = `ktol`.`fk_order_id` " +
-				"INNER JOIN `tax` `t` ON `i`.`fk_tax_id` = `t`.`tax_id` " +
-				"WHERE `o`.`order_id` = '"+orderNumber+"' " +
-				"GROUP BY `item_id`;";
+		String statement = "SELECT `item_id`, `name`, `price`, `percents`, COUNT(*) AS amount FROM `selectitems_v` WHERE `order_id` = '"+orderNumber+"' GROUP BY `item_id`;";
 		return getProduct(statement);
 	}
 
@@ -65,7 +59,7 @@ public class ProductDAO {
 		List<Product> products = new ArrayList<Product>();
 		//Open db connection
 		DatabaseConnection connection = new DatabaseConnection();
-		if(connection.openConnection()) {
+		if(connection.connectAsSelect()) {
 			//connection opened succesfully
 			//execute SQL statement to retrieve Tables
 			//Select all product for a given orderNumber
