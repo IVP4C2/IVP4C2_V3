@@ -13,9 +13,9 @@ import java.sql.*;
 public class DatabaseConnection {
     
     private Connection connection;
-    private static final String DB_NAME = "jdbc:mysql://mysql.famcoolen.nl/avans_hartigehap_all";
-    private static String DB_USER = "ivp4_admin";
-    private static String DB_PASS = "hHzCPejUBA";
+    private static final String DB_NAME = "jdbc:mysql://145.48.6.148/hhc";
+    private static String DB_USER = "root";
+    private static String DB_PASS = "10ec4u";
     
     // The Statement object has been defined as a field because some methods
     // may return a ResultSet object. If so, the statement object may not

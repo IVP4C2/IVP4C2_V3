@@ -12,12 +12,14 @@ public class Payment {
     private final int paymentNumber;
     private final Date paymentDate;
     private final double totalPrice;
+    private final double totalPriceExcl;
     private final List<Product> productList;
 
-    public Payment(int paymentNumber, Date paymentDate, double totalPrice) {
+    public Payment(int paymentNumber, Date paymentDate, double totalPrice, double totalPriceExcl) {
         this.paymentNumber = paymentNumber;
         this.paymentDate = paymentDate;
         this.totalPrice = totalPrice;
+        this.totalPriceExcl = totalPriceExcl;
         productList = new ArrayList<Product>();
     }
 
@@ -44,11 +46,11 @@ public class Payment {
      * @return TotalPrice as a double including VAT
      */
     public double getTotalPrice() {
-        double totalPriceIncl = 0;
-        for(Product p : productList) {
-            totalPriceIncl += ((p.getPrice()*(p.getVat()+100)/100)*p.getAmount());
-        }
-        return totalPriceIncl;
+//        double totalPriceIncl = 0;
+//        for(Product p : productList) {
+//            totalPriceIncl += ((p.getPrice()*(p.getVat()+100)/100)*p.getAmount());
+//        }
+        return totalPrice;
     }
 
     /**
@@ -56,7 +58,7 @@ public class Payment {
      * @return Total Price as a double excluding VAT
      */
     public double getTotalPriceExcl() {
-        return totalPrice;
+        return totalPriceExcl;
     }
 
     /**

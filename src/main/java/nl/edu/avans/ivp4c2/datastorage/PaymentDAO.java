@@ -44,7 +44,8 @@ public final class PaymentDAO {
                         payment = new Payment(
                                 resultset.getInt("bill_id"),
                                 resultset.getTimestamp("send_on"),
-                                resultset.getDouble("total_price")
+                                resultset.getDouble("total_price"),
+                                resultset.getDouble("total_price_ex")
                         );
 
                         //Create new ProductDAO to retrieve the product from the Database and store them in an ArrayList

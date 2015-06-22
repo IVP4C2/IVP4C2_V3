@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bd77aae5-c321-4cbb-b22e-35cb1c83a706" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/OrderDAO.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/OrderDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Payment.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Payment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java" />
     </list>
     <ignored path="avans.ivp4c2.proftaak.iteratie1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,16 +36,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="RegisterValidator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/RegisterValidator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="4" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="RegisterDAO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/RegisterDAO.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -56,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DatabaseConnection.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DatabaseConnection.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="43" column="60" selection-start-line="43" selection-start-column="60" selection-end-line="43" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.2877292">
+              <caret line="15" column="72" selection-start-line="15" selection-start-column="72" selection-end-line="15" selection-end-column="72" />
               <folding />
             </state>
           </provider>
@@ -86,12 +76,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PaymentDAO.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PaymentDAO.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.3878702">
-              <caret line="77" column="80" selection-start-line="77" selection-start-column="80" selection-end-line="77" selection-end-column="80" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Payment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Payment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="60" column="29" selection-start-line="60" selection-start-column="29" selection-end-line="60" selection-end-column="29" />
+              <folding>
+                <element signature="e#1608#1609#0" expanded="true" />
+                <element signature="e#1645#1646#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -175,11 +178,12 @@
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/RegisterDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/CustomerDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/ProductDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
-        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/OrderDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Payment.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java" />
       </list>
     </option>
   </component>
@@ -770,12 +774,12 @@
       <workItem from="1434623514751" duration="12250000" />
       <workItem from="1434650073880" duration="5629000" />
       <workItem from="1434707915146" duration="3599000" />
-      <workItem from="1434967732450" duration="6297000" />
+      <workItem from="1434967732450" duration="8323000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="164379000" />
+    <option name="totallyTimeSpent" value="166405000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -789,7 +793,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19978285" sideWeight="0.63854164" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19978285" sideWeight="0.63854164" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Sequence" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1015,13 +1019,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Payment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Product.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1223,18 +1220,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Payment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="43" column="60" selection-start-line="43" selection-start-column="60" selection-end-line="43" selection-end-column="60" />
-          <folding />
+          <caret line="60" column="29" selection-start-line="60" selection-start-column="29" selection-end-line="60" selection-end-column="29" />
+          <folding>
+            <element signature="e#1608#1609#0" expanded="true" />
+            <element signature="e#1645#1646#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3878702">
-          <caret line="77" column="80" selection-start-line="77" selection-start-column="80" selection-end-line="77" selection-end-column="80" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="65" column="0" selection-start-line="65" selection-start-column="0" selection-end-line="65" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2877292">
+          <caret line="15" column="72" selection-start-line="15" selection-start-column="72" selection-end-line="15" selection-end-column="72" />
           <folding />
         </state>
       </provider>
