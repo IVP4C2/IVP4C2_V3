@@ -25,6 +25,7 @@ public class OrderSection {
     private Table table;
     private Order tempOrder;
     public OrderSection() {
+
     }
 
     /**
@@ -105,6 +106,10 @@ public class OrderSection {
 
     public void clearSelectedOrder() {
         tempOrder = null;
+    }
+
+    public void revalidateTable(JPanel panelCenter) {
+        getTableLeft(table, panelCenter);
     }
 
     /**

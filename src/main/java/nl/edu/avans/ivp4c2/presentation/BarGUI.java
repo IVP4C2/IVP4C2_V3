@@ -208,6 +208,9 @@ public class BarGUI extends JPanel {
 					}
 				}
 			}
+            if(tableStatusOrder.size() <= 0) {
+                tableButton[tb].setBackground(Color.decode("#DFDFDF"));
+            }
 		}
         /*Set colors*/
 		for(int i : barOrderTables) {
@@ -231,7 +234,6 @@ public class BarGUI extends JPanel {
 			tableButton[tb].setBackground(Color.RED);
 			repaint();
 		}
-
 	}
 
 	// Inner classes
@@ -242,10 +244,11 @@ public class BarGUI extends JPanel {
 	 */
 	class TableButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
+            panelCenter.removeAll();
+            revalidate();
 			for (int tb = 1; tb <= 10; tb++) {
 				if (e.getSource() == tableButton[tb]) {
-					panelCenter.removeAll();
+
 					/*Set border on clicked table button*/
 					TitledBorder topBorder = BorderFactory.createTitledBorder("Actief");
 					topBorder.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -339,11 +342,13 @@ public class BarGUI extends JPanel {
 								default:
 									break;
 							}
-							orderSection.getSelectedOrder().setOrderStatus(orderStatus);
-							barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus(orderStatus);
-							orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
-							panelCenter.revalidate();
+                            orderSection.getSelectedOrder().setOrderStatus(orderStatus);
+                            orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
+                            barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus(orderStatus);
 							orderSection.clearSelectedOrder();
+                            panelCenter.removeAll();
+                            orderSection.revalidateTable(panelCenter);
+                            revalidate();
 						} catch (Exception f) {
 							JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
 							Logger logger = Logger.getAnonymousLogger();
@@ -354,7 +359,7 @@ public class BarGUI extends JPanel {
 					}
 				}
 			} else {
-				JOptionPane.showMessageDialog(BarGUI.this, "Afronden Mislukt. Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(BarGUI.this, "Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
