@@ -4,9 +4,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- *
+ * The Order class can create new orders when a customer order some products.
+ * The Order class holds all products from an Orde made by a Table.
  * @author IVP4C2
  */
 
@@ -17,7 +17,13 @@ public class Order {
 	private int destination;
 	private List<Product> products;
 
-	
+	/**
+	 * Constructor will initialize a new order
+	 * @param orderNumber will be a unique orderNumber
+	 * @param orderStatus will say what kind of order it is ('Bestelling geplaatst', 'In behandeling', 'Gereed', 'Gereserveerd', 'Betaald')
+	 * @param orderTime will contain the time of the order
+	 * @param destination will explain if it is a kitchen or a bar order
+	 */
 	public Order(int orderNumber, String orderStatus, Timestamp orderTime, int destination) {
 		this.orderNumber = orderNumber;
 		this.orderStatus = orderStatus;
@@ -38,9 +44,9 @@ public class Order {
 
 	/**
 	 * returns the full timestamp as a Date. By returning the full timestamp a Date,
-	it can be used a different points in the code
-	* @return returns the full timestamp as a Date
-	* */
+	 * it can be used a different points in the code
+	 * @return returns the full timestamp as a Date
+	 */
 	public Timestamp getOrderTime() {
 		return orderTime;
 	}
@@ -90,6 +96,9 @@ public class Order {
 
 
 	/*Default equals and hashCode methods*/
+	/*
+	 * Those two methods will overridde orders when needed.
+	 */
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

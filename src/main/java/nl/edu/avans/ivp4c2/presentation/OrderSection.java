@@ -29,8 +29,8 @@ public class OrderSection {
 
     /**
      * Returns a JTable for a given Order object
-     * @param o
-     * @return JTable with order details
+     * @param o The Order Object from which the right JTable should be created
+     * @return JPanel with order details
      */
     public JTable getTableRight(Order o) {
         this.tableRight = new JTable(buildTableModelRight(o));
@@ -42,8 +42,8 @@ public class OrderSection {
 
     /**
      * Returns a JTable for a given Table object. Requires panelCenter to add the JTable to the frame.
-     * @param table
-     * @param panelCenter
+     * @param table The Table Object from which the left JTable should be created
+     * @param panelCenter JPanel with all acctive order for the given Table
      * @return JTable with table orders
      */
     public JPanel getTableLeft(Table table, JPanel panelCenter) {
@@ -107,7 +107,11 @@ public class OrderSection {
         tempOrder = null;
     }
 
-    // Method to create JTable
+    /**
+     * Creates the DefaultTableModel for the Table object to fill the left JTable
+     * @param t The Table object from which to create a JTable
+     * @return DefaultTableModel
+     */
     public DefaultTableModel buildTableModel(Table t) {
 
         // Gets column names from Table
@@ -133,7 +137,11 @@ public class OrderSection {
     }
 
 
-    // Method to create JTable
+    /**
+     * Creates the DefaultTableModel for the given Order object to fill the right JTable
+     * @param order The Order from which to create the right JTable
+     * @return DafaultTableModel
+     */
     public DefaultTableModel buildTableModelRight(Order order) {
 
         // Gets column names from Table

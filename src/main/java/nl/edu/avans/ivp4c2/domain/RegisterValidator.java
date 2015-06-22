@@ -2,6 +2,11 @@ package nl.edu.avans.ivp4c2.domain;
 
 import java.util.regex.Pattern;
 
+/**
+ * This class checks whether the email address and zip code meets the requirements.
+ * This class contains two regular expressions (patterns) one for a email and one for the zipcode
+ * @author IVP4c2
+ */
 
 public class RegisterValidator {
 	
@@ -11,20 +16,23 @@ public class RegisterValidator {
 	private Pattern patternEmail;
 	private Pattern patternZipcode;
 	private java.util.regex.Matcher matcher;
-	
-	// Constructor
+
+	/**
+	 * patternEmail will initialize the EMAIL_PATTERN
+	 * patternZipcode will initialize the ZIPCODE_PATTERN
+	 */
 	public RegisterValidator() {
 		patternEmail = Pattern.compile(EMAIL_PATTERN);
 		patternZipcode = Pattern.compile(ZIPCODE_PATTERN);
 	}
 	
 	// Methods
-	
+
 	/**
 	 * Validate a emailaddress
-	 * 
+	 *
 	 * @param EMAIL_PATTERN (parameter) will check of the emailaddress is correct
-	 *            
+	 *
 	 * @return true = valid emailaddress, false invalid = emailaddress
 	 */
 	public boolean validateEmail(final String EMAIL_PATTERN) {

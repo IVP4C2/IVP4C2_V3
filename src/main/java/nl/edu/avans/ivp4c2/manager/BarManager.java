@@ -53,9 +53,9 @@ public class BarManager {
 	}
 
 	/**
-	 * Hashmap which returns a Table object, used to fill the JTable
-	 * @param tableNumber
-	 * @return Table ofr given tableNumber
+	 * Returns a Table object from the tableHashMap, used to fill the JTable
+	 * @param tableNumber is the number of the table
+	 * @return Table of given tableNumber
 	 */
 	public Table getHashTable(int tableNumber) {
 		Table tempTable;
@@ -81,10 +81,9 @@ public class BarManager {
 	}
 
 
-	/* ArrayList getters
-	 *
-	 * These methods return an ArrayList with Table objects.
-	 * These ArrayLists are stored in the system memory
+	/*
+	 * These methods return a List with Table objects.
+	 * These Lists are stored in the system memory
 	 */
 
 	/**
@@ -133,15 +132,13 @@ public class BarManager {
 
 	/*DAO table getters
 	 * 
-	 * These methods update the three ArrayLists stored in the system memory every 5 seconds by
-	 * retrieving data from the database. Each list is cleared before new data is
-	 * added. By doing so, a table can never be in two or more lists
+	 * These methods update the three Lists stored in the system memory every 5 seconds by
+	 * retrieving data from the database.
 	 */
 
 	/**
 	 * Retrieves all tables from the database which have the status 'Bezet'
 	 * Also adds these tables to the tableHashmap
-	 * @return ArrayList<Table>
 	 */
 	public void getOccupiedTablesDAO() {
 		for (Table t : tableDAO.getTableOccupied()) {
@@ -156,7 +153,6 @@ public class BarManager {
 	/**
 	 * Retrieves all tebles from the database which have the status 'Afrekenen'
 	 * Also adds these tables to the tableHashMap
-	 * @return ArrayList<Table>
 	 */
 	public void getPaymentTablesDAO() {
 		for (Table t : tableDAO.getTablePayment()) {
@@ -170,7 +166,6 @@ public class BarManager {
 
 	/**
 	 * Retrieves all tebles from the database which have the status 'Leeg'
-	 * @return ArrayList<Table>
 	 */
 	public void getEmptyTablesDAO() {
 		for (Table t : tableDAO.getTableEmpty()) {
@@ -179,7 +174,6 @@ public class BarManager {
 			} else {
 				tableHashmap.put(t.getTableNumber(), t);
 			}
-
 		}
 	}
 }

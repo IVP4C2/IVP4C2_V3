@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- *
+ *Database Access Object for the Employee class. Handles all operation regarding the Employee class in which a database is used
  * @author IVP4C2
  */
 public class EmployeeDAO {
@@ -24,6 +24,7 @@ public class EmployeeDAO {
 	 *            identifies the employee to be loaded from the database
 	 * @return the Employee object to be found. In case employee could not be
 	 *         found, null is returned.
+	 * @throws NoDBConnectionException if there is no database connection
 	 */
 	public Employee findEmployee(int employeeNumber) throws NoDBConnectionException {
 		Employee employee = null;
@@ -79,6 +80,12 @@ public class EmployeeDAO {
 
 	}
 
+	/**
+	 * @param employee the employee object to be removed
+	 * @return true if the query to insert the time of logging out
+	 * was a success, otherwise false
+	 *
+	 */
 	public boolean removeEmployee(Employee employee) {
 		int employeeNumber = employee.getEmployeeNumber();
 

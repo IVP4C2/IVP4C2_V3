@@ -10,7 +10,15 @@ public class Product {
 	private int amount;
 	private double price;
 	private int vat;
-	
+
+	/** Constructor
+	 * The constructor will initialize and create a new product
+	 * @param productNumber will make a unique number so a product can easily be find
+	 * @param productName is the name of the product
+	 * @param amount of the product
+	 * @param price of the product
+	 * @param vat of a product is like 21
+	 */
 	public Product(int productNumber, String productName, int amount, double price, int vat) {
 
 		this.productNumber = productNumber;

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * To create these Order objects, this class used the OrderDAO.
  * To create the product for an Order, the OrderDAO uses ProductDAo
  * This class can be seen as a master class from where other DAO's get called.
- * 
+ *
  *  @author IVP4C2
  */
 
@@ -38,7 +38,7 @@ public final class TableDAO {
 	/**
 	 * Retreives all tables which have the 'Bezet' status.
 	 * Returns these tables in an ArrayList
-	 * @return ArrayList containing Table object
+	 * @return List containing Table object
 	 */
     public final List<Table> getTableOccupied() {
     	List<Table> fetchedTables = new ArrayList<Table>();
@@ -49,7 +49,7 @@ public final class TableDAO {
 	/**
 	 * Retreives all tables which have the 'Afrekenen' status.
 	 * Returns these tables in an ArrayList
-	 * @return ArrayList containing Table object
+	 * @return List containing Table object
 	 */
     public final List<Table> getTablePayment() {
     	List<Table> fetchedTables = new ArrayList<Table>();
@@ -60,7 +60,7 @@ public final class TableDAO {
 	/**
 	 * Retreives all tables which have the 'Leeg' status.
 	 * Returns these tables in an ArrayList
-	 * @return ArrayList containing Table object
+	 * @return List containing Table object
 	 */
     public final List<Table> getTableEmpty() {
     	List<Table> fetchedTables = new ArrayList<Table>();
@@ -72,7 +72,7 @@ public final class TableDAO {
 	/**Retrieves all tables from the database. The retrieved values get stored in Table objects.
 	*A table object contains an ArrayList with Orders. An Order contains an ArrayList with Products
 	*@param status
-	*@return ArrayList containing Table Objectts
+	*@return List containing Table Objects
 	*/
 	private final List<Table> getTable(int status) {
 		

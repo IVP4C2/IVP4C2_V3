@@ -71,7 +71,11 @@ public class PaymentSection {
         return paymentPanel;
     }
 
-    // Method to create JTable
+    /**
+     * Creates the DefaultTableModel for the given Payment object
+     * @param payment Payment object from which to create the DefaultTableModel
+     * @return
+     */
     public DefaultTableModel buildTableModel(Payment payment) {
 
         // Gets column names from Table
@@ -118,8 +122,8 @@ public class PaymentSection {
     /**
      * Creates a PDF file using a given Payment object.
      * Gives to option to print the PDF.
-     * @param p
-     * @throws Exception
+     * @param p The Payment object from which the bill is created
+     * @throws Exception Since a lot can go wrong here, we catch the general Exception
      */
     public void GenerateBill(Payment p) throws Exception {
         //Create a new document

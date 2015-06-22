@@ -11,15 +11,17 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-
 import nl.edu.avans.ivp4c2.datastorage.OrderDAO;
 import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
 import nl.edu.avans.ivp4c2.manager.LoginManager;
 import nl.edu.avans.ivp4c2.manager.PaymentManager;
+
+/**This GUI Class is the base of the whole Graphical user interface
+ * It holds all the Table buttons and other buttons. It also provides a space to show Orders/Payments
+ */
 
 public class BarGUI extends JPanel {
 	// Buttons
@@ -41,17 +43,10 @@ public class BarGUI extends JPanel {
 	private JPanel panelWest;
 	private JPanel panelCenter;
 	private int activeTable;
-
 	private JTextField logInOutField;
 	private JButton loginButton;
 	private JButton logoutButton;
-
-	/*
-	 * Initialize JTable to fill rightPanel and leftPanel. By doing so, we make
-	 * sure there is always an object present in the layout
-	 */
 	private PaymentManager paymentManager;
-
 	private BarManager barmanager;
 	private LoginManager loginmanager;
 	private OrderSection orderSection;
@@ -81,11 +76,7 @@ public class BarGUI extends JPanel {
 		panelNorthLeft.setSize(600, 200);
 		panelNorthRight.setLayout(new GridLayout(2, 5));
 		panelWest.setLayout(new GridLayout(7, 1));
-        /*Has room for one JPanel. The panel can change depending on the table Status.
-        * panelCenter.removeAll() will remove the current JPanel and a new one can be placed */
 		panelCenter.setLayout(new GridLayout(1, 1)); // Has room for one JPanel. The panel displayed here will change depending on the tableStatus
-
-		// Setup North panel
 
 		/* Reading and setting logo image */
 		panelNorthLeft.add(new JLabel(new ImageIcon(getClass().getResource("/logo_resized.jpg"))));
@@ -168,9 +159,9 @@ public class BarGUI extends JPanel {
 
 	// Methods
 
-	/*
-	 * Using new method to set table status. Atable can only have the
-	 * status 'Bezet', 'Afrekenen' or 'Leeg'.
+	/**
+	 * Sets the color of the Table buttons. Green for a bar Order, Yellow for a kitchen Order
+     * and gray when there are no order to complete
 	 */
 	public void setTableStatus() {
 		List<Table> tableStatusOrder = barmanager.getOccupiedTables(); //Contains all 'Bezet' tables
@@ -193,7 +184,6 @@ public class BarGUI extends JPanel {
 			tableButton[tb].setEnabled(false); //Table is empty. Therefore, the button is disabled
 			repaint();
 		}
-
 
 		// Set tableButtons for tables with status 'Bezet'
 		for (Table to : tableStatusOrder) {
@@ -246,15 +236,16 @@ public class BarGUI extends JPanel {
 
 	// Inner classes
 	/**
-	 *Adds a different JPanel to panelCenter depending on the table status
+	 * Adds a different JPanel to panelCenter depending on the table status
 	 * Uses classes OrderSection and PaymentSection
+     * Also handles the table button border placement
 	 */
 	class TableButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
 			for (int tb = 1; tb <= 10; tb++) {
 				if (e.getSource() == tableButton[tb]) {
-
+					panelCenter.removeAll();
 					/*Set border on clicked table button*/
 					TitledBorder topBorder = BorderFactory.createTitledBorder("Actief");
 					topBorder.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -284,7 +275,6 @@ public class BarGUI extends JPanel {
 						}
 						else {
 							panelCenter.removeAll();
-
 						}
 					}
 				} else {
@@ -300,10 +290,7 @@ public class BarGUI extends JPanel {
 		}
 	}
 
-
-
 	/**
-	 * CONTENTS MIGHT GET REPLACED BY A DEDICATED CompleOrderButton CLASS WTIH EXCEPTION HANDLING
 	 * Handles the CompleteOrder button.
 	 * Depending on the tableStatus, completes the Payment or Order.
 	 */
@@ -373,8 +360,10 @@ public class BarGUI extends JPanel {
 	}
 
 	// Inner class
-	// Will log a employee in and can log a employee out
-	// And add / remove them from the employeelist automatically
+
+    /**
+     * Handles the logging in/out of an Employee
+     */
 	class LogInOutHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 
@@ -387,32 +376,25 @@ public class BarGUI extends JPanel {
 					if (!logInOutField.getText().equals("")) {
 						// Dit werkt
 						int employeeCode = Integer.parseInt(logInOutField.getText());
-
 						// System.out.println(employeeCode);
 						Employee employee = loginmanager.findEmployee(employeeCode);
-
 						// Remove all items from the JComboBox
 						employeeBox.removeAllItems();
-
 						for (Employee ef : employeeList) {
 							employeeBox.addItem(ef);
 						}
-
 						logInOutField.setText("");
 					} else {
 						JOptionPane.showMessageDialog(panelCenter, "Voer eerst u medewerkersnummer in om in te kunnen loggen", "Foutmelding: incorrecte invoer", JOptionPane.ERROR_MESSAGE);
 						logInOutField.setText("");
 					}
 				}
-
 				if (e.getSource() == logoutButton) {
 					if (employeeBox.getItemCount() != 0 && logInOutField.getText().equals("")) {
 						Employee employee = (Employee) employeeBox.getSelectedItem();
 						boolean removeSuccess = loginmanager.removeEmployeeFromList(employee);
-
 						// Remove all items from the JComboBox
 						employeeBox.removeAllItems();
-
 						for (Employee ef : employeeList) {
 							employeeBox.addItem(ef);
 						}
@@ -442,12 +424,12 @@ public class BarGUI extends JPanel {
 	}
 
 
+    /**
+     * Actionhandler for the 'Inschrijven' button
+     */
 	class SignupHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
-
 			panelCenter.removeAll();
-			System.out.println("show signup area");
 			RegisterSection rs = new RegisterSection();
 			panelCenter.add(rs);
 			panelCenter.revalidate();

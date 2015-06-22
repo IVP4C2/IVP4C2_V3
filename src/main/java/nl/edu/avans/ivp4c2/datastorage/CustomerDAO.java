@@ -10,7 +10,7 @@ import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 /**
- *
+ * Database Access Object for the Customer class. Handles all operation regarding the Customer class in which a database is used
  * @author IVP4C2
  */
 public class CustomerDAO {
@@ -62,6 +62,16 @@ public class CustomerDAO {
 
     }
 
+    /**
+     * @param lastname the lastname of the customer
+     * @param nameInitials the initials of the customer
+     * @param firstname the firstname of the customer
+     * @param address the address of the customer
+     * @param residence the residence of the customer
+     * @param zipcode the zipcode of the customer
+     * @param emailaddress the emailaddress of the customer
+     * @return the customer object
+     */
     public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) {
         Customer customer = null;
         DatabaseConnection connection = null;

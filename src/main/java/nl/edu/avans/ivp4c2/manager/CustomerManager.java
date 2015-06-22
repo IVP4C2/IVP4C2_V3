@@ -7,6 +7,13 @@ import nl.edu.avans.ivp4c2.datastorage.CustomerDAO;
 import nl.edu.avans.ivp4c2.datastorage.EmployeeDAO;
 import nl.edu.avans.ivp4c2.presentation.CustomerException;
 
+/**
+ * CustomerManager class will manage all customers. This manager can find customers by a emailaddress
+ * it can also register a new customer.
+ * @author IVP4C2
+ *
+ */
+
 public class CustomerManager {
 	private Customer customer;
 	
@@ -14,20 +21,13 @@ public class CustomerManager {
 	public CustomerManager() {
 
 	}
-	
-	// Methods
-//	public boolean customerExistence(String emailaddress) {
-//		CustomerDAO customerDAO = new CustomerDAO();
-//		boolean penis44 = customerDAO.customerExistence(emailaddress);
-//		return penis44;
-//	}
-//	
-//	public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) {
-//		
-//		return customer;
-//	}
-//	
-	
+
+	/**
+	 * findCustomer method can find a customer by his emailadress, because every emailaddress is unique
+	 * @param emailaddress find a customer by his emailaddress
+	 * @return a customer object
+	 * @throws CustomerException may fire when a client already exists
+	 */
 	 public Customer findCustomer(String emailaddress) throws CustomerException {
 	         if (customer == null) {
 	             // when the employee isn't loaded from the database yet, we need to do that first
@@ -39,9 +39,20 @@ public class CustomerManager {
 		 } 
          return customer;
      }
-	 
-	 
-	 
+
+	/**
+	 * registerCustomer method will register a new customer, keep in mind that a emailaddress make a customer unique,
+	 * so every emailaddress can only be used once!
+	 * @param lastname of the customer
+	 * @param nameInitials of the customer
+	 * @param firstname of the customer
+	 * @param address of the customer
+	 * @param residence of the customer
+	 * @param zipcode of the customer
+	 * @param emailaddress pf the customer
+	 * @return a new customer
+	 * @throws CustomerException if not all fields are filled in
+	 */
 	 public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) throws CustomerException  {
 		 if(lastname != null && nameInitials != null && firstname != null && address != null && residence != null && zipcode != null && emailaddress != null) {
 			 CustomerDAO customerDAO = new CustomerDAO();

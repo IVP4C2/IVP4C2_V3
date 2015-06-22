@@ -9,9 +9,10 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Manager which handles all operations regarding payments
+ * PaymentManager is a manager which handles all operations regarding payments
  * @author IVP4C2
  */
+
 public class PaymentManager {
     private PaymentDAO paymentDAO;
     private HashMap<Integer, Payment> paymentMap; //Holds all the Payment Objects
@@ -23,8 +24,8 @@ public class PaymentManager {
 
     /**
      * Get the payment for a given tableNumber. Returns a Payment object
-     * @param tableNumber
-     * @return payment
+     * @param tableNumber number of the table
+     * @return payment for a active table
      */
     public Payment getActivePayment(int tableNumber) {
         if (paymentMap.containsKey(tableNumber)){
@@ -39,9 +40,9 @@ public class PaymentManager {
 
     /**
      * Completes a Payment using a given tableNumber.
-     * Returns true is the payment was completed successfully
-     * @param tableNumer
-     * @return true is completed succesfully
+     * @param tableNumer of the table
+     * @return result boolean true if a payment is succesfully completed or boolean false is unsuccesfully completed
+     * @throws Exception if the completion of a payment fails
      */
     public boolean completePayment(int tableNumer) throws Exception {
         boolean result = false;

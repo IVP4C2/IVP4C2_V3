@@ -10,6 +10,11 @@ import java.util.ArrayList;
 
 import static javax.swing.JOptionPane.*;
 
+/**
+ * Main class will start the program
+ * @author IVP4C2
+ */
+
 public class Main{
 	private static final int MegaBytes = 10241024;
 	public static void main(String args[] ) {

@@ -11,8 +11,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *Retrieves the order data and creates an Order object.
- *This DAO uses the ProductDAO to fill the Order with products
+ * Database Access Object for the Order class. Handles all operation regarding the Order class in which a database is used
+ * This DAO uses the ProductDAO to fill the Order with products
  * @author IVP4C2
  */
 public final class OrderDAO {
@@ -21,11 +21,12 @@ public final class OrderDAO {
 		// Nothing to be initialized. This is a stateless class. Constructor
 		// has been added to explicitely make this clear.
 	}
-	
-	/**
+
+    /**
      * Retrieves all orders for a given tableNumber
-	 * @param tableNumber
-	 * @return ArrayList<Order> */
+     * @param tableNumber is the table number of a table
+     * @return a list of orders
+     */
 	public final static List<Order> getTableOrder(int tableNumber) {
 		List<Order> orders = new ArrayList<Order>();
 
@@ -72,6 +73,12 @@ public final class OrderDAO {
 		return orders;
 	}
 
+    /**
+     * @param orderNumber the number of the order
+     * @param status the status of the order
+     * @return true if the query was a success, false otherwise
+     * @throws SQLException throws a exception if something is wrong with the sql.
+     */
     public boolean updateOrder(int orderNumber, int status) throws SQLException{
         boolean result = false;
         DatabaseConnection connection = new DatabaseConnection();

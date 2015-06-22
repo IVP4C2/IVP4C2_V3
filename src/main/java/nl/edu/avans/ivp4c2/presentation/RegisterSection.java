@@ -22,6 +22,11 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+/**
+ * Handles all operations regarding Registering customers
+ * @author IVP4C2
+ */
+
 public class RegisterSection extends JPanel {
 
 	// Attributes

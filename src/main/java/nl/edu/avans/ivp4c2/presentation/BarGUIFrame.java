@@ -5,6 +5,12 @@ import javax.swing.JPanel;
 
 import nl.edu.avans.ivp4c2.manager.BarManager;
 
+/**
+ * Holds the BarGUI JPanel. This JFrame is used to set the behaviour of the application window.
+ * It also creates a new BarGUI panel
+ * This class is created by the main class
+ */
+
 public class BarGUIFrame extends JFrame {
 	BarManager barmanager;
 	public BarGUIFrame(BarManager barmanager) {

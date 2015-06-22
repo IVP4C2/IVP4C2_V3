@@ -11,7 +11,7 @@ import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 /**
- *
+ * Database Access Object used for registering new Customers in the Database
  * @author IVP4C2
  */
 public class RegisterDAO {
@@ -19,7 +19,13 @@ public class RegisterDAO {
         // Nothing to be initialized. This is a stateless class. Constructor
         // has been added to explicitely make this clear.
     }
-    
+
+    /**
+     * @param emailaddress the emailaddress of the customer
+     * @return a customer object if the emailaddress has already
+     * been registred in the database, null otherwise
+     * @throws NoDBConnectionException if there is no Database connection
+     */
     public Customer findCustomer(String emailaddress) throws NoDBConnectionException{
     	Customer customer = null;
 
@@ -62,36 +68,35 @@ public class RegisterDAO {
         return customer;
 
     }
-    
+
+    /**
+     * @param lastname the lastname of the customer
+     * @param nameInitials the initials of the customer
+     * @param firstname the firstname of the customer
+     * @param address the address of the customer
+     * @param residence the residence of the customer
+     * @param zipcode the zipcode of the customer
+     * @param emailaddress the emailaddress of the customer
+     * @return customer object if the insert query was a success
+     * @throws NoDBConnectionException if there is no database connection
+     */
     public Customer registerCustomer(String lastname, String nameInitials, String firstname, String address, String residence, String zipcode, String emailaddress) throws NoDBConnectionException{
-    	DatabaseConnection connection = null;
     	Customer customer = null;
-
-    	 // First open a database connnection
-        connection = new DatabaseConnection();
+        // First open a database connnection
+        DatabaseConnection connection = new DatabaseConnection();
         if (connection.openConnection()) {
-
-//        	statement = connection.createStatement();
-//        	
-        	System.out.println("connectie is open");
-        	
         	String query = ("INSERT INTO `customer` "
 					+ "(`initials`, `firstname`, `lastname`, `address`, `city`, `zipcode`, "
 					+ "`email`) "
 					+ "VALUES ('" + lastname + "', '" + nameInitials + "', '" + firstname + "', '" + address + "', '" + residence + "', "
 					+ "'" + zipcode + "', '" + emailaddress + "');");
-        	
-        	//customer = new Customer(String lastname, String nameInitials, String firstname, String address, String residence, y zipcode, emailaddress);
-         
          	connection.executeUpdateStatement(query);
         	connection.closeConnection();
-        	
         	try {
         		customer = findCustomer(emailaddress);
         	} catch (NoDBConnectionException ndbce) {
         		//Do nothing for now 
         	}
-
         } else {
         	throw new NoDBConnectionException("No Database Connection");
         }

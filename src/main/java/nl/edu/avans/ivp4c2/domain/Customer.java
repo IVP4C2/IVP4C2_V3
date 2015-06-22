@@ -3,6 +3,12 @@ package nl.edu.avans.ivp4c2.domain;
 import java.sql.Time;
 import java.time.*;
 
+/**
+ * This Customer class can create customers for insertion in the Database, the email address of a customer will be the unique key
+ * and shall be used to check if a customer is unique.
+ * @author IVP4C2
+ */
+
 public class Customer {
 	// Attributes
 	private String lastname;
@@ -26,6 +32,7 @@ public class Customer {
 		registerDate = LocalDate.now();
 	}
 
+	/*Default getters and setters for all attributes*/
 	public String getLastname() {
 		return lastname;
 	}

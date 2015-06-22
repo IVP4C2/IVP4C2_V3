@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * A Table has Orders and Orders have Products
- * 
+ * The Table Class represents a physical Table in the Restaurant
  * @author IVP4C2
  */
 

@@ -1,8 +1,5 @@
 package nl.edu.avans.ivp4c2.manager;
 
-
-import com.sun.org.apache.xpath.internal.SourceTree;
-
 import nl.edu.avans.ivp4c2.datastorage.EmployeeDAO;
 import nl.edu.avans.ivp4c2.domain.Employee;
 import nl.edu.avans.ivp4c2.domain.AlreadyLoggedInException;
@@ -11,7 +8,8 @@ import nl.edu.avans.ivp4c2.domain.WrongEmployeeNumberException;
 import java.util.*;
 
 /**
- * Created by Bram on 22-5-2015.
+ * LoginManager class will manage all logins. It contain a list of employees.
+ * @author IVP4C2
  */
 public class LoginManager {
 	private Employee employee;
@@ -19,14 +17,17 @@ public class LoginManager {
 	private boolean existence = false;
 
 	public LoginManager() {
-		/*employeeList = new HashSet<Employee>();*/
-		// paymentList = new ArrayList<Payment>();
-		// employeeList.add(new Employee(2, "Test", "Test"));
-		// System.out.println(employeeList.get(2));
-
+		//Empty constructor
 	}
 
 	//Methods
+	/**
+	 * @param employeeNumber the number of the employee
+	 * @return employee object if it has been found in the database, null otherwise
+	 * @throws AlreadyLoggedInException if user already logged in
+	 * @throws WrongEmployeeNumberException if the employee number is invalid
+	 * @throws NoDBConnectionException if there is no database connection
+	 */
 	public Employee findEmployee(int employeeNumber) throws AlreadyLoggedInException, WrongEmployeeNumberException, NoDBConnectionException {
         Employee employee = null;
         
@@ -53,16 +54,21 @@ public class LoginManager {
         return employee;
     }
 
-	// This method will give a list of employees, that will be used to create
-	// the JCombBox
+	/** This method will give a Collection of employees, that will be used to create
+	 * the JCombBox
+	 */
 	public HashSet<Employee> getEmployees() {
-
 		return employeeList;
 	}
 
 
-	//This methode will remove an employee from the employeeList
-	//Only if there is an active database connection
+	/**
+	 * removeEmployeeFromList will remove an employee from the employeeList
+	 * Only if there is an active database connection
+	 * @param e is a employee
+	 * @return true or false
+	 * @throws NoDBConnectionException if there is no Database connection
+	 */
 	public boolean removeEmployeeFromList(Employee e) throws NoDBConnectionException {
 
 		EmployeeDAO employeeDAO = new EmployeeDAO();
@@ -78,9 +84,11 @@ public class LoginManager {
         	return false;
         }
 	}
-	
-	//This methode will check if an employee already exists
-	//in the employeeList
+
+	/**
+	 * checkForExistence will check if an employee already exists in the employeeList
+	 * @param e is a employee
+	 */
 	public void checkForExistence(Employee e) {
 		if (employeeList.contains(e)) {
 			existence = true;
@@ -89,7 +97,11 @@ public class LoginManager {
 		}
 		
 	}
-	
+
+	/**
+	 * throwDBConnectionException
+	 * @throws NoDBConnectionException if there is no database connection.
+	 */
 	public void throwDBConnectionException() throws NoDBConnectionException {
 		throw new NoDBConnectionException("Hoi");
 	}

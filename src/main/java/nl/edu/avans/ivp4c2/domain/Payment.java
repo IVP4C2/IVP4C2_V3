@@ -5,9 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- *
+ * This payment class can create new payments, those payments will be used when a customer want to pay his bill.
  * @author IVP4C2
  */
+
 public class Payment {
     private final int paymentNumber;
     private final Date paymentDate;
@@ -15,6 +16,12 @@ public class Payment {
     private final double totalPriceExcl;
     private final List<Product> productList;
 
+    /**
+     * Constructor
+     * @param  paymentNumber every payment will have a unique paymentNumber
+     * @param  paymentDate this will de date of the payment
+     * @param totalPrice this will be the total price of all products
+     */
     public Payment(int paymentNumber, Date paymentDate, double totalPrice, double totalPriceExcl) {
         this.paymentNumber = paymentNumber;
         this.paymentDate = paymentDate;
@@ -26,8 +33,8 @@ public class Payment {
     /*Getters*/
 
     /**
-     * Return the Paymentumber from the Payment Object
-     * @return PaymentNumber int
+     * Return the Paymentnumber from the Payment Object
+     * @return PaymentNumber as an int
      */
     public int getPaymentNumber() {
         return paymentNumber;
@@ -46,10 +53,6 @@ public class Payment {
      * @return TotalPrice as a double including VAT
      */
     public double getTotalPrice() {
-//        double totalPriceIncl = 0;
-//        for(Product p : productList) {
-//            totalPriceIncl += ((p.getPrice()*(p.getVat()+100)/100)*p.getAmount());
-//        }
         return totalPrice;
     }
 
@@ -88,8 +91,8 @@ public class Payment {
     /**
      * Returns true if the given Object equals 'this',
      * false if they are not equal
-     * @param obj
-     * @return True is obj equals 'this'
+     * @param obj is the object to be compared
+     * @return True if obj equals 'this'
      */
     @Override
     public boolean equals(Object obj) {

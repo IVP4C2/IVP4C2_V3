@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Retrieves the payment for a given tableNumber.
- * @return Payment
+ * Database Access Object for the Payment class. Handles all operation regarding the Payment class in which a database is used
  * @author IVP4C2
  */
 public final class PaymentDAO {
@@ -67,8 +66,9 @@ public final class PaymentDAO {
     /**
      * Updates the 'ispaid' column in the 'bill' table for the given paymentNumber
      * Returns true if the record was updated successfully, false if not.
-     * @param paymentNumber
+     * @param paymentNumber number of the payment
      * @return true if updated successfully
+     * @throws SQLException if there is something wrong with the sql
      */
     public boolean completePayment(int paymentNumber) throws SQLException {
         Boolean result = false;

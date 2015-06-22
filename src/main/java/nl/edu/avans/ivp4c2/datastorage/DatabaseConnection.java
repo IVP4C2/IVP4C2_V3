@@ -49,7 +49,11 @@ public class DatabaseConnection {
 //        DB_PASS = "hhc2barudi";
 //        return openConnection();
 //    }
-    
+
+    /**
+     * Opens the connection with the database
+     * @return true if the connection is op, false otherwise
+     */
     public boolean openConnection() {
         boolean result = false;
 
@@ -71,7 +75,10 @@ public class DatabaseConnection {
         }
         return result;
     }
-    
+
+    /**
+     * @return true if the connection is open, false otherwhise
+     */
     public boolean connectionIsOpen() {
         boolean open = false;
         
@@ -88,7 +95,10 @@ public class DatabaseConnection {
         
         return open;
     }
-    
+
+    /**
+     * Closes the database connection
+     */
     public void closeConnection() {
         try {
             statement.close();
@@ -99,7 +109,11 @@ public class DatabaseConnection {
             System.out.println(e);
         }
     }
-    
+
+    /**
+     * @param query the SQL-query to be performed
+     * @return the result from the database
+     */
     public ResultSet executeSQLSelectStatement(String query) {
         ResultSet resultset = null;
         
@@ -117,7 +131,12 @@ public class DatabaseConnection {
         
         return resultset;
     }
-    
+
+
+    /**
+     * @param query the SQL-query to be performed
+     * @return true if the deletestatement was a success, false if not
+     */
     public boolean executeSQLDeleteStatement(String query) {
         boolean result = false;
         
@@ -136,7 +155,11 @@ public class DatabaseConnection {
         
         return result;
     }
-    
+
+    /**
+     * @param query the SQL-query to be performed
+     * @return the result from the database
+     */
     public boolean executeUpdateStatement(String query){
         
         boolean result = false;

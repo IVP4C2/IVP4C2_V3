@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *Retrieves products from the database using a variable query
+ * Database Access Object for the Product class. Handles all operation regarding the Product class in which a database is used
  * @author IVP4C2
  */
 public class ProductDAO {
@@ -20,10 +20,10 @@ public class ProductDAO {
 	}
 
 	/**
-	 * Retrieve products for an Order. Takes an orderNumber as parameter
-	 * Returns an ArrayList containing products
-	 * @param orderNumber
-	 * @return ArrayList<Product>
+	 * Retrieves products for an Order. Takes an orderNumber as parameter
+	 * Returns a List containing products
+	 * @param orderNumber number of the order
+	 * @return A list containing products
 	 */
 	public List<Product> getProductViaOrder(int orderNumber) {
 		String statement = "SELECT * FROM `selectitems_v` WHERE `order_id` = '"+orderNumber+"';";
@@ -31,10 +31,10 @@ public class ProductDAO {
 	}
 
 	/**
-	 * Retrieve products for a Payment. Takes a PaymentNumber as parameter
-	 * Returns an ArrayList containing products
-	 * @param billId
-	 * @return ArrayList<Product>
+	 * Retrieves products for a Payment. Takes a PaymentNumber as parameter
+	 * Returns a List containing products
+	 * @param billId is the id of the bill
+	 * @return A list containing products
 	 */
 	public List<Product> getProductViaBill(int billId) {
 		String statement = "SELECT `item_id`, `name`, `price`, `t`.`percents`, COUNT(*) AS amount " +
@@ -50,9 +50,9 @@ public class ProductDAO {
 
 	/**
 	 * Retrieves products from the database using the query given as a parameter.
-	 * Return an ArrayList containing products
-	 * @param statement
-	 * @return ArrayList<Product>
+	 * Returns a List containing products
+	 * @param statement an SQL query as String.
+	 * @return A list containing products
 	 */
 	private static final List<Product> getProduct(String statement) {
 		

@@ -6,7 +6,10 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Bram on 22-5-2015.
+ * This Employee class can create new employees, those employees can handle table orders.
+ * A employee has a employeeNumber that make him/her unique.
+ * Every employee has a list with done orders, that will be saved in the database.
+ * @author IVP4C2
  */
 public class Employee {
     private int employeeNumber;
@@ -57,8 +60,9 @@ public class Employee {
     }
 
 
-
-
+    /**
+     * Override toString, equals and hashcode method so there are no double objects
+     */
     @Override
     public String toString() {
         return employeeFirstName + " " + employeeLastName;
