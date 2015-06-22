@@ -3,6 +3,7 @@ package nl.edu.avans.ivp4c2.presentation;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.List;
@@ -187,11 +188,13 @@ public class BarGUI extends JPanel {
 
 		// Set tableButtons for tables with status 'Bezet'
 		for (Table to : tableStatusOrder) {
+			boolean hasOpenOrder = false;
 			int tb = to.getTableNumber();
 			boolean hasKitchenOrder = false;
 			tableButton[tb].setEnabled(true); //Table is occupied. Therefore, the button is enabled
 			for(Order o : to.getOrders()) {
 				if(o.getDestination() == 1) {
+					hasOpenOrder = true;
 					kitchenOrderTables.add(tb);
 					hasKitchenOrder = true;
 					if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
@@ -200,15 +203,15 @@ public class BarGUI extends JPanel {
 					}
 				}
 				if(o.getDestination() == 2 && !hasKitchenOrder) {
+					hasOpenOrder = true;
 					barOrderTables.add(tb);
 					if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
 						longestBarTable = tb;
 						longestBarOrder = o.getOrderTime();
-
 					}
 				}
 			}
-            if(tableStatusOrder.size() <= 0) {
+            if(!hasOpenOrder) {
                 tableButton[tb].setBackground(Color.decode("#DFDFDF"));
             }
 		}
@@ -244,8 +247,7 @@ public class BarGUI extends JPanel {
 	 */
 	class TableButtonHandler implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-            panelCenter.removeAll();
-            revalidate();
+			orderSection.clearSelectedOrder();
 			for (int tb = 1; tb <= 10; tb++) {
 				if (e.getSource() == tableButton[tb]) {
 
@@ -262,14 +264,14 @@ public class BarGUI extends JPanel {
                         /**/
 						if ("Bezet".equals(table.getTableStatus()) || "Hulp".equals(table.getTableStatus())) {
 							completeOrderButton.setText("Status Aanpassen");
-							panelWest.revalidate();
+							orderSection.clearTables();
 							panelCenter.removeAll();
 							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
 							activeTable = tb;
 							panelCenter.revalidate();
 						} else if ("Afrekenen".equals(table.getTableStatus())) {
 							completeOrderButton.setText("Afronden");
-							panelWest.revalidate();
+							orderSection.clearTables();
 							panelCenter.removeAll();
 							Payment p = paymentManager.getActivePayment(tb);
 							activeTable = tb;
@@ -277,7 +279,9 @@ public class BarGUI extends JPanel {
 							revalidate();
 						}
 						else {
+							orderSection.clearTables();
 							panelCenter.removeAll();
+							panelCenter.revalidate();
 						}
 					}
 				} else {
@@ -286,10 +290,9 @@ public class BarGUI extends JPanel {
 					topBorderInactive.setTitlePosition(TitledBorder.TOP);
 					tableButton[tb].setBorder(topBorderInactive);
 					tableButton[tb].setBorder(BorderFactory.createEtchedBorder());
-					revalidate();
+					panelCenter.revalidate();
 				}
 			}
-			revalidate();
 		}
 	}
 
@@ -301,64 +304,74 @@ public class BarGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 
 			if (employeeBox.getItemCount() > 0) {
-				if("Afrekenen".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
-					try {
-						paymentManager.completePayment(activeTable);
-						barmanager.removeTable(activeTable);
-						tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
-						revalidate();
-						panelCenter.removeAll();
-						JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
-					} catch (Exception f) {
-						JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
-						Logger logger = Logger.getAnonymousLogger();
-						logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandeler", f);
-					}
-				} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
-					if(orderSection.getSelectedOrder() != null) {
-						String[] buttons = {"In Behandeling", "Gereed", "Geserveerd"};
-						int optionPane = JOptionPane.showOptionDialog(BarGUI.this, "Status Aanpassen", "Status",
-								JOptionPane.DEFAULT_OPTION, 0, null, buttons, buttons[2]);
+				try {
+					if ("Afrekenen".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
 						try {
-							OrderDAO orderDAO = new OrderDAO();
-							int status = 0;
-							String orderStatus = null;
-							switch (optionPane) {
-								case 0:
-									System.out.println("In behandeling");
-									status = 2;
-									orderStatus = "In behandelng";
-									break;
-								case 1:
-									System.out.println("Gereed");
-									status = 3;
-									orderStatus = "Gereed";
-									break;
-								case 2:
-									System.out.println("Geserveerd");
-									status = 4;
-									orderStatus = "Geserveerd";
-									break;
-								default:
-									break;
-							}
-                            orderSection.getSelectedOrder().setOrderStatus(orderStatus);
-                            orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
-                            barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus(orderStatus);
-							orderSection.clearSelectedOrder();
-                            panelCenter.removeAll();
-                            orderSection.revalidateTable(panelCenter);
-                            revalidate();
+							paymentManager.completePayment(activeTable);
+							barmanager.removeTable(activeTable);
+							tableButton[activeTable].setBackground(Color.decode("#DFDFDF"));
+							revalidate();
+							panelCenter.removeAll();
+							JOptionPane.showMessageDialog(BarGUI.this, "Rekening Succesvol afgerond", "Rekening Afgerond", JOptionPane.INFORMATION_MESSAGE);
 						} catch (Exception f) {
 							JOptionPane.showMessageDialog(BarGUI.this, f.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
 							Logger logger = Logger.getAnonymousLogger();
-							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", f);
+							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandeler", f);
 						}
-					} else {
-						JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een bestelling", "Fout", JOptionPane.ERROR_MESSAGE);
+					} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
+						try {
+							if (!orderSection.getSelectedOrder().equals(null)) {
+								String[] buttons = {"In Behandeling", "Gereed", "Geserveerd"};
+								int optionPane = JOptionPane.showOptionDialog(BarGUI.this, "Status Aanpassen", "Status",
+										JOptionPane.DEFAULT_OPTION, 3, null, buttons, buttons[2]);
+								OrderDAO orderDAO = new OrderDAO();
+								int status = 0;
+								boolean changedStatus = false;
+								String orderStatus = null;
+								switch (optionPane) {
+									case 0:
+										System.out.println("In behandeling");
+										status = 2;
+										orderStatus = "In behandelng";
+										changedStatus = true;
+										break;
+									case 1:
+										System.out.println("Gereed");
+										status = 3;
+										orderStatus = "Gereed";
+										changedStatus = true;
+										break;
+									case 2:
+										System.out.println("Geserveerd");
+										status = 4;
+										orderStatus = "Geserveerd";
+										changedStatus = true;
+										break;
+									default:
+										changedStatus = false;
+										break;
+								}
+								if(changedStatus) {
+									orderSection.getSelectedOrder().setOrderStatus(orderStatus);
+									orderDAO.updateOrder(orderSection.getSelectedOrder().getOrderNumber(), status);
+									barmanager.getHashTable(activeTable).getSpecificOrder(orderSection.getSelectedOrder().getOrderNumber()).setOrderStatus(orderStatus);
+									orderSection.clearSelectedOrder();
+									panelCenter.removeAll();
+									orderSection.revalidateTable(panelCenter);
+								}
+							}
+						} catch (SQLException sqle) {
+							JOptionPane.showMessageDialog(BarGUI.this, sqle.getMessage(), "Fout", JOptionPane.ERROR_MESSAGE);
+							Logger logger = Logger.getAnonymousLogger();
+							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", sqle);
+						} catch (NullPointerException nul) {
+							JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een bestelling", "Fout", JOptionPane.ERROR_MESSAGE);
+						}
 					}
+				} catch (NullPointerException ne) {
+					JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een tafel", "Fout", JOptionPane.ERROR_MESSAGE);
 				}
-			} else {
+			} else{
 				JOptionPane.showMessageDialog(BarGUI.this, "Log eerst in.", "Fout", JOptionPane.ERROR_MESSAGE);
 			}
 		}

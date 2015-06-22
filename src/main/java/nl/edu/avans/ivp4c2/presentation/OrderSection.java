@@ -19,11 +19,11 @@ import java.util.logging.Logger;
  * @author IVP4C2
  */
 public class OrderSection {
-    private JTable tableLeft = new JTable();
-    private JTable tableRight = new JTable();
-    final JPanel rightPanel = new JPanel(new GridLayout(1, 1));
+    private JPanel rightPanel = new JPanel(new GridLayout(1, 1));
+    private JPanel leftPanel = new JPanel(new GridLayout(1, 1));
     private Table table;
     private Order tempOrder;
+    private JPanel barPanel;
     public OrderSection() {
 
     }
@@ -34,7 +34,9 @@ public class OrderSection {
      * @return JPanel with order details
      */
     public JTable getTableRight(Order o) {
-        this.tableRight = new JTable(buildTableModelRight(o));
+        rightPanel.removeAll();
+        rightPanel.revalidate();
+        JTable tableRight = new JTable(buildTableModelRight(o));
         tableRight.setBorder(BorderFactory
                 .createEtchedBorder());
         tableRight.setEnabled(false); // Disable user input
@@ -48,15 +50,16 @@ public class OrderSection {
      * @return JTable with table orders
      */
     public JPanel getTableLeft(Table table, JPanel panelCenter) {
+        leftPanel.removeAll();
+        leftPanel.revalidate();
         this.table = table;
-        JPanel barPanel = new JPanel(new GridLayout(1, 2));
-        JPanel leftPanel = new JPanel(new GridLayout(1, 1));
+        barPanel = new JPanel(new GridLayout(1, 2));
         leftPanel.setBackground(Color.WHITE);
         rightPanel.setBackground(Color.WHITE);
         barPanel.add(leftPanel);
         barPanel.add(rightPanel);
         panelCenter.add(barPanel);
-        tableLeft = new JTable(buildTableModel(table));
+        JTable tableLeft = new JTable(buildTableModel(table));
 
         // Add mouse listener
         final Table finalTable = table;
@@ -112,6 +115,12 @@ public class OrderSection {
         getTableLeft(table, panelCenter);
     }
 
+    public void clearTables() {
+        rightPanel.removeAll();
+        rightPanel.revalidate();
+        leftPanel.removeAll();
+        leftPanel.revalidate();
+    }
     /**
      * Creates the DefaultTableModel for the Table object to fill the left JTable
      * @param t The Table object from which to create a JTable
