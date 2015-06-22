@@ -13,9 +13,9 @@ import java.sql.*;
 public class DatabaseConnection {
     
     private Connection connection;
-    private static final String DB_NAME = "jdbc:mysql://127.0.0.1/hhc";
-    private static String DB_USER = "root";
-    private static String DB_PASS = "";
+    private static final String DB_NAME = "jdbc:mysql://mysql.famcoolen.nl/avans_hartigehap_all";
+    private static String DB_USER = "ivp4_admin";
+    private static String DB_PASS = "hHzCPejUBA";
     
     // The Statement object has been defined as a field because some methods
     // may return a ResultSet object. If so, the statement object may not
@@ -28,27 +28,27 @@ public class DatabaseConnection {
         statement = null;
     }
 
-    /**
-     * This user is allowed to execute SELECT queries.
-     * Should be used when only SELECTing data from the database. Should be used together with views
-     * @return
-     */
-    public boolean connectAsSelect() {
-        DB_USER = "Barselect";
-        DB_PASS = "hhc2barselect";
-        return openConnection();
-    }
-
-    /**
-     * This user is allowed to execute INSERT, UPDATE and SELECT statements
-     * Should be used when INSERTing or UPDATEing a row. It has the SELECT privilege so it can return results when needed
-     * @return
-     */
-    public boolean connectAsUDI() {
-        DB_USER = "Barudi";
-        DB_PASS = "hhc2barudi";
-        return openConnection();
-    }
+//    /**
+//     * This user is allowed to execute SELECT queries.
+//     * Should be used when only SELECTing data from the database. Should be used together with views
+//     * @return
+//     */
+//    public boolean connectAsSelect() {
+//        DB_USER = "Barselect";
+//        DB_PASS = "hhc2barselect";
+//        return openConnection();
+//    }
+//
+//    /**
+//     * This user is allowed to execute INSERT, UPDATE and SELECT statements
+//     * Should be used when INSERTing or UPDATEing a row. It has the SELECT privilege so it can return results when needed
+//     * @return
+//     */
+//    public boolean connectAsUDI() {
+//        DB_USER = "Barudi";
+//        DB_PASS = "hhc2barudi";
+//        return openConnection();
+//    }
     
     public boolean openConnection() {
         boolean result = false;
@@ -69,8 +69,6 @@ public class DatabaseConnection {
             // A connection was already initalized.
             result = true;
         }
-        DB_USER = "root";
-        DB_PASS = "";
         return result;
     }
     
@@ -145,8 +143,6 @@ public class DatabaseConnection {
         
         if(query != null && connectionIsOpen()) {
             try {
-                DB_USER = "Barudi";
-                DB_PASS = "hhc2barudi";
                 statement.executeUpdate(query);
                 result = true;
             } catch(SQLException e) {

@@ -201,7 +201,7 @@ public class BarGUI extends JPanel {
 			boolean hasKitchenOrder = false;
 			tableButton[tb].setEnabled(true); //Table is occupied. Therefore, the button is enabled
 			for(Order o : to.getOrders()) {
-				if(o.getDestination() == 2) {
+				if(o.getDestination() == 1) {
 					kitchenOrderTables.add(tb);
 					hasKitchenOrder = true;
 					if(longestKitchenOrder == null || o.getOrderTime().before(longestKitchenOrder)) {
@@ -209,7 +209,7 @@ public class BarGUI extends JPanel {
 						longestKitchenOrder = o.getOrderTime();
 					}
 				}
-				if(o.getDestination() == 1 && !hasKitchenOrder) {
+				if(o.getDestination() == 2 && !hasKitchenOrder) {
 					barOrderTables.add(tb);
 					if(longestBarOrder == null || o.getOrderTime().before(longestBarOrder)) {
 						longestBarTable = tb;

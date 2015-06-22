@@ -35,12 +35,12 @@ public final class OrderDAO {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			//Select all orders for a given tableNumber
-			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM selectorders_V " +
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM SelectOrders_V " +
                     "WHERE `fk_table_id` = '"+tableNumber+"' " +
-                    "AND ((`destination` = '1' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
-                    "OR (`destination` = '2' AND `name` = 'Gereed')) " +
+                    "AND ((`destination` = '2' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
+                    "OR (`destination` = '1' AND `name` = 'Gereed')) " +
                     "GROUP BY `order_id` " +
-                    "ORDER BY `destination` DESC;");
+                    "ORDER BY `destination` ASC;");
             if (resultset != null) {
                 try {
                     while (resultset.next()) {
