@@ -79,7 +79,7 @@ public final class TableDAO {
 		List<Table> tables = new ArrayList<Table>();
 		//Open db connection
 		DatabaseConnection connection = new DatabaseConnection();
-		if(connection.connectAsSelect()) {
+		if(connection.openConnection()) {
 			//connection opened succesfully
 			//execute SQL statement to retrieve Tables
 			ResultSet resultset = connection.executeSQLSelectStatement(

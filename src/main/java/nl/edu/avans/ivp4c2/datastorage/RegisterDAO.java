@@ -69,7 +69,7 @@ public class RegisterDAO {
 
     	 // First open a database connnection
         connection = new DatabaseConnection();
-        if (connection.connectAsUDI()) {
+        if (connection.openConnection()) {
 
 //        	statement = connection.createStatement();
 //        	

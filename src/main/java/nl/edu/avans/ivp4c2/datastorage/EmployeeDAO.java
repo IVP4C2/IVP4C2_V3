@@ -30,13 +30,13 @@ public class EmployeeDAO {
 
 		// First open a database connnection
 		DatabaseConnection connection = new DatabaseConnection();
-		if (connection.connectAsUDI()) {
+		if (connection.openConnection()) {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			ResultSet resultset = connection
-					.executeSQLSelectStatement("SELECT employee_id, firstname, lastname FROM selectemployee_v WHERE employee_id = "
+					.executeSQLSelectStatement("SELECT employee_id, firstname, lastname FROM employee WHERE employee_id = "
 							+ employeeNumber + ";");
-	
+
 			if (resultset != null) {
 				try {
 					// The employeeNumber is unique for a employee, so in case

@@ -73,7 +73,7 @@ public final class PaymentDAO {
         Boolean result = false;
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();
-        if (connection.connectAsUDI()) {
+        if (connection.openConnection()) {
             // If a connection was successfully setup, execute the UPDATE statement.
             //executeUpdateStatement returns a boolean which is stored in result
             result = connection.executeUpdateStatement("UPDATE `bill` SET `ispaid` = '1' WHERE `bill_id` = "+paymentNumber+";");

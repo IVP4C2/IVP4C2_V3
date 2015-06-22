@@ -26,7 +26,7 @@ public class CustomerDAO {
 
         // First open a database connnection
         DatabaseConnection connection = new DatabaseConnection();
-        if (connection.connectAsUDI()) {
+        if (connection.openConnection()) {
             // If a connection was successfully setup, execute the SELECT statement.
             ResultSet resultset = connection.executeSQLSelectStatement(
                     "SELECT * FROM customer WHERE email = '" + emailaddress + "';");
@@ -69,7 +69,7 @@ public class CustomerDAO {
 
         // First open a database connnection
         connection = new DatabaseConnection();
-        if (connection.connectAsUDI()) {
+        if (connection.openConnection()) {
             System.out.println("connectie is open");
 
             String query = ("INSERT INTO `avans_hartigehap_c2`.`customer` "

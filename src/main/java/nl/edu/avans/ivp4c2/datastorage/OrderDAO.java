@@ -31,11 +31,11 @@ public final class OrderDAO {
 
 		// First open a database connnection
 		DatabaseConnection connection = new DatabaseConnection();
-		if (connection.connectAsSelect()) {
+		if (connection.openConnection()) {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			//Select all orders for a given tableNumber
-			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM SelectOrders_V " +
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM selectorders_V " +
                     "WHERE `fk_table_id` = '"+tableNumber+"' " +
                     "AND ((`destination` = '1' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
                     "OR (`destination` = '2' AND `name` = 'Gereed')) " +
@@ -75,7 +75,7 @@ public final class OrderDAO {
     public boolean updateOrder(int orderNumber, int status) throws SQLException{
         boolean result = false;
         DatabaseConnection connection = new DatabaseConnection();
-        if(connection.connectAsUDI()) {
+        if(connection.openConnection()) {
             String updateStatement = "UPDATE `order` SET `fk_status_id` = '"+status+"' WHERE `order_id` = "+orderNumber+";";
             result = connection.executeUpdateStatement(updateStatement);
         }
