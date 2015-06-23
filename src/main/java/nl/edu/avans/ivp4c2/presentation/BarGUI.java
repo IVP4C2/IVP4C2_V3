@@ -468,9 +468,7 @@ public class BarGUI extends JPanel {
 			}
 			System.out.println(activeTable);
 			try {
-				System.out.println("hallooo");
 				if ("Bezet".equals(tempTable.getTableStatus())) {
-					System.out.println("hallooo2");
 					orderSection.clearTables();
 					panelCenter.removeAll();
 					panelCenter.add(orderHistorySection.getTableHistory(barmanager.getOrderHitory(tempTable), tempTable, panelCenter));
