@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="bd77aae5-c321-4cbb-b22e-35cb1c83a706" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderSection.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderSection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java" />
     </list>
     <ignored path="avans.ivp4c2.proftaak.iteratie1.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -70,23 +69,49 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BarGUI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BarGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.49520767">
-              <caret line="348" column="46" selection-start-line="348" selection-start-column="46" selection-end-line="348" selection-end-column="46" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="415" column="70" selection-start-line="415" selection-start-column="70" selection-end-line="415" selection-end-column="70" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CustomerManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/manager/CustomerManager.java">
+      <file leaf-file-name="EmployeeDAO.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.83627605">
+              <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Order.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Order.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="35" column="47" selection-start-line="35" selection-start-column="47" selection-end-line="35" selection-end-column="47" />
+              <caret line="97" column="43" selection-start-line="97" selection-start-column="43" selection-end-line="97" selection-end-column="43" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Employee.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="70" column="38" selection-start-line="70" selection-start-column="38" selection-end-line="70" selection-end-column="38" />
               <folding>
-                <element signature="imports" expanded="false" />
+                <element signature="imports" expanded="true" />
+                <element signature="e#1882#1883#0" expanded="true" />
+                <element signature="e#1915#1916#0" expanded="true" />
+                <element signature="e#1954#1955#0" expanded="true" />
+                <element signature="e#1986#1987#0" expanded="true" />
+                <element signature="e#2039#2040#0" expanded="true" />
+                <element signature="e#2081#2082#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -139,7 +164,6 @@
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/AccessConfig.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/DatabaseConnection.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/CustomerDAO.java" />
-        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/OrderDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/ProductDAO.java" />
@@ -149,7 +173,6 @@
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/CompleteHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Customer.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/CustomerExistsException.java" />
-        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/EmptyFieldsException.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/LoginException.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/NoDBConnectionException.java" />
@@ -170,6 +193,8 @@
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/RegisterSection.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderSection.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java" />
       </list>
     </option>
   </component>
@@ -761,12 +786,12 @@
       <workItem from="1434650073880" duration="5629000" />
       <workItem from="1434707915146" duration="3599000" />
       <workItem from="1434967732450" duration="19643000" />
-      <workItem from="1435013026907" duration="3788000" />
+      <workItem from="1435013026907" duration="5830000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="181513000" />
+    <option name="totallyTimeSpent" value="183555000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1296" height="1000" extended-state="6" />
@@ -780,7 +805,7 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21271676" sideWeight="0.63854164" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21618497" sideWeight="0.63854164" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Sequence" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -948,14 +973,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="82" column="7" selection-start-line="82" selection-start-column="7" selection-end-line="82" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.7182236">
@@ -968,14 +985,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.15620214">
           <caret line="27" column="27" selection-start-line="27" selection-start-column="27" selection-end-line="27" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/OrderDAO.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.15620214">
-          <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="14" selection-end-column="3" />
           <folding />
         </state>
       </provider>
@@ -1003,17 +1012,6 @@
           <folding>
             <element signature="e#444#445#0" expanded="false" />
             <element signature="e#471#472#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.72894335">
-          <caret line="64" column="7" selection-start-line="64" selection-start-column="7" selection-end-line="64" selection-end-column="7" />
-          <folding>
-            <element signature="e#1231#1232#0" expanded="false" />
-            <element signature="e#1271#1272#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -1051,14 +1049,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15620214">
           <caret line="6" column="46" selection-start-line="6" selection-start-column="46" selection-end-line="6" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Order.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7136294">
-          <caret line="97" column="43" selection-start-line="97" selection-start-column="43" selection-end-line="97" selection-end-column="43" />
           <folding />
         </state>
       </provider>
@@ -1235,8 +1225,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49520767">
-          <caret line="348" column="46" selection-start-line="348" selection-start-column="46" selection-end-line="348" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="415" column="70" selection-start-line="415" selection-start-column="70" selection-end-line="415" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Order.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="97" column="43" selection-start-line="97" selection-start-column="43" selection-end-line="97" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/OrderDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="83" column="65" selection-start-line="83" selection-start-column="65" selection-end-line="83" selection-end-column="65" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/domain/Employee.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="70" column="38" selection-start-line="70" selection-start-column="38" selection-end-line="70" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1882#1883#0" expanded="true" />
+            <element signature="e#1915#1916#0" expanded="true" />
+            <element signature="e#1954#1955#0" expanded="true" />
+            <element signature="e#1986#1987#0" expanded="true" />
+            <element signature="e#2039#2040#0" expanded="true" />
+            <element signature="e#2081#2082#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/EmployeeDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.83627605">
+          <caret line="105" column="0" selection-start-line="105" selection-start-column="0" selection-end-line="105" selection-end-column="0" />
           <folding />
         </state>
       </provider>

@@ -1,8 +1,9 @@
 package nl.edu.avans.ivp4c2.domain;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -16,16 +17,16 @@ public class Employee {
     private String employeeFirstName;
     private String employeeLastName;
     private String employeeInitials;
-    private Calendar beginShift;
-    private Calendar endSShift;
+    private Timestamp beginShift;
+    private Timestamp endSShift;
 
     private final List<Order> listDoneOrders;
 
-    public Employee(int employeeNumber, String employeeFirstName, String employeeLastName) {
+    public Employee(int employeeNumber, String employeeFirstName, String employeeLastName, Timestamp beginShift) {
         this.employeeNumber = employeeNumber;
         this.employeeFirstName = employeeFirstName;
         this.employeeLastName = employeeLastName;
-        beginShift = Calendar.getInstance();
+        this.beginShift = beginShift;
 
         // Here will be initialized the list of Orders that have been done by the Employee.
         listDoneOrders = new ArrayList<Order>();
@@ -59,6 +60,17 @@ public class Employee {
         this.employeeLastName = employeeLastName;
     }
 
+    public Timestamp getBeginShift() {
+        return beginShift;
+    }
+
+    public Timestamp getEndSShift() {
+        return endSShift;
+    }
+
+    public void setEndSShift(Timestamp endSShift) {
+        this.endSShift = endSShift;
+    }
 
     /**
      * Override toString, equals and hashcode method so there are no double objects

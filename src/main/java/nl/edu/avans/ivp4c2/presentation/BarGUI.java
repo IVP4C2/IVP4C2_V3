@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -14,6 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+
+import nl.edu.avans.ivp4c2.datastorage.EmployeeDAO;
 import nl.edu.avans.ivp4c2.datastorage.OrderDAO;
 import nl.edu.avans.ivp4c2.domain.*;
 import nl.edu.avans.ivp4c2.manager.BarManager;
@@ -410,7 +413,8 @@ public class BarGUI extends JPanel {
 				if (e.getSource() == logoutButton) {
 					if (employeeBox.getItemCount() != 0 && logInOutField.getText().equals("")) {
 						Employee employee = (Employee) employeeBox.getSelectedItem();
-						boolean removeSuccess = loginmanager.removeEmployeeFromList(employee);
+						loginmanager.removeEmployeeFromList(employee);;
+						new EmployeeDAO().setEmployeeEnd(employee);
 						// Remove all items from the JComboBox
 						employeeBox.removeAllItems();
 						for (Employee ef : employeeList) {
@@ -436,6 +440,9 @@ public class BarGUI extends JPanel {
 				logInOutField.setText("");
 			} catch (WrongEmployeeNumberException wene) {
 				JOptionPane.showMessageDialog(panelCenter, "Het ingevoerde medewerkersnummer bestaat niet", "Foutmelding: Aanmelden", JOptionPane.ERROR_MESSAGE);
+				logInOutField.setText("");
+			} catch (SQLException sqle) {
+				JOptionPane.showMessageDialog(panelCenter, "Het afmelden is mislukt", "Foutmelding: Afmelden", JOptionPane.ERROR_MESSAGE);
 				logInOutField.setText("");
 			}
 		}

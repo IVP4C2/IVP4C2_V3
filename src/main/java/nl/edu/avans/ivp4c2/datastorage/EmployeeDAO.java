@@ -5,6 +5,9 @@ import nl.edu.avans.ivp4c2.domain.NoDBConnectionException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  *Database Access Object for the Employee class. Handles all operation regarding the Employee class in which a database is used
@@ -37,7 +40,7 @@ public class EmployeeDAO {
 			ResultSet resultset = connection
 					.executeSQLSelectStatement("SELECT employee_id, firstname, lastname FROM employee WHERE employee_id = "
 							+ employeeNumber + ";");
-
+			Timestamp beginShift = new Timestamp(new Date().getTime());
 			if (resultset != null) {
 				try {
 					// The employeeNumber is unique for a employee, so in case
@@ -54,7 +57,7 @@ public class EmployeeDAO {
 						String lastNameFromDb = resultset.getString("lastname");
 
 						employee = new Employee(employeeNumberFromDb,
-								firstNameFromDb, lastNameFromDb);
+								firstNameFromDb, lastNameFromDb, beginShift);
 
 					}
 				} catch (SQLException e) {
@@ -63,7 +66,8 @@ public class EmployeeDAO {
 				} 
 			}
 			String query = ("INSERT INTO `active_employee` "
-					+ "(`fk_employee_id`, `starttime`, `endtime`)" + "VALUES ('" + employeeNumber + "', NOW(), NOW());");
+					+ "(`fk_employee_id`, `starttime`, `endtime`)" + "VALUES ('" + employeeNumber + "', '"+beginShift+"', " +
+					"'"+beginShift+"');");
 	
 
 			connection.executeUpdateStatement(query);
@@ -78,6 +82,17 @@ public class EmployeeDAO {
 
 		return employee;
 
+	}
+
+	public boolean setEmployeeEnd(Employee employee) throws SQLException{
+		boolean result = false;
+		DatabaseConnection connection = new DatabaseConnection();
+		if(connection.openConnection()) {
+			String updateStatement = "UPDATE `active_employee` SET `endtime` = '"+new Timestamp(new Date().getTime())+"' " +
+					"WHERE `starttime` = "+employee.getBeginShift()+";";
+			result = connection.executeUpdateStatement(updateStatement);
+		}
+		return result;
 	}
 
 	/**
