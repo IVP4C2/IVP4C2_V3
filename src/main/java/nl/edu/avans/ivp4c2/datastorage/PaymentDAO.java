@@ -33,7 +33,7 @@ public final class PaymentDAO {
             // statement.
             //Retrieve the Payment from the database
 
-            ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM SelectPayment_V WHERE `fk_table_id` = '"+tableNumber+"';");
+            ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM selectpayment_v WHERE `fk_table_id` = '"+tableNumber+"';");
 
             if (resultset != null) {
                 try {

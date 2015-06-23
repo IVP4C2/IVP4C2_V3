@@ -111,6 +111,7 @@ public class BarGUI extends JPanel {
 		completeOrderButton.setFont(font);
 		completeOrderButton.setBorder(BorderFactory.createEtchedBorder());
 		tableHistoryButton = new JButton("Geschiedenis");
+		tableHistoryButton.addActionListener(new OrderHistoryHandler());
 		tableHistoryButton.setBackground(Color.decode("#DFDFDF"));
 		tableHistoryButton.setFont(font);
 		tableHistoryButton.setBorder(BorderFactory.createEtchedBorder());
@@ -274,7 +275,7 @@ public class BarGUI extends JPanel {
 							panelCenter.revalidate();
 						} else if ("Afrekenen".equals(table.getTableStatus())) {
 							completeOrderButton.setText("Afronden");
-							orderSection.clearTables();
+
 							panelCenter.removeAll();
 							Payment p = paymentManager.getActivePayment(tb);
 							activeTable = tb;
@@ -448,6 +449,61 @@ public class BarGUI extends JPanel {
 		}
 	}
 
+	/**
+	 * Handles the 'Geschiedenis' buttton.
+	 * The Order history uses the Orderection to populate the screen and uses Orders stored in the system momory
+	 */
+	class OrderHistoryHandler implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			orderSection.clearSelectedOrder();
+			for (int tb = 1; tb <= 10; tb++) {
+				if (e.getSource() == tableButton[tb]) {
+
+					/*Set border on clicked table button*/
+					TitledBorder topBorder = BorderFactory.createTitledBorder("Actief");
+					topBorder.setBorder(BorderFactory.createLineBorder(Color.black));
+					topBorder.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorder);
+
+                    /*retrieve the matching table from the barmanager for a given tableNumber*/
+					Table table = barmanager.getHashTable(tb);
+                    /*Check if a table object is present*/
+					if (table != null) {
+                        /**/
+						if ("Bezet".equals(table.getTableStatus()) || "Hulp".equals(table.getTableStatus())) {
+							completeOrderButton.setText("Status Aanpassen");
+							orderSection.clearTables();
+							panelCenter.removeAll();
+							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
+							activeTable = tb;
+							panelCenter.revalidate();
+						} else if ("Afrekenen".equals(table.getTableStatus())) {
+							completeOrderButton.setText("Afronden");
+
+							panelCenter.removeAll();
+							Payment p = paymentManager.getActivePayment(tb);
+							activeTable = tb;
+							panelCenter.add(paymentSection.getPaymentPanel(p));
+							revalidate();
+						}
+						else {
+							orderSection.clearTables();
+							panelCenter.removeAll();
+							panelCenter.revalidate();
+						}
+					}
+				} else {
+					TitledBorder topBorderInactive = BorderFactory.createTitledBorder("");
+					topBorderInactive.setBorder(BorderFactory.createLineBorder(Color.decode("#DFDFDF")));
+					topBorderInactive.setTitlePosition(TitledBorder.TOP);
+					tableButton[tb].setBorder(topBorderInactive);
+					tableButton[tb].setBorder(BorderFactory.createEtchedBorder());
+					panelCenter.revalidate();
+				}
+			}
+		}
+	}
 
     /**
      * Actionhandler for the 'Inschrijven' button

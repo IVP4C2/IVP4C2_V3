@@ -36,7 +36,7 @@ public final class OrderDAO {
 			// If a connection was successfully setup, execute the SELECT
 			// statement.
 			//Select all orders for a given tableNumber
-			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM SelectOrders_V " +
+			ResultSet resultset = connection.executeSQLSelectStatement("SELECT * FROM selectorders_v " +
                     "WHERE `fk_table_id` = '"+tableNumber+"' " +
                     "AND ((`destination` = '2' AND `name` IN ('In behandeling', 'Bestelling is geplaatst', 'Gereed')) " +
                     "OR (`destination` = '1' AND `name` = 'Gereed')) " +
