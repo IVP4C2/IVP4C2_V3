@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HartigeHapBedienen:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/HartigeHapBedienen_jar</output-path>
+    <root id="archive" name="HartigeHapBedienen.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/main/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="HartigeHapBedienen" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mysql-connector-java-5.1.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/pdfbox/pdfbox/1.8.9/pdfbox-1.8.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/pdfbox/fontbox/1.8.9/fontbox-1.8.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/pdfbox/jempbox/1.8.9/jempbox-1.8.9.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

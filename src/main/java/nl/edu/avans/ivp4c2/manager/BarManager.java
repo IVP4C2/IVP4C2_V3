@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import nl.edu.avans.ivp4c2.datastorage.*;
+import nl.edu.avans.ivp4c2.domain.Order;
 import nl.edu.avans.ivp4c2.domain.Table;
 import nl.edu.avans.ivp4c2.presentation.BarGUI;
 
@@ -25,12 +26,13 @@ import static javax.swing.JOptionPane.*;
  */
 public class BarManager {
 	private HashMap<Integer, Table> tableHashmap; //Used to store all tables
+	private HashMap<Integer, ArrayList<Order>> tableHistoryHashMap; //Holds the order history
 	TableDAO tableDAO;
 
 	public BarManager() {
 		tableHashmap = new HashMap<Integer, Table>();
 		tableDAO = new TableDAO();
-
+		tableHistoryHashMap  = new HashMap<>();
 		getOccupiedTablesDAO();
 		getPaymentTablesDAO();
 		getEmptyTablesDAO();
@@ -65,6 +67,34 @@ public class BarManager {
 				tempTable = tableHashmap.get(tableNumber);
 			}
 		return tempTable;
+	}
+
+	public void addOrderToHistory(int tableNumber, Order order) {
+		System.out.println(tableNumber);
+		System.out.println(order.getOrderNumber());
+		ArrayList<Order> tempList = new ArrayList<Order>();
+		tempList.add(order);
+		if (tableHistoryHashMap.containsKey(tableNumber)) {
+			for(Order o : tableHistoryHashMap.get(tableNumber)) {
+				tempList.add(o);
+			}
+			tableHistoryHashMap.replace(tableNumber, tempList);
+		} else {
+			tableHistoryHashMap.put(tableNumber, tempList);
+		}
+		System.out.println(2);
+	}
+
+	public ArrayList<Order> getOrderHitory(Table table) {
+		ArrayList<Order> orderHistory = new ArrayList<>();
+		for(Map.Entry<Integer, ArrayList<Order>> oList : tableHistoryHashMap.entrySet()) {
+			if(oList.getKey() == table.getTableNumber()) {
+				for (Order order : oList.getValue()) {
+					orderHistory.add(order);
+				}
+			}
+		}
+		return orderHistory;
 	}
 
 	public HashMap<Integer, Table> getHashMap() {

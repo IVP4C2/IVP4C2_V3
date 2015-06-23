@@ -62,7 +62,6 @@ public class BarGUI extends JPanel {
 		this.paymentManager = new PaymentManager();
 		this.orderSection = new OrderSection();
 		this.paymentSection = new PaymentSection();
-
 		setLayout(new BorderLayout());
 
 		Font font = new Font("SansSerif", Font.PLAIN, 24);
@@ -306,10 +305,10 @@ public class BarGUI extends JPanel {
 	 */
 	class CompleteOrderHandler implements  ActionListener {
 		public void actionPerformed(ActionEvent e) {
-
+			Table tempTable = barmanager.getHashTable(activeTable);
 			if (employeeBox.getItemCount() > 0) {
 				try {
-					if ("Afrekenen".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
+					if ("Afrekenen".equals(tempTable.getTableStatus())) {
 						try {
 							paymentManager.completePayment(activeTable);
 							barmanager.removeTable(activeTable);
@@ -322,7 +321,7 @@ public class BarGUI extends JPanel {
 							Logger logger = Logger.getAnonymousLogger();
 							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandeler", f);
 						}
-					} else if ("Bezet".equals(barmanager.getHashTable(activeTable).getTableStatus())) {
+					} else if ("Bezet".equals(tempTable.getTableStatus())) {
 						try {
 							if (!orderSection.getSelectedOrder().equals(null)) {
 								String[] buttons = {"In Behandeling", "Gereed", "Geserveerd"};
@@ -349,6 +348,9 @@ public class BarGUI extends JPanel {
 										System.out.println("Geserveerd");
 										status = 4;
 										orderStatus = "Geserveerd";
+										System.out.println(activeTable);
+										System.out.println(orderSection.getSelectedOrder().getOrderNumber());
+										barmanager.addOrderToHistory(activeTable, orderSection.getSelectedOrder());
 										changedStatus = true;
 										break;
 									default:
@@ -370,6 +372,8 @@ public class BarGUI extends JPanel {
 							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", sqle);
 						} catch (NullPointerException nul) {
 							JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een bestelling", "Fout", JOptionPane.ERROR_MESSAGE);
+							Logger logger = Logger.getAnonymousLogger();
+							logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", nul);
 						}
 					}
 				} catch (NullPointerException ne) {
@@ -451,56 +455,31 @@ public class BarGUI extends JPanel {
 
 	/**
 	 * Handles the 'Geschiedenis' buttton.
-	 * The Order history uses the Orderection to populate the screen and uses Orders stored in the system momory
+	 * The Order history uses the OrderHistorySection to populate the screen and uses Orders stored in the system momory
 	 */
 	class OrderHistoryHandler implements ActionListener {
-		@Override
+		Table tempTable = null;
+		OrderHistorySection orderHistorySection = new OrderHistorySection();
 		public void actionPerformed(ActionEvent e) {
-			orderSection.clearSelectedOrder();
-			for (int tb = 1; tb <= 10; tb++) {
-				if (e.getSource() == tableButton[tb]) {
-
-					/*Set border on clicked table button*/
-					TitledBorder topBorder = BorderFactory.createTitledBorder("Actief");
-					topBorder.setBorder(BorderFactory.createLineBorder(Color.black));
-					topBorder.setTitlePosition(TitledBorder.TOP);
-					tableButton[tb].setBorder(topBorder);
-
-                    /*retrieve the matching table from the barmanager for a given tableNumber*/
-					Table table = barmanager.getHashTable(tb);
-                    /*Check if a table object is present*/
-					if (table != null) {
-                        /**/
-						if ("Bezet".equals(table.getTableStatus()) || "Hulp".equals(table.getTableStatus())) {
-							completeOrderButton.setText("Status Aanpassen");
-							orderSection.clearTables();
-							panelCenter.removeAll();
-							panelCenter.add(orderSection.getTableLeft(table, panelCenter));
-							activeTable = tb;
-							panelCenter.revalidate();
-						} else if ("Afrekenen".equals(table.getTableStatus())) {
-							completeOrderButton.setText("Afronden");
-
-							panelCenter.removeAll();
-							Payment p = paymentManager.getActivePayment(tb);
-							activeTable = tb;
-							panelCenter.add(paymentSection.getPaymentPanel(p));
-							revalidate();
-						}
-						else {
-							orderSection.clearTables();
-							panelCenter.removeAll();
-							panelCenter.revalidate();
-						}
-					}
-				} else {
-					TitledBorder topBorderInactive = BorderFactory.createTitledBorder("");
-					topBorderInactive.setBorder(BorderFactory.createLineBorder(Color.decode("#DFDFDF")));
-					topBorderInactive.setTitlePosition(TitledBorder.TOP);
-					tableButton[tb].setBorder(topBorderInactive);
-					tableButton[tb].setBorder(BorderFactory.createEtchedBorder());
+			for(Table t : barmanager.getOccupiedTables()) {
+				if (t.getTableNumber() == activeTable) {
+					tempTable = t;
+				}
+			}
+			System.out.println(activeTable);
+			try {
+				System.out.println("hallooo");
+				if ("Bezet".equals(tempTable.getTableStatus())) {
+					System.out.println("hallooo2");
+					orderSection.clearTables();
+					panelCenter.removeAll();
+					panelCenter.add(orderHistorySection.getTableHistory(barmanager.getOrderHitory(tempTable), tempTable, panelCenter));
 					panelCenter.revalidate();
 				}
+			} catch (NullPointerException nulex) {
+				JOptionPane.showMessageDialog(BarGUI.this, "Selecteer een tafel met bestellingen", "Fout", JOptionPane.ERROR_MESSAGE);
+				Logger logger = Logger.getAnonymousLogger();
+				logger.log(Level.SEVERE, "An exception was thrown in BarGUI at CompleteOrderHandler", nulex);
 			}
 		}
 	}

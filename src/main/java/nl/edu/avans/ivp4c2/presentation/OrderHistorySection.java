@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * Handles all operations regarding Orders
  * @author IVP4C2
  */
-public class OrderSection {
+public class OrderHistorySection {
     private JPanel rightPanel = new JPanel(new GridLayout(1, 1));
     private JPanel leftPanel = new JPanel(new GridLayout(1, 1));
     private Table table;
@@ -27,7 +27,7 @@ public class OrderSection {
     private JPanel barPanel;
     private ArrayList<Order>  orderList;
 
-    public OrderSection() {
+    public OrderHistorySection() {
 
     }
 
@@ -72,6 +72,27 @@ public class OrderSection {
         return barPanel;
     }
 
+    public JPanel getTableHistory(ArrayList<Order> orderList, Table table, JPanel panelCenter) {
+        this.orderList = orderList;
+        leftPanel.removeAll();
+        leftPanel.revalidate();
+        this.table = table;
+        barPanel = new JPanel(new GridLayout(1, 2));
+        leftPanel.setBackground(Color.WHITE);
+        rightPanel.setBackground(Color.WHITE);
+        barPanel.add(leftPanel);
+        barPanel.add(rightPanel);
+        panelCenter.add(barPanel);
+        JTable tableLeft = new JTable(buildTableModelHistory(table));
+
+        // Add mouse listener
+        final Table finalTable = table;
+        tableLeft.addMouseListener(new OrderHandler());
+        leftPanel.add(new JScrollPane(tableLeft))
+                .setBackground(Color.WHITE);
+        leftPanel.revalidate();
+        return barPanel;
+    }
 
     /**
      * Finds the Order matching the clicked Order in the left JTable
@@ -86,7 +107,11 @@ public class OrderSection {
                         .getSource(); // Get left JTable
                 final int row = target.getSelectedRow(); //Get row selected by user
                 int value = (Integer) target.getValueAt(row, 1); // Get value from cell. 'row' is the row clicked by the user, '1' is the second column
-                tempOrder = table.getSpecificOrder(value);
+                for(Order order : orderList) {
+                    if(order.getOrderNumber() == value) {
+                        tempOrder = order;
+                    }
+                }
                 tableRight = getTableRight(tempOrder);
                 rightPanel.add(
                         new JScrollPane(tableRight))
@@ -143,7 +168,7 @@ public class OrderSection {
         Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 
 
-        for (Order o : t.getOrders()) {
+        for (Order o : orderList) {
             Vector<Object> vector = new Vector<Object>();
             vector.add(t.getTableNumber());
             vector.add(o.getOrderNumber());
@@ -153,6 +178,33 @@ public class OrderSection {
         }
         return new DefaultTableModel(data, columnNames);
     }
+
+    public DefaultTableModel buildTableModelHistory(Table t) {
+
+        // Gets column names from Table
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.add("TafelNr");
+        columnNames.add("BestelNr");
+        columnNames.add("Tijd");
+        columnNames.add("Status");
+
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+
+
+        for (Order o : orderList) {
+            if(o.getOrderStatus().equals("Geserveerd")) {
+                Vector<Object> vector = new Vector<Object>();
+                vector.add(t.getTableNumber());
+                vector.add(o.getOrderNumber());
+                vector.add(new SimpleDateFormat("HH:mm:ss").format(o.getOrderTime())); //Formats the Date to a useful string
+                vector.add(o.getOrderStatus());
+                data.add(vector);
+            }
+        }
+        return new DefaultTableModel(data, columnNames);
+    }
+
 
     /**
      * Creates the DefaultTableModel for the given Order object to fill the right JTable
