@@ -6,7 +6,10 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd77aae5-c321-4cbb-b22e-35cb1c83a706" name="Default" comment="" />
+    <list default="true" id="bd77aae5-c321-4cbb-b22e-35cb1c83a706" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/manager/BarManager.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/manager/BarManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderHistorySection.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderHistorySection.java" />
+    </list>
     <ignored path="avans.ivp4c2.proftaak.iteratie1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -37,11 +40,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="BarGUI.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="BarGUI.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6509573">
-              <caret line="478" column="60" selection-start-line="478" selection-start-column="60" selection-end-line="478" selection-end-column="60" />
+            <state vertical-scroll-proportion="-8.37037">
+              <caret line="313" column="39" selection-start-line="313" selection-start-column="39" selection-end-line="313" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -57,15 +60,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="BarManager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="BarManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/manager/BarManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-19.074074">
-              <caret line="92" column="44" selection-start-line="92" selection-start-column="44" selection-end-line="92" selection-end-column="44" />
+            <state vertical-scroll-proportion="1.3519882">
+              <caret line="108" column="22" selection-start-line="108" selection-start-column="22" selection-end-line="108" selection-end-column="22" />
               <folding>
-                <element signature="e#2265#2272#0" expanded="true" />
-                <element signature="e#2989#2990#0" expanded="true" />
-                <element signature="e#3015#3016#0" expanded="true" />
+                <element signature="e#2343#2350#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,9 +88,9 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderHistorySection.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="147" column="31" selection-start-line="147" selection-start-column="31" selection-end-line="147" selection-end-column="31" />
+              <caret line="106" column="7" selection-start-line="106" selection-start-column="7" selection-end-line="106" selection-end-column="7" />
               <folding>
-                <element signature="e#7752#7768#0" expanded="true" />
+                <element signature="e#5407#5423#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -200,9 +201,9 @@
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/datastorage/PaymentDAO.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderHistorySecetion.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderSection.java" />
+        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderHistorySection.java" />
         <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/manager/BarManager.java" />
-        <option value="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
       </list>
     </option>
   </component>
@@ -809,12 +810,12 @@
       <workItem from="1435062347065" duration="1505000" />
       <workItem from="1435065267495" duration="1889000" />
       <workItem from="1435067206860" duration="3816000" />
-      <workItem from="1435091646162" duration="7722000" />
+      <workItem from="1435091646162" duration="8212000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="204750000" />
+    <option name="totallyTimeSpent" value="205240000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -896,9 +897,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="50" column="8" selection-start-line="50" selection-start-column="8" selection-end-line="50" selection-end-column="8" />
           <folding>
-            <element signature="e#2265#2272#0" expanded="true" />
-            <element signature="e#2989#2990#0" expanded="true" />
-            <element signature="e#3015#3016#0" expanded="true" />
+            <element signature="e#2343#2350#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -937,9 +936,7 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#2265#2272#0" expanded="true" />
-            <element signature="e#2989#2990#0" expanded="true" />
-            <element signature="e#3015#3016#0" expanded="true" />
+            <element signature="e#2343#2350#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1226,6 +1223,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.37037">
+          <caret line="313" column="39" selection-start-line="313" selection-start-column="39" selection-end-line="313" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderSection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1239,30 +1244,20 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/OrderHistorySection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="147" column="31" selection-start-line="147" selection-start-column="31" selection-end-line="147" selection-end-column="31" />
+          <caret line="106" column="7" selection-start-line="106" selection-start-column="7" selection-end-line="106" selection-end-column="7" />
           <folding>
-            <element signature="e#7752#7768#0" expanded="true" />
+            <element signature="e#5407#5423#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/manager/BarManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-19.074074">
-          <caret line="92" column="44" selection-start-line="92" selection-start-column="44" selection-end-line="92" selection-end-column="44" />
+        <state vertical-scroll-proportion="1.3519882">
+          <caret line="108" column="22" selection-start-line="108" selection-start-column="22" selection-end-line="108" selection-end-column="22" />
           <folding>
-            <element signature="e#2265#2272#0" expanded="true" />
-            <element signature="e#2989#2990#0" expanded="true" />
-            <element signature="e#3015#3016#0" expanded="true" />
+            <element signature="e#2343#2350#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6509573">
-          <caret line="478" column="60" selection-start-line="478" selection-start-column="60" selection-end-line="478" selection-end-column="60" />
-          <folding />
         </state>
       </provider>
     </entry>

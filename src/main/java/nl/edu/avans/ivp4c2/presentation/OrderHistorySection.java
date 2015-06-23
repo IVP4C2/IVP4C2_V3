@@ -51,27 +51,6 @@ public class OrderHistorySection {
      * @param panelCenter JPanel with all acctive order for the given Table
      * @return JTable with table orders
      */
-    public JPanel getTableLeft(Table table, JPanel panelCenter) {
-        leftPanel.removeAll();
-        leftPanel.revalidate();
-        this.table = table;
-        barPanel = new JPanel(new GridLayout(1, 2));
-        leftPanel.setBackground(Color.WHITE);
-        rightPanel.setBackground(Color.WHITE);
-        barPanel.add(leftPanel);
-        barPanel.add(rightPanel);
-        panelCenter.add(barPanel);
-        JTable tableLeft = new JTable(buildTableModel(table));
-
-        // Add mouse listener
-        final Table finalTable = table;
-        tableLeft.addMouseListener(new OrderHandler());
-        leftPanel.add(new JScrollPane(tableLeft))
-                .setBackground(Color.WHITE);
-        leftPanel.revalidate();
-        return barPanel;
-    }
-
     public JPanel getTableHistory(ArrayList<Order> orderList, Table table, JPanel panelCenter) {
         this.orderList = orderList;
         leftPanel.removeAll();
@@ -122,63 +101,10 @@ public class OrderHistorySection {
     }
 
     /**
-     * Returns the OrderNumber from the selected order
-     * @return OrderNumber as an Integer
-     */
-    public Order getSelectedOrder() throws NullPointerException{
-        Order order;
-        try {
-            order = tempOrder;
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Geen bestelling geselecteerd");
-        }
-        return order;
-    }
-
-
-    public void clearSelectedOrder() {
-        tempOrder = null;
-    }
-
-    public void revalidateTable(JPanel panelCenter) {
-        getTableLeft(table, panelCenter);
-    }
-
-    public void clearTables() {
-        rightPanel.removeAll();
-        rightPanel.revalidate();
-        leftPanel.removeAll();
-        leftPanel.revalidate();
-    }
-    /**
      * Creates the DefaultTableModel for the Table object to fill the left JTable
      * @param t The Table object from which to create a JTable
      * @return DefaultTableModel
      */
-    public DefaultTableModel buildTableModel(Table t) {
-
-        // Gets column names from Table
-        Vector<String> columnNames = new Vector<String>();
-        columnNames.add("TafelNr");
-        columnNames.add("BestelNr");
-        columnNames.add("Tijd");
-        columnNames.add("Status");
-
-        // data of the table
-        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-
-
-        for (Order o : orderList) {
-            Vector<Object> vector = new Vector<Object>();
-            vector.add(t.getTableNumber());
-            vector.add(o.getOrderNumber());
-            vector.add(new SimpleDateFormat("HH:mm:ss").format(o.getOrderTime())); //Formats the Date to a useful string
-            vector.add(o.getOrderStatus());
-            data.add(vector);
-        }
-        return new DefaultTableModel(data, columnNames);
-    }
-
     public DefaultTableModel buildTableModelHistory(Table t) {
 
         // Gets column names from Table

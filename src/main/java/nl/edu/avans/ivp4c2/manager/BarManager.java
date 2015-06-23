@@ -26,7 +26,7 @@ import static javax.swing.JOptionPane.*;
  */
 public class BarManager {
 	private HashMap<Integer, Table> tableHashmap; //Used to store all tables
-	private HashMap<Integer, ArrayList<Order>> tableHistoryHashMap; //Holds the order history
+	private HashMap<Integer, ArrayList<Order>> tableHistoryHashMap; //Holds the order history for each table.
 	TableDAO tableDAO;
 
 	public BarManager() {
@@ -69,9 +69,13 @@ public class BarManager {
 		return tempTable;
 	}
 
+
+	/**
+	 * Adds a Served Order to the HashMap.
+	 * @param tableNumber the table number to be used as key
+	 * @param order the order to add
+	 */
 	public void addOrderToHistory(int tableNumber, Order order) {
-		System.out.println(tableNumber);
-		System.out.println(order.getOrderNumber());
 		ArrayList<Order> tempList = new ArrayList<Order>();
 		tempList.add(order);
 		if (tableHistoryHashMap.containsKey(tableNumber)) {
@@ -82,9 +86,13 @@ public class BarManager {
 		} else {
 			tableHistoryHashMap.put(tableNumber, tempList);
 		}
-		System.out.println(2);
 	}
 
+	/**
+	 * Returns an ArrayList containing the Order previously done by the Table and which are already served
+	 * @param table the table from which to get the completed orders
+	 * @return returns an ArrayList with all the completed Orders for the table
+	 */
 	public ArrayList<Order> getOrderHitory(Table table) {
 		ArrayList<Order> orderHistory = new ArrayList<>();
 		for(Map.Entry<Integer, ArrayList<Order>> oList : tableHistoryHashMap.entrySet()) {
@@ -97,9 +105,6 @@ public class BarManager {
 		return orderHistory;
 	}
 
-	public HashMap<Integer, Table> getHashMap() {
-		return tableHashmap;
-	}
 
 	public void removeTable(int tableNumber) throws Exception{
 		try {
