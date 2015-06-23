@@ -6,9 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bd77aae5-c321-4cbb-b22e-35cb1c83a706" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" afterPath="$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java" />
-    </list>
+    <list default="true" id="bd77aae5-c321-4cbb-b22e-35cb1c83a706" name="Default" comment="" />
     <ignored path="avans.ivp4c2.proftaak.iteratie1.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -42,8 +40,8 @@
       <file leaf-file-name="BarGUI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.45066273">
-              <caret line="470" column="65" selection-start-line="470" selection-start-column="65" selection-end-line="470" selection-end-column="65" />
+            <state vertical-scroll-proportion="0.6509573">
+              <caret line="478" column="60" selection-start-line="478" selection-start-column="60" selection-end-line="478" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -811,12 +809,12 @@
       <workItem from="1435062347065" duration="1505000" />
       <workItem from="1435065267495" duration="1889000" />
       <workItem from="1435067206860" duration="3816000" />
-      <workItem from="1435091646162" duration="7621000" />
+      <workItem from="1435091646162" duration="7722000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="204649000" />
+    <option name="totallyTimeSpent" value="204750000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1262,8 +1260,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/nl/edu/avans/ivp4c2/presentation/BarGUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.45066273">
-          <caret line="470" column="65" selection-start-line="470" selection-start-column="65" selection-end-line="470" selection-end-column="65" />
+        <state vertical-scroll-proportion="0.6509573">
+          <caret line="478" column="60" selection-start-line="478" selection-start-column="60" selection-end-line="478" selection-end-column="60" />
           <folding />
         </state>
       </provider>
